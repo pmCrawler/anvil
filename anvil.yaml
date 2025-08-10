@@ -16,3 +16,5 @@ services:
 - client_config: {}
   server_config: {}
   source: /runtime/services/tables.yml
+startup: {module: AduraLayout, type: form}
+startup_form: null
