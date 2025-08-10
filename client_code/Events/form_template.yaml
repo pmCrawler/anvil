@@ -1,0 +1,8 @@
+components_by_slot:
+  content:
+  - layout_properties: {}
+    name: repeating_panel_1
+    properties: {item_template: Events.EventCardTemplate}
+    type: RepeatingPanel
+is_package: true
+layout: {type: 'form:AduraLayout'}

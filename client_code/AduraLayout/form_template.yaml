@@ -3,7 +3,7 @@ components_by_slot:
   - components:
     - layout_properties: {grid_position: 'FXGWZZ,JICMPZ'}
       name: nav_link_events
-      properties: {bold: true, font_size: '14', icon: 'mi:event_upcoming', icon_color: 'theme:Primary', text: Events, text_color: 'theme:Tertiary'}
+      properties: {bold: true, font_size: '14', icon: 'mi:event_upcoming', icon_color: 'theme:Primary', navigate_to: Events, text: Events, text_color: 'theme:Tertiary'}
       type: form:dep_lin1x4oec0ytd:_Components.NavigationLink
     - layout_properties: {grid_position: 'LWOOZU,IMLOCE'}
       name: nav_link_tasks
