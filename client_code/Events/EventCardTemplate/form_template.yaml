@@ -1,31 +1,55 @@
 components:
 - components:
   - components:
-    - layout_properties: {slot: card-content-container-slot}
-      name: text_1
+    - components:
+      - layout_properties: {col_xs: 0, row: ZWIXKF, width_xs: 5}
+        name: text_1
+        properties: {bold: true, text: Liverpool Fan Club Meeting}
+        type: form:dep_lin1x4oec0ytd:_Components.Text
+      - layout_properties: {col_xs: 3, row: ZWIXKF, width_xs: 3}
+        name: text_3
+        properties: {icon: 'mi:date_range', icon_color: 'theme:Error', text: 9/21/2025}
+        type: form:dep_lin1x4oec0ytd:_Components.Text
+      - layout_properties: {col_xs: 8, row: ZWIXKF, width_xs: 4}
+        name: text_4
+        properties: {icon: 'mi:timer', icon_color: 'theme:Error', text: '2:00 - 4:00 PM'}
+        type: form:dep_lin1x4oec0ytd:_Components.Text
+      - layout_properties: {col_xs: 0, row: HXKJQA, width_xs: 3}
+        name: text_2
+        properties: {text: Social Club, text_color: 'theme:Outline'}
+        type: form:dep_lin1x4oec0ytd:_Components.Text
+      - layout_properties: {col_xs: 5, row: HXKJQA, width_xs: 4}
+        name: text_5
+        properties: {icon: 'mi:location_pin', icon_color: '#39aff9', text: Club House}
+        type: form:dep_lin1x4oec0ytd:_Components.Text
+      data_bindings: []
+      layout_properties: {slot: card-content-container-slot}
+      name: grid_panel_1
       properties:
-        bold: true
+        background: ''
         spacing:
-          margin: [null, null, null, 0]
-          padding: [null, null, null, '0']
-        text: 'Event Title:  Liverpool Fan Club Meeting'
-      type: form:dep_lin1x4oec0ytd:_Components.Text
-    - layout_properties: {slot: card-content-container-slot}
-      name: text_2
-      properties: {align: left, bold: false, text: 'Description:  Getting ready for the season'}
-      type: form:dep_lin1x4oec0ytd:_Components.Text
+          margin: [5, 0, null, '0']
+          padding: [null, '0', null, 6]
+        spacing_above: small
+      type: GridPanel
     layout_properties: {slot: card-content-slot}
-    name: card_content_container_1
+    name: card_content_container_2
     properties:
-      margin: ['16', '8', '16', '8']
+      margin: ['4', '-16', '4', '16']
     type: form:dep_lin1x4oec0ytd:_Components.Card.CardContentContainer
-  layout_properties: {full_width_row: false, grid_position: 'QGRZIV,VVUCNB'}
+  layout_properties: {full_width_row: false, grid_position: 'CLDWJS,DXCBJV'}
   name: card_1
-  properties: {}
+  properties:
+    align: left
+    orientation: row
+    spacing:
+      margin: [null, '0', null, '0']
   type: form:dep_lin1x4oec0ytd:_Components.Card
-- layout_properties: {grid_position: 'QGRZIV,EPJXXP'}
-  name: text_3
-  properties: {bold: false, text: 'Date:  9/21/2025'}
-  type: form:dep_lin1x4oec0ytd:_Components.Text
-container: {type: ColumnPanel}
+container:
+  properties:
+    col_spacing: tiny
+    spacing:
+      margin: [null, '-16', null, null]
+      padding: [null, '0', null, '0']
+  type: ColumnPanel
 is_package: true
