@@ -12,3 +12,4 @@ class EventCardTemplate(EventCardTemplateTemplate):
         self.init_components(**properties)
 
         # Any code you write here will run before the form opens.
+        self.item['description'] = "Wear your new gear to meeting!"
