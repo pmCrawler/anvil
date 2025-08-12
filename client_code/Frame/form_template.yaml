@@ -1,4 +1,5 @@
 components_by_slot:
+  content: []
   navigation:
   - components:
     - layout_properties: {grid_position: 'FXGWZZ,JICMPZ'}
@@ -42,7 +43,7 @@ is_package: true
 layout:
   properties: {navigation_rail_collapse_to: bottom_app_bar, navigation_rail_color: '', navigation_rail_vertical_align: top, show_sidesheet: false}
   type: form:dep_lin1x4oec0ytd:Layouts.NavigationRailLayout
-layout_metadata: {description: Main app layout - NavigationRail, title: AduraLayout}
+layout_metadata: {description: Main app layout - NavigationRail, title: FrameLayout}
 slots:
   content:
     index: 0

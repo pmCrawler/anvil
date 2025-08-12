@@ -2,9 +2,11 @@ unique_ids:
   assets:
     theme.css: 6G44GIEQQRJLILWU6GQSQO5BTDFT5ZI3
   forms:
-    AduraLayout: '1754825750678698889500188.8124'
-    Events: '1754837833546875939330597.0604'
-    Events.EventCardTemplate: '1754839796383291043605269.0828'
-  modules: {}
+    EventList: '1754837833546875939330597.0604'
+    EventList.EventCardTemplate: '1754839796383291043605269.0828'
+    Frame: '1754825750678698889500188.8124'
+  modules:
+    StartupModule: '1755021157811378098655893.68475'
   scripts: {}
-  server_modules: {}
+  server_modules:
+    EventServerModule: '175502065147669584109963.6717'
