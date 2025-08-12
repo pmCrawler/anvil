@@ -2,7 +2,9 @@ components_by_slot:
   content:
   - layout_properties: {}
     name: repeating_panel_1
-    properties: {item_template: EventList.EventCardTemplate}
+    properties:
+      item_template: EventList.EventCardTemplate
+      margin: [0, '0', null, 0]
     type: RepeatingPanel
 is_package: true
 layout: {type: 'form:Frame'}

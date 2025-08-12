@@ -11,6 +11,3 @@ class EventCardTemplate(EventCardTemplateTemplate):
     def __init__(self, **properties):
         # Set Form properties and Data Bindings.
         self.init_components(**properties)
-
-        # Any code you write here will run before the form opens.
-        self.item['description'] = "Wear your new gear to meeting!"

@@ -9,7 +9,7 @@ def startup():
     # user = anvil.users.login_with_form()
     # if not user['color']:
     #     anvil.server.call('add_user_color')
-    open_form("Frame")
+    open_form("EventList")
 
 
 startup()

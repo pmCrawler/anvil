@@ -2,31 +2,45 @@ components:
 - components:
   - components:
     - components:
-      - layout_properties: {col_xs: 0, row: ZWIXKF, width_xs: 5}
+      - data_bindings:
+        - {code: 'self.item[''event_title'']', property: text, writeback: false}
+        layout_properties: {col_xs: 0, row: ZWIXKF, width_xs: 6}
         name: txt_title
-        properties: {bold: true, text: Liverpool Fan Club Meeting}
-        type: form:dep_lin1x4oec0ytd:_Components.Text
-      - layout_properties: {col_xs: 3, row: ZWIXKF, width_xs: 3}
-        name: text_3
-        properties: {icon: 'mi:date_range', icon_color: 'theme:Error', text: 9/21/2025}
-        type: form:dep_lin1x4oec0ytd:_Components.Text
-      - layout_properties: {col_xs: 8, row: ZWIXKF, width_xs: 4}
-        name: text_4
-        properties: {icon: 'mi:timer', icon_color: 'theme:Error', text: '2:00 - 4:00 PM'}
-        type: form:dep_lin1x4oec0ytd:_Components.Text
-      - layout_properties: {col_xs: 0, row: HXKJQA, width_xs: 3}
-        name: text_2
-        properties: {text: Social Club, text_color: 'theme:Outline'}
-        type: form:dep_lin1x4oec0ytd:_Components.Text
-      - layout_properties: {col_xs: 5, row: HXKJQA, width_xs: 4}
-        name: text_5
-        properties: {icon: 'mi:location_pin', icon_color: '#39aff9', text: Club House}
+        properties: {bold: true, text: 'self.item[''event_title'']'}
         type: form:dep_lin1x4oec0ytd:_Components.Text
       - data_bindings:
-        - {code: 'self.item[''description'']', property: text, writeback: false}
-        layout_properties: {col_xs: 0, row: TMXMUH, width_xs: 4}
-        name: txt_description
-        properties: {bold: true}
+        - {code: 'self.item[''event_type'']', property: text, writeback: false}
+        layout_properties: {col_xs: 0, row: WRBVIZ, width_xs: 2}
+        name: txt_event_type
+        properties: {align: left, scale: small, style: label, text: Social Club, text_color: 'theme:Outline'}
+        type: form:dep_lin1x4oec0ytd:_Components.Text
+      - layout_properties: {col_xs: 0, row: XWZIJY, width_xs: 3}
+        name: spacer_1
+        properties: {height: '2', spacing_above: none}
+        type: Spacer
+      - data_bindings:
+        - {code: 'f"Date: {self.item[''event_date'']}"', property: text, writeback: false}
+        layout_properties: {col_xs: 0, row: TRJVIC, width_xs: 3}
+        name: txt_date
+        properties: {icon: 'mi:date_range', icon_color: 'theme:Error', text: 9/21/2025}
+        type: form:dep_lin1x4oec0ytd:_Components.Text
+      - data_bindings:
+        - {code: 'f"Time: {self.item[''event_start'']} - {self.item[''event_end'']}"', property: text, writeback: false}
+        layout_properties: {col_xs: 3, row: TRJVIC, width_xs: 3}
+        name: txt_times
+        properties: {icon: 'mi:timer', icon_color: 'theme:Error', text: '2:00 - 4:00 PM'}
+        type: form:dep_lin1x4oec0ytd:_Components.Text
+      - data_bindings:
+        - {code: 'f"Budget: {self.item[''budget'']}"', property: text, writeback: false}
+        layout_properties: {col_xs: 0, row: TMXMUH, width_xs: 3}
+        name: txt_budget
+        properties: {bold: false, icon: 'mi:money', icon_color: '#01b72e'}
+        type: form:dep_lin1x4oec0ytd:_Components.Text
+      - data_bindings:
+        - {code: 'self.item[''location''][''venue_name'']', property: text, writeback: false}
+        layout_properties: {col_xs: 3, row: TMXMUH, width_xs: 4}
+        name: txt_venue
+        properties: {icon: 'mi:location_pin', icon_color: '#39aff9', scale: medium, text: Club House}
         type: form:dep_lin1x4oec0ytd:_Components.Text
       data_bindings: []
       layout_properties: {slot: card-content-container-slot}
@@ -34,28 +48,29 @@ components:
       properties:
         background: ''
         spacing:
-          margin: [5, 0, null, '0']
-          padding: [null, '0', null, 6]
-        spacing_above: small
+          margin: ['0', 25, null, '0']
+          padding: ['8', 59, null, '10']
+        spacing_above: none
+        spacing_below: none
       type: GridPanel
     layout_properties: {slot: card-content-slot}
     name: card_content_container_2
     properties:
-      margin: ['4', '-16', '4', '16']
+      margin: ['0', '0', '4', '0']
     type: form:dep_lin1x4oec0ytd:_Components.Card.CardContentContainer
   layout_properties: {full_width_row: false, grid_position: 'CLDWJS,DXCBJV'}
   name: card_1
   properties:
     align: left
-    orientation: row
+    orientation: column
     spacing:
-      margin: [null, '0', null, '0']
+      margin: ['0', '0', null, '0']
   type: form:dep_lin1x4oec0ytd:_Components.Card
 container:
   properties:
-    col_spacing: tiny
+    col_spacing: small
     spacing:
-      margin: [null, '-16', null, null]
-      padding: [null, '0', null, '0']
+      margin: ['0', '0', null, 0]
+      padding: [null, '0', null, 0]
   type: ColumnPanel
 is_package: true
