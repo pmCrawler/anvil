@@ -5,7 +5,7 @@ import anvil.tables.query as q
 from anvil.tables import app_tables
 import anvil.server
 
-ai_responses = [
+ai_response = [
     {
         "budget": "Assume a moderate budget with cost-saving DIY elements where possible",
         "themes": [
@@ -280,4 +280,4 @@ def get_events():
 
 @anvil.server.callable
 def get_ai_response():
-    return ai_responses
+    return ai_response
