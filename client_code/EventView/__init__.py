@@ -75,14 +75,14 @@ class EventView(EventViewTemplate):
             An Anvil component containing the accordion
         """
         # Create the accordion container
-        accordion = ColumnPanel(spacing_above="small", spacing_below="small")
+        accordion = ColumnPanel(spacing_above="none", spacing_below="none")
 
         # Create expandable card
         card = m3.Card()
         card.role = "elevated-card"
 
         # Create content panel (initially hidden)
-        content_panel = ColumnPanel(visible=False, spacing_above="small")
+        content_panel = ColumnPanel(visible=False, spacing_above="none")
 
         # Track expanded state
         is_expanded = {"value": False}
@@ -97,7 +97,7 @@ class EventView(EventViewTemplate):
             bold=True,
             background="theme:Gray 50",
             foreground="theme:Primary 700",
-            align="full",
+            align="full",  # Changed from "left" to "full" for full width
             icon_align="left",
         )
 
@@ -120,13 +120,13 @@ class EventView(EventViewTemplate):
 
         # Set event handler for click only
         header_btn.set_event_handler("click", toggle_accordion)
-
         header_container.add_component(header_btn)
 
         # Process the value based on its type
         if isinstance(value, str):
-            # Simple string value - display as label
-            content_panel.add_component(Label(text=value, font_size=14))
+            # Simple string value - also use table format for consistency
+            value_row = self.create_table_row("Content", value)
+            content_panel.add_component(value_row)
 
         elif isinstance(value, list):
             # List of items - create radio buttons for selection
@@ -141,9 +141,10 @@ class EventView(EventViewTemplate):
                         content_panel.add_component(Spacer(height=10))
 
         elif isinstance(value, dict):
-            # Single dictionary - display as formatted content
-            item_panel = self.create_dict_display(value)
-            content_panel.add_component(item_panel)
+            # Single dictionary - display as formatted table
+            for dict_key, dict_value in value.items():
+                value_row = self.create_table_row(dict_key, dict_value)
+                content_panel.add_component(value_row)
 
         # Assemble the card
         card_content = ColumnPanel()
@@ -168,100 +169,158 @@ class EventView(EventViewTemplate):
         Returns:
             An Anvil panel component
         """
-        panel = ColumnPanel(
-            background="theme:Gray 100", spacing_above="small", spacing_below="small"
+        # Main container for the item
+        main_panel = ColumnPanel(
+            background="white",
+            spacing_above="none",
+            spacing_below="none",
+            border="1px solid theme:Gray 700",
+            role="card",
         )
 
-        # Create horizontal panel for radio button and content
-        row_panel = FlowPanel(align="left", spacing="medium")
+        # Create a header section with radio button
+        header_section = FlowPanel(
+            align="left",
+            spacing="medium",
+            background="theme:Gray 50",
+            spacing_above="none",
+            spacing_below="none",
+        )
 
-        # Create radio button
+        # Create radio button with a label
+        option_number = index + 1
         radio = RadioButton(
             value=f"{section_key}_{index}",
             group_name=section_key,
-            spacing_above="small",
+            text=f"Option {option_number}",
+            font_size=14,
+            bold=True,
+            spacing_above="none",
+            spacing_below="none",
         )
 
         # Add change handler
         def radio_changed(sender, **event_args):
             if sender.selected:
                 self.selected_values[section_key] = {"index": index, "value": item}
+                # Highlight selected panel
+                main_panel.background = "theme:Primary 50"
+            else:
+                main_panel.background = "white"
 
         radio.set_event_handler("change", radio_changed)
         radio_group.append(radio)
 
-        # Create content panel
-        content = ColumnPanel()
+        # Add radio button to header
+        header_section.add_component(radio)
+        main_panel.add_component(header_section)
+
+        # Create content table (table-like layout without borders)
+        content_table = ColumnPanel(
+            spacing_above="none",
+            spacing_below="none",
+        )
 
         if isinstance(item, dict):
-            # Display dictionary fields
+            # Display dictionary fields in table format
             for field_key, field_value in item.items():
-                field_panel = self.create_field_display(field_key, field_value)
-                content.add_component(field_panel)
+                field_row = self.create_table_row(field_key, field_value)
+                content_table.add_component(field_row)
         else:
-            # Display as simple text
-            content.add_component(Label(text=str(item)))
+            # Display as simple text in a single row
+            field_row = self.create_table_row("Value", str(item))
+            content_table.add_component(field_row)
 
-        row_panel.add_component(radio)
-        row_panel.add_component(content)
-        panel.add_component(row_panel)
+        main_panel.add_component(content_table)
 
-        return panel
+        return main_panel
 
-    def create_field_display(self, field_key, field_value):
+    def create_table_row(self, field_key, field_value):
         """
-        Create a display for a single field
+        Create a table-like row with key and value columns
 
         Args:
-            field_key: The field name
-            field_value: The field value
+            field_key: The field name (left column)
+            field_value: The field value (right column)
 
         Returns:
-            An Anvil component
+            An Anvil component representing a table row
         """
-        field_panel = FlowPanel(align="left", spacing="small")
+        # Create container with indentation
+        row_container = FlowPanel(
+            align="left",
+            spacing="small",
+            spacing_above="none",
+            width="100%",
+        )
 
-        # Format the field name
-        label = Label(
+        # Add indentation spacer
+        row_container.add_component(Spacer(width="30px"))
+
+        # Key column with fixed width
+        key_label = Label(
             text=f"{self.format_title(field_key)}:",
             bold=True,
             font_size=13,
-            foreground="theme:Primary 500",
+            foreground="theme:Primary 600",
+            width="120px",  # Fixed width to prevent wrapping
         )
+        row_container.add_component(key_label)
 
-        # Handle different value types
+        # Value column
         if isinstance(field_value, list):
-            # For lists, create a formatted string or sub-components
+            # Handle list values
             if all(isinstance(item, str) for item in field_value):
-                # Simple string list
+                # Simple string list - display as comma-separated
                 value_text = ", ".join(field_value)
-                value_label = Label(text=value_text, font_size=13)
-                field_panel.add_component(label)
-                field_panel.add_component(value_label)
+                value_component = Label(text=value_text, font_size=13)
             else:
-                # Complex list - create vertical layout
-                vert_panel = ColumnPanel()
-                vert_panel.add_component(label)
+                # Complex list - create nested display
+                value_component = ColumnPanel()
                 for item in field_value:
                     if isinstance(item, dict):
-                        sub_panel = self.create_dict_display(item)
-                        vert_panel.add_component(sub_panel)
-                    else:
-                        vert_panel.add_component(
-                            Label(text=f"  • {str(item)}", font_size=12)
+                        # For complex nested items, show key fields only
+                        item_text = self.get_item_summary(item)
+                        value_component.add_component(
+                            Label(text=f"• {item_text}", font_size=12)
                         )
-                return vert_panel
+                    else:
+                        value_component.add_component(
+                            Label(text=f"• {str(item)}", font_size=12)
+                        )
         else:
-            # Simple value
-            value_label = Label(text=str(field_value), font_size=13)
-            field_panel.add_component(label)
-            field_panel.add_component(value_label)
+            # Simple value - let it flow naturally without width restriction
+            value_component = Label(text=str(field_value), font_size=13)
 
-        return field_panel
+        row_container.add_component(value_component)
+
+        return row_container
+
+    def get_item_summary(self, item_dict):
+        """
+        Get a summary string for a dictionary item
+
+        Args:
+            item_dict: Dictionary to summarize
+
+        Returns:
+            Summary string
+        """
+        # Look for common identifier fields
+        for key in ["name", "title", "id", "theme", "menu_option"]:
+            if key in item_dict:
+                return str(item_dict[key])
+
+        # If no identifier found, return first value
+        if item_dict:
+            first_key = list(item_dict.keys())[0]
+            return f"{first_key}: {item_dict[first_key]}"
+
+        return "Item"
 
     def create_dict_display(self, data_dict):
         """
-        Create a formatted display for a dictionary
+        Create a formatted display for a dictionary using table-like layout
 
         Args:
             data_dict: Dictionary to display
@@ -269,11 +328,11 @@ class EventView(EventViewTemplate):
         Returns:
             An Anvil component
         """
-        panel = ColumnPanel(spacing_above="small")
+        panel = ColumnPanel(spacing_above="none")
 
         for key, value in data_dict.items():
-            field_display = self.create_field_display(key, value)
-            panel.add_component(field_display)
+            field_row = self.create_table_row(key, value)
+            panel.add_component(field_row)
 
         return panel
 

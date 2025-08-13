@@ -169,13 +169,168 @@ ai_response = [
             },
             {
                 "recommendation": "Cultural Touchpoints",
-                "description": "Incorporate small details from the menus into the decor – for example, themed table cards describing each cuisine's significance or a display of multicultural baby symbols.",
+                "description": "Incorporate small options from the menus into the decor – for example, themed table cards describing each cuisine's significance or a display of multicultural baby symbols.",
             },
             {
                 "recommendation": "Customized Favors",
                 "description": "Prepare small favor bags that reflect the event’s multicultural vibe – such as mini succulents, handmade soaps, or themed candies.",
             },
         ],
+    }
+]
+
+ai_response_2 = [
+    {
+        "themes": [
+            {
+                "name": "Tropical Escape",
+                "description": "Bring a vacation vibe to your event with vibrant colors, palm leaves, tiki torches, and island music. This theme works great for outdoor events or for an indoor venue transformed with creative lighting and decor.",
+            },
+            {
+                "name": "Retro 80s Party",
+                "description": "Set the stage with neon colors, disco balls, and era-specific music. Encourage guests to dress in their best 1980s attire, and use arcade and retro gaming elements throughout the venue.",
+            },
+            {
+                "name": "Enchanted Garden",
+                "description": "Transform the venue into a whimsical garden with fairy lights, floral arrangements, and rustic table settings. This theme works excellently for daytime outdoor events but can be adapted for indoor spaces with creative lighting.",
+            },
+            {
+                "name": "Modern Minimalistic Chic",
+                "description": "Focus on sleek lines, a monochrome palette with bold accent colors, and elegant decor. This theme suits events where a sophisticated atmosphere is desired, and pooling together minimal art pieces can get a high-end feel.",
+            },
+        ],
+        "menu": [
+            {
+                "approach": "Design an adaptable menu that fits within the budget, suits the event duration (e.g., 4-6 hours), and caters to a maximum number of attendees. Consider offering a mix of finger foods, small plates, and streamed stations to minimize waste and maximize enjoyment."
+            },
+            {
+                "appetizers": [
+                    {"option": "Seasonal Vegetable Crudités with assorted dips"},
+                    {"option": "Mini Caprese Skewers drizzled with balsamic glaze"},
+                    {
+                        "option": "Gourmet Sliders (beef, vegetarian, or chicken options)"
+                    },
+                ]
+            },
+            {
+                "main_courses": [
+                    "Build-your-own taco or wrap station with diverse proteins and toppings",
+                    "Pasta bar featuring two or three sauce choices with a vegetarian-friendly option",
+                    "Customizable grain bowls with varying proteins, veggies, and dressings",
+                ]
+            },
+            {
+                "sides": [
+                    "Mixed greens salad with a selection of dressings",
+                    "Roasted seasonal vegetables",
+                    "Gourmet flatbreads or artisanal breads accompanied by flavored butters",
+                ]
+            },
+            {
+                "desserts": [
+                    "Mini pastries or cupcakes aligned with the event theme",
+                    "Fruit skewers or a dessert station with bite-sized sweets",
+                    "A themed cake or dessert centerpiece for a memorable reveal",
+                ]
+            },
+            {
+                "beverages": [
+                    "Signature cocktails/mocktails themed to the event (e.g., Tropical Punch for a Tropical Escape)",
+                    "A curated selection of wines and craft beers",
+                    "Infused waters and specialty coffee/tea stations",
+                ]
+            },
+        ],
+        "place_settings": [
+            {
+                "option": "Customized Table Numbers",
+                "description": "Integrate table numbers that match the event theme—such as small tropical shells for a Tropical Escape or neon signage for a Retro 80s Party.",
+            },
+            {
+                "option": "Themed Centerpieces",
+                "description": "Use floral arrangements, candles, or small decor items that tie into the theme. For example, an Enchanted Garden might feature mason jars filled with wildflowers.",
+            },
+            {
+                "option": "Coordinated Tableware",
+                "description": "Select plates, napkins, and cutlery that follow the color scheme and style of the event. Minimalistic events might use white or metallic accents while retro themes could incorporate bold, patterned designs.",
+            },
+            {
+                "option": "Personalized Place Cards",
+                "description": "Offer guests a personalized card with a tip or fun fact related to the theme, creating a memorable and interactive element from the moment they are seated.",
+            },
+        ],
+        "gift_bags": {
+            "considerations": "Align gift bag contents with the event theme and budget while ensuring that the items are useful and memorable for guests.",
+            "ideas": [
+                {
+                    "theme": "Tropical Escape",
+                    "contents": [
+                        "Mini bottle of sunscreen or after-sun lotion",
+                        "Customized sunglasses",
+                        "Local tropical-flavored snacks (e.g., coconut cookies)",
+                        "A small plant or succulent in a themed pot",
+                    ],
+                },
+                {
+                    "theme": "Retro 80s Party",
+                    "contents": [
+                        "Retro-themed keychain or mini Rubik's Cube",
+                        "Cassette or CD of iconic 80s hits (or a custom playlist card)",
+                        "Neon-colored accessories (e.g., wristbands or small sunglasses)",
+                        "Vintage-style candy or treats from the era",
+                    ],
+                },
+                {
+                    "theme": "Enchanted Garden",
+                    "contents": [
+                        "Seed packets for native flowers or herbs",
+                        "Miniature terrarium or a small potted plant",
+                        "Handmade soap or a scented candle inspired by nature",
+                        "Artisan tea bags or a specialty herbal blend",
+                    ],
+                },
+                {
+                    "theme": "Modern Minimalistic Chic",
+                    "contents": [
+                        "Elegant stationery set or a high-quality notebook",
+                        "Sleek keychain or minimalist jewelry",
+                        "Gourmet chocolates with simple, modern packaging",
+                        "A small voucher for a local coffee shop or boutique",
+                    ],
+                },
+            ],
+        },
+        "activities": {
+            "overview": "Plan a schedule that balances structured group activities, free networking, and enough downtime to appreciate the food and decor. The following suggestions include ideas on the activity types, durations, and timing to create a well-rounded experience.",
+            "activity_schedule": [
+                {
+                    "time": "0:00 - 0:30",
+                    "activity": "Welcome Reception",
+                    "description": "Greet guests with signature drinks and light appetizers. Consider using a themed welcome video or interactive ice-breakers related to the event theme.",
+                },
+                {
+                    "time": "0:30 - 1:30",
+                    "activity": "Interactive Activity/Group Games",
+                    "description": "Design group activities that fit the theme. For instance, a Tropical Escape event could include a limbo contest or hula hoop competition; a Retro 80s Party might have a dance-off or arcade game challenge. Ensure each activity is 15-20 minutes long with a few rounds.",
+                },
+                {
+                    "time": "1:30 - 2:30",
+                    "activity": "Themed Workshop or Demonstration",
+                    "description": "Incorporate an engaging session like a cocktail-making demonstration for Tropical themes, a DIY craft station for Modern Minimalistic events, or even an interactive garden arrangement for Enchanted Garden themes.",
+                },
+                {
+                    "time": "2:30 - 3:30",
+                    "activity": "Networking & Socializing",
+                    "description": "Allow ample time for guests to mingle, enjoy the meal and explore interactive activity stations or photo booths that complement the theme.",
+                },
+                {
+                    "time": "3:30 - 4:00",
+                    "activity": "Closing Activity & Thank You",
+                    "description": "Wrap up with a fun and memorable finale, such as a raffle draw, a group photo session in the themed photo booth, or a final performance (e.g., a live band or DJ set).",
+                },
+            ],
+            "notes": "Maintain flexibility in timing; adjust durations based on guest engagement and the flow of the event. Consider having optional breakout sessions or quieter lounge areas for guests who prefer to relax.",
+        },
     }
 ]
 
