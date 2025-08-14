@@ -1,0 +1,8 @@
+components_by_slot:
+  content:
+  - layout_properties: {}
+    name: content_panel
+    properties: {col_spacing: small}
+    type: ColumnPanel
+is_package: true
+layout: {type: 'form:Frame'}

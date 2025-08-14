@@ -429,6 +429,11 @@ events = [
 
 
 @anvil.server.callable
+def get_event():
+    return events[0]
+
+
+@anvil.server.callable
 def get_events():
     return events
 

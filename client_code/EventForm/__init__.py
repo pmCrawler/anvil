@@ -1,18 +1,15 @@
-from ._anvil_designer import EventViewTemplate
+from ._anvil_designer import EventFormTemplate
 from anvil import *
 import anvil.server
 import m3.components as m3
 import anvil.tables as tables
 import anvil.tables.query as q
 from anvil.tables import app_tables
-import json
 
 
-class EventView(EventViewTemplate):
+class EventForm(EventFormTemplate):
     def __init__(self, **properties):
         # Set Form properties and Data Bindings.
         self.init_components(**properties)
 
-        self.event = anvil.server.call("get_event")
-        print(f"Event Title: {self.event['event_title']}")
-        pass
+        # Any code you write here will run before the form opens.
