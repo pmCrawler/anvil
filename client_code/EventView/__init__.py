@@ -73,11 +73,15 @@ class EventView(EventViewTemplate):
             An Anvil component containing the accordion
         """
         # Create the accordion container
-        accordion = ColumnPanel(spacing_above="none", spacing_below="none")
+        accordion = ColumnPanel(
+            spacing_above="none",
+            spacing_below="none",
+            wrap_on="mobile",
+        )
 
         # Create expandable card
-        card = m3.Card()
-        card.role = "elevated-card"
+        card = m3.Card(appearance="filled")
+        # card.role = "outlined-card"
 
         # Create content panel (initially hidden)
         content_panel = ColumnPanel(
