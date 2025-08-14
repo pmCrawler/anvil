@@ -15,8 +15,6 @@ class EventView(EventViewTemplate):
 
         # Store selected values for each section
         self.selected_values = {}
-
-        # Sample JSON data (you can replace this with your actual data source)
         self.ai_response = anvil.server.call("get_ai_response")
         self.process_json_response(self.ai_response)
 
@@ -82,7 +80,11 @@ class EventView(EventViewTemplate):
         card.role = "elevated-card"
 
         # Create content panel (initially hidden)
-        content_panel = ColumnPanel(visible=False, spacing_above="none")
+        content_panel = ColumnPanel(
+            visible=False,
+            spacing_above="none",
+            wrap_on="mobile",
+        )
 
         # Track expanded state
         is_expanded = {"value": False}
@@ -91,13 +93,13 @@ class EventView(EventViewTemplate):
         header_container = ColumnPanel()
 
         # Use Button with custom styling for the accordion header
-        header_btn = Button(
+        header_btn = m3.Button(
             text=f"▶ {self.format_title(key)}",
-            font_size=16,
+            font_size=14,
             bold=True,
             background="theme:Gray 50",
             foreground="theme:Primary 700",
-            align="full",  # Changed from "left" to "full" for full width
+            align="left",
             icon_align="left",
         )
 
@@ -138,7 +140,7 @@ class EventView(EventViewTemplate):
                     item_panel = self.create_item_panel(item, key, idx, radio_group)
                     if item_panel:
                         content_panel.add_component(item_panel)
-                        content_panel.add_component(Spacer(height=10))
+                        content_panel.add_component(Spacer(height=5))
 
         elif isinstance(value, dict):
             # Single dictionary - display as formatted table
@@ -175,7 +177,7 @@ class EventView(EventViewTemplate):
             spacing_above="none",
             spacing_below="none",
             border="1px solid theme:Gray 700",
-            role="card",
+            role="elevated-card",
         )
 
         # Create a header section with radio button
@@ -189,7 +191,7 @@ class EventView(EventViewTemplate):
 
         # Create radio button with a label
         option_number = index + 1
-        radio = RadioButton(
+        radio = m3.RadioButton(
             value=f"{section_key}_{index}",
             group_name=section_key,
             text=f"Option {option_number}",
@@ -197,6 +199,7 @@ class EventView(EventViewTemplate):
             bold=True,
             spacing_above="none",
             spacing_below="none",
+            spacing="small",
         )
 
         # Add change handler
@@ -208,7 +211,7 @@ class EventView(EventViewTemplate):
             else:
                 main_panel.background = "white"
 
-        radio.set_event_handler("change", radio_changed)
+        radio.set_event_handler("x-change", radio_changed)
         radio_group.append(radio)
 
         # Add radio button to header
@@ -219,13 +222,21 @@ class EventView(EventViewTemplate):
         content_table = ColumnPanel(
             spacing_above="none",
             spacing_below="none",
+            # border="1px solid #d1d2d4",
+            role="outlined-card",
+            wrap_on="mobile",
         )
+        # content_table = LinearPanel(
+        #     spacing_above="none",
+        #     spacing_below="none",
+        #     border="0.5px solid #d1d2d4",
+        # )
 
         if isinstance(item, dict):
             # Display dictionary fields in table format
             for field_key, field_value in item.items():
                 field_row = self.create_table_row(field_key, field_value)
-                content_table.add_component(field_row)
+                content_table.add_component(field_row, full_width_row=True)
         else:
             # Display as simple text in a single row
             field_row = self.create_table_row("Value", str(item))
@@ -249,9 +260,12 @@ class EventView(EventViewTemplate):
         # Create container with indentation
         row_container = FlowPanel(
             align="left",
-            spacing="small",
+            # spacing="none",
             spacing_above="none",
+            spacing_below="none",
             width="100%",
+            gap="none",
+            role="outlined-card",
         )
 
         # Add indentation spacer
@@ -264,6 +278,7 @@ class EventView(EventViewTemplate):
             font_size=13,
             foreground="theme:Primary 600",
             width="120px",  # Fixed width to prevent wrapping
+            role="outlined-card",
         )
         row_container.add_component(key_label)
 
@@ -273,7 +288,11 @@ class EventView(EventViewTemplate):
             if all(isinstance(item, str) for item in field_value):
                 # Simple string list - display as comma-separated
                 value_text = ", ".join(field_value)
-                value_component = Label(text=value_text, font_size=13)
+                value_component = Label(
+                    text=value_text,
+                    font_size=13,
+                    role="outlined-card",
+                )
             else:
                 # Complex list - create nested display
                 value_component = ColumnPanel()
@@ -282,7 +301,11 @@ class EventView(EventViewTemplate):
                         # For complex nested items, show key fields only
                         item_text = self.get_item_summary(item)
                         value_component.add_component(
-                            Label(text=f"• {item_text}", font_size=12)
+                            Label(
+                                text=f"• {item_text}",
+                                font_size=12,
+                                role="outlined-card",
+                            )
                         )
                     else:
                         value_component.add_component(
