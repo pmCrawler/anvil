@@ -57,7 +57,7 @@ class EventView(EventViewTemplate):
         self.content_panel.add_component(main_container)
 
         # Add a submit button at the bottom
-        submit_btn = Button(text="Submit Selections", role="primary-color")
+        submit_btn = m3.Button(text="Submit Selections", appearance="tonal")
         submit_btn.set_event_handler("click", self.submit_selections)
         self.content_panel.add_component(submit_btn)
 
@@ -80,8 +80,7 @@ class EventView(EventViewTemplate):
         )
 
         # Create expandable card
-        card = m3.Card(appearance="filled")
-        # card.role = "outlined-card"
+        card = m3.Card(appearance="outlined", visible=False)
 
         # Create content panel (initially hidden)
         content_panel = ColumnPanel(
@@ -94,23 +93,22 @@ class EventView(EventViewTemplate):
         is_expanded = {"value": False}
 
         # Create header container
-        header_container = ColumnPanel()
+        # header_container = ColumnPanel()
+        header_container = m3.Text(scale="small")
 
         # Use Button with custom styling for the accordion header
         header_btn = m3.Button(
             text=f"▶ {self.format_title(key)}",
-            font_size=14,
-            bold=True,
-            background="theme:Gray 50",
-            foreground="theme:Primary 700",
             align="left",
             icon_align="left",
+            appearance="text",
         )
 
         def toggle_accordion(**event_args):
             """Toggle accordion expansion"""
             is_expanded["value"] = not is_expanded["value"]
             content_panel.visible = is_expanded["value"]
+            card.visible = is_expanded["value"]
 
             # Update arrow direction and background
             arrow = "▼" if is_expanded["value"] else "▶"
@@ -153,11 +151,14 @@ class EventView(EventViewTemplate):
                 content_panel.add_component(value_row)
 
         # Assemble the card
-        card_content = ColumnPanel()
-        card_content.add_component(header_container)
+        # card_content = ColumnPanel()
+        card_content = m3.CardContentContainer(margin="16px")
+        # card_content.add_component(header_container)
         card_content.add_component(content_panel)
+        # card.add_component(header_container)
         card.add_component(card_content)
 
+        accordion.add_component(header_container)
         accordion.add_component(card)
 
         return accordion
@@ -230,11 +231,6 @@ class EventView(EventViewTemplate):
             role="outlined-card",
             wrap_on="mobile",
         )
-        # content_table = LinearPanel(
-        #     spacing_above="none",
-        #     spacing_below="none",
-        #     border="0.5px solid #d1d2d4",
-        # )
 
         if isinstance(item, dict):
             # Display dictionary fields in table format
