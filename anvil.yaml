@@ -14,7 +14,7 @@ db_schema:
       type: simpleObject
     server: full
     title: ai_response
-  events:
+  event:
     client: full
     columns:
     - admin_ui: {order: 0, width: 200}
@@ -42,7 +42,7 @@ db_schema:
       name: ai_response
       type: simpleObject
     server: full
-    title: events
+    title: event
   files:
     client: none
     columns:
