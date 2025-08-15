@@ -11,3 +11,10 @@ class EventCardTemplate(EventCardTemplateTemplate):
     def __init__(self, **properties):
         # Set Form properties and Data Bindings.
         self.init_components(**properties)
+        # self.event_id = anvil.server.call("get_event", properties["item"]["id"])
+        # print(f"Event Id: {self.event_id}")
+
+    def btn_details_click(self, **event_args):
+        """This method is called when the component is clicked."""
+        id = self.item["id"]
+        print(f"ID: {id}")

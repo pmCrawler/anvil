@@ -427,8 +427,9 @@ events = [
 
 
 @anvil.server.callable
-def get_event():
-    return events[0]
+def get_event(id):
+    event = (e for e in events if e["id"] == id)
+    return event
 
 
 @anvil.server.callable

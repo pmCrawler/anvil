@@ -42,6 +42,23 @@ components:
         name: txt_venue
         properties: {icon: 'mi:location_pin', icon_color: '#39aff9', scale: medium, text: Club House}
         type: form:dep_lin1x4oec0ytd:_Components.Text
+      - data_bindings:
+        - {code: 'self.item[''id'']', property: item, writeback: false}
+        - {code: 'self.item[''id'']', property: tag, writeback: false}
+        event_bindings: {click: btn_details_click}
+        layout_properties: {col_xs: 9, row: TMXMUH, width_xs: 3}
+        name: btn_details
+        properties:
+          align: left
+          appearance: text
+          enabled: true
+          icon: mi:arrow_right
+          icon_align: right
+          icon_size: 26
+          spacing:
+            padding: [null, 26, null, null]
+          text: Details
+        type: form:dep_lin1x4oec0ytd:_Components.Button
       data_bindings: []
       layout_properties: {slot: card-content-container-slot}
       name: grid_panel_1
