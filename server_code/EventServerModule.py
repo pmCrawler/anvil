@@ -1,8 +1,4 @@
 import anvil.files
-from anvil.files import data_files
-import anvil.tables as tables
-import anvil.tables.query as q
-from anvil.tables import app_tables
 import anvil.server
 
 ai_response = [
@@ -336,6 +332,7 @@ ai_response_2 = [
 
 events = [
     {
+        "id": 1,
         "event_title": "Mystery Book Club: And Then There Were None",
         "event_description": "Join us for a thrilling discussion of Agatha Christie's masterpiece 'And Then There Were None'. We'll explore the intricate plot twists and Christie's genius in crafting the perfect murder mystery.",
         "event_type": "book club",
@@ -354,6 +351,7 @@ events = [
         "guest_count": 15,
     },
     {
+        "id": 2,
         "event_title": "Sarah's Baby Shower - Ocean Theme",
         "event_description": "Celebrate the upcoming arrival of baby Emma with an ocean-themed baby shower. Games, gifts, and seafood appetizers await!",
         "event_type": "baby shower",
