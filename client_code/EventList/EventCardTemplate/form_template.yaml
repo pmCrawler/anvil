@@ -47,6 +47,7 @@ components:
       name: grid_panel_1
       properties:
         background: ''
+        role: null
         spacing:
           margin: ['0', 25, null, '0']
           padding: ['8', 59, null, '10']
@@ -63,6 +64,7 @@ components:
   properties:
     align: left
     orientation: column
+    role: ''
     spacing:
       margin: ['0', '0', null, '0']
   type: form:dep_lin1x4oec0ytd:_Components.Card
