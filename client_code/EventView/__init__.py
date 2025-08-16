@@ -13,6 +13,6 @@ class EventView(EventViewTemplate):
         # Set Form properties and Data Bindings.
         self.init_components(**properties)
 
-        self.event = anvil.server.call("get_event")
+        self.event = properties
         print(f"Event Title: {self.event['event_title']}")
         pass
