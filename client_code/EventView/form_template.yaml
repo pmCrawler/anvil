@@ -1,6 +1,81 @@
 components_by_slot:
   content:
-  - layout_properties: {}
+  - components:
+    - components:
+      - data_bindings:
+        - {code: '', property: item, writeback: false}
+        - {code: 'self.item["event_title"]', property: text, writeback: false}
+        layout_properties: {slot: card-content-slot}
+        name: title_heading
+        properties:
+          background_color: theme:Secondary Container
+          bold: true
+          scale: small
+          spacing:
+            padding: [null, null, null, '16']
+          style: title
+        type: form:dep_lin1x4oec0ytd:_Components.Heading
+      - components:
+        - components:
+          - data_bindings: []
+            layout_properties: {width: 73.16124560546875, x: 11.533828735351562, y: 21.240951538085938}
+            name: lbl_type_copy
+            properties: {align: left, bold: true, scale: medium, style: label, text: 'Event type:'}
+            type: form:dep_lin1x4oec0ytd:_Components.Text
+          - layout_properties: {width: 73.11291191406248, x: 11.59417724609375, y: 52.21919250488281}
+            name: lbl_date_copy
+            properties: {align: left, bold: true, scale: medium, style: label, text: 'Date:'}
+            type: form:dep_lin1x4oec0ytd:_Components.Text
+          - layout_properties: {width: 50.80370166015625, x: 428.47225189208984, y: 24.245162963867188}
+            name: lbl_status
+            properties: {align: left, bold: true, scale: medium, style: label, text: 'Status:'}
+            type: form:dep_lin1x4oec0ytd:_Components.Text
+          - layout_properties: {width: 50.78502431640633, x: 428.4873275756836, y: 54.1817626953125}
+            name: lbl_time
+            properties: {align: left, bold: true, scale: medium, style: label, text: 'Time:'}
+            type: form:dep_lin1x4oec0ytd:_Components.Text
+          - data_bindings:
+            - {code: 'self.item[''event_date'']', property: text, writeback: false}
+            layout_properties: {width: 168.01026916503906, x: 94.91242218017578, y: 50.9208984375}
+            name: txt_date
+            properties: {style: label}
+            type: form:dep_lin1x4oec0ytd:_Components.Text
+          - data_bindings:
+            - {code: 'self.item[''event_type'']', property: text, writeback: false}
+            layout_properties: {width: 168.01026916503906, x: 92.91968536376953, y: 22.192031860351562}
+            name: txt_type
+            properties: {style: label}
+            type: form:dep_lin1x4oec0ytd:_Components.Text
+          - data_bindings:
+            - {code: 'f"{self.item[''event_start'']} - {self.item[''event_end'']}"', property: text, writeback: false}
+            layout_properties: {width: 171.05978393554688, x: 487.4093246459961, y: 51.26811218261719}
+            name: txt_time
+            properties: {style: label}
+            type: form:dep_lin1x4oec0ytd:_Components.Text
+          - data_bindings:
+            - {code: 'self.item[''event_status'']', property: text, writeback: false}
+            layout_properties: {width: 170.10870361328125, x: 488.3303451538086, y: 25.120773315429688}
+            name: txt_status
+            properties: {style: label}
+            type: form:dep_lin1x4oec0ytd:_Components.Text
+          layout_properties: {slot: card-content-container-slot}
+          name: xypanel_1
+          properties:
+            height: 81.24154663085938
+            margin: ['5', null, null, null]
+            spacing_above: none
+            spacing_below: none
+          type: XYPanel
+        layout_properties: {slot: card-content-slot}
+        name: card_content_container_1
+        properties:
+          margin: ['16', '16', '16', '16']
+        type: form:dep_lin1x4oec0ytd:_Components.Card.CardContentContainer
+      layout_properties: {grid_position: 'VMZLAG,DXGJLV'}
+      name: card_1
+      properties: {}
+      type: form:dep_lin1x4oec0ytd:_Components.Card
+    layout_properties: {}
     name: content_panel
     properties: {}
     type: ColumnPanel

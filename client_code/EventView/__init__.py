@@ -13,6 +13,10 @@ class EventView(EventViewTemplate):
         # Set Form properties and Data Bindings.
         self.init_components(**properties)
 
-        self.event = properties
-        print(f"Event Title: {self.event['event_title']}")
+        self.item = properties
+        self.title_heading.text = self.item["event_title"]
+        # self.txt_date.text = self.item["event_date"]
+        print(f"Event Title: {self.item['event_title']}")
+
+        # self.card_content_container_1.add_component(self.heading_1)
         pass
