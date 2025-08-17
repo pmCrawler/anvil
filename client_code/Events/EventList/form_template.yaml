@@ -3,7 +3,7 @@ components_by_slot:
   - layout_properties: {}
     name: repeating_panel_1
     properties:
-      item_template: EventList.EventCardTemplate
+      item_template: Events.EventList.EventCardTemplate
       margin: [0, '0', null, 0]
     type: RepeatingPanel
 is_package: true
