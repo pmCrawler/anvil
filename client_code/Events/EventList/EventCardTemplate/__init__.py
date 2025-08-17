@@ -18,5 +18,5 @@ class EventCardTemplate(EventCardTemplateTemplate):
         """This method is called when the component is clicked."""
         event = self.item
         print(f"ID: {event['id']}")
-        open_form("EventView", **event)
-         #  ("EventView", self.item)
+        open_form("Events.EventView", **event)
+        #  ("EventView", self.item)

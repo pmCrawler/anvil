@@ -3,7 +3,8 @@ import anvil.tables as tables
 import anvil.tables.query as q
 from anvil.tables import app_tables
 from anvil import *
-from .Events.EventList import EventList
+from . import Events
+from . import Tasks
 
 
 def startup():
@@ -11,7 +12,7 @@ def startup():
     # if not user['color']:
     #     anvil.server.call('add_user_color')
     # open_form("EventList")
-    open_form("EventList")
+    open_form("Events.EventList")
 
 
 startup()
