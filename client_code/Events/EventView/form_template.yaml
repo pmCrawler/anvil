@@ -8,12 +8,13 @@ components_by_slot:
         layout_properties: {slot: card-content-slot}
         name: title_heading
         properties:
-          background_color: theme:Secondary Container
-          bold: true
+          background_color: theme:Surface
+          bold: false
           scale: small
           spacing:
             padding: [null, null, null, '16']
           style: title
+          text_color: ''
         type: form:dep_lin1x4oec0ytd:_Components.Heading
       - components:
         - components:
@@ -58,13 +59,16 @@ components_by_slot:
             name: txt_status
             properties: {style: label}
             type: form:dep_lin1x4oec0ytd:_Components.Text
+          data_bindings: []
           layout_properties: {slot: card-content-container-slot}
           name: xypanel_1
           properties:
+            align: left
             height: 81.24154663085938
             margin: ['5', null, null, null]
             spacing_above: none
             spacing_below: none
+            width: null
           type: XYPanel
         layout_properties: {slot: card-content-slot}
         name: card_content_container_1
@@ -77,7 +81,9 @@ components_by_slot:
       type: form:dep_lin1x4oec0ytd:_Components.Card
     layout_properties: {}
     name: content_panel
-    properties: {}
+    properties:
+      spacing:
+        margin: ['0', null, null, null]
     type: ColumnPanel
 is_package: true
 layout: {type: 'form:Frame'}

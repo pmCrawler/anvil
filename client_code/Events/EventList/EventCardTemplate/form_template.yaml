@@ -1,95 +1,141 @@
 components:
 - components:
+  - data_bindings:
+    - {code: 'self.item[''event_title'']', property: text, writeback: false}
+    layout_properties: {slot: card-content-slot}
+    name: heading_title
+    properties:
+      background_color: ''
+      bold: true
+      font_size: 12
+      scale: small
+      spacing:
+        margin: [null, null, null, '8']
+      style: title
+      text: self.item['event_title']
+    type: form:dep_lin1x4oec0ytd:_Components.Heading
   - components:
     - components:
       - data_bindings:
-        - {code: 'self.item[''event_title'']', property: text, writeback: false}
-        layout_properties: {col_xs: 0, row: ZWIXKF, width_xs: 6}
-        name: txt_title
-        properties: {bold: true, text: 'self.item[''event_title'']'}
+        - {code: 'self.item[''event_date'']', property: text, writeback: false}
+        layout_properties: {grid_position: 'SWPSMW,EOSLQT'}
+        name: txt_date
+        properties:
+          icon: mi:date_range
+          icon_color: theme:Error
+          icon_size: 14
+          scale: small
+          spacing:
+            margin: [null, null, null, '5']
+            padding: [null, null, '5', null]
+          text: 9/21/2025
+        type: form:dep_lin1x4oec0ytd:_Components.Text
+      - data_bindings:
+        - {code: 'f"{self.item[''event_start'']} - {self.item[''event_end'']}"', property: text, writeback: false}
+        layout_properties: {grid_position: 'SWPSMW,KZNCIJ'}
+        name: txt_times
+        properties:
+          icon: mi:timer
+          icon_color: theme:Error
+          icon_size: 14
+          scale: small
+          spacing:
+            margin: [null, null, null, '5']
+            padding: [null, null, '5', null]
+          text: 2:00 - 4:00 PM
+        type: form:dep_lin1x4oec0ytd:_Components.Text
+      - data_bindings:
+        - {code: 'f"Budget: ${self.item[''budget'']}"', property: text, writeback: false}
+        layout_properties: {grid_position: 'SWPSMW,CZRETP'}
+        name: txt_budget
+        properties:
+          bold: false
+          icon: mi:money
+          icon_color: '#01b72e'
+          icon_size: 14
+          scale: small
+          spacing:
+            margin: [null, null, null, '5']
+            padding: [null, null, '5', null]
+        type: form:dep_lin1x4oec0ytd:_Components.Text
+      layout_properties: {slot: card-content-container-slot}
+      name: column_panel_1
+      properties:
+        col_spacing: tiny
+        spacing:
+          margin: [null, null, '0', null]
+        spacing_above: small
+        spacing_below: small
+      type: ColumnPanel
+    - components:
+      - data_bindings:
+        - {code: 'self.item[''location''][''venue_name'']', property: text, writeback: false}
+        layout_properties: {grid_position: 'RJTPDK,ZMVEXJ'}
+        name: txt_venue
+        properties:
+          align: left
+          icon: mi:location_pin
+          icon_color: '#39aff9'
+          icon_size: 14
+          scale: small
+          spacing:
+            margin: [null, null, null, '5']
+            padding: [null, null, '10', null]
+          text: txt_venue
         type: form:dep_lin1x4oec0ytd:_Components.Text
       - data_bindings:
         - {code: 'self.item[''event_type'']', property: text, writeback: false}
-        layout_properties: {col_xs: 0, row: WRBVIZ, width_xs: 2}
+        layout_properties: {grid_position: 'YMWWEE,GDBEUP'}
         name: txt_event_type
-        properties: {align: left, scale: small, style: label, text: Social Club, text_color: 'theme:Outline'}
-        type: form:dep_lin1x4oec0ytd:_Components.Text
-      - layout_properties: {col_xs: 0, row: XWZIJY, width_xs: 3}
-        name: spacer_1
-        properties: {height: '2', spacing_above: none}
-        type: Spacer
-      - data_bindings:
-        - {code: 'f"Date: {self.item[''event_date'']}"', property: text, writeback: false}
-        layout_properties: {col_xs: 0, row: TRJVIC, width_xs: 3}
-        name: txt_date
-        properties: {icon: 'mi:date_range', icon_color: 'theme:Error', text: 9/21/2025}
-        type: form:dep_lin1x4oec0ytd:_Components.Text
-      - data_bindings:
-        - {code: 'f"Time: {self.item[''event_start'']} - {self.item[''event_end'']}"', property: text, writeback: false}
-        layout_properties: {col_xs: 3, row: TRJVIC, width_xs: 3}
-        name: txt_times
-        properties: {icon: 'mi:timer', icon_color: 'theme:Error', text: '2:00 - 4:00 PM'}
-        type: form:dep_lin1x4oec0ytd:_Components.Text
-      - data_bindings:
-        - {code: 'f"Budget: {self.item[''budget'']}"', property: text, writeback: false}
-        layout_properties: {col_xs: 0, row: TMXMUH, width_xs: 3}
-        name: txt_budget
-        properties: {bold: false, icon: 'mi:money', icon_color: '#01b72e'}
-        type: form:dep_lin1x4oec0ytd:_Components.Text
-      - data_bindings:
-        - {code: 'self.item[''location''][''venue_name'']', property: text, writeback: false}
-        layout_properties: {col_xs: 3, row: TMXMUH, width_xs: 4}
-        name: txt_venue
-        properties: {icon: 'mi:location_pin', icon_color: '#39aff9', scale: medium, text: Club House}
+        properties:
+          align: left
+          bold: false
+          scale: small
+          spacing:
+            margin: ['10', null, null, '5']
+            padding: ['0', '8', '0', null]
+          style: label
+          text: Social Club
+          text_color: theme:Outline
         type: form:dep_lin1x4oec0ytd:_Components.Text
       - data_bindings:
         - {code: 'self.item[''id'']', property: item, writeback: false}
         - {code: 'self.item[''id'']', property: tag, writeback: false}
         event_bindings: {click: btn_details_click}
-        layout_properties: {col_xs: 9, row: TMXMUH, width_xs: 3}
+        layout_properties: {grid_position: 'YMWWEE,NNLLTH'}
         name: btn_details
         properties:
-          align: left
+          align: right
           appearance: text
+          bold: true
           enabled: true
-          icon: mi:arrow_right
+          font_size: 11
+          icon: mi:arrow_right_alt
           icon_align: right
-          icon_size: 26
+          icon_size: 22
           spacing:
-            padding: [null, 26, null, null]
+            margin: [0, '0', 0, '5']
+            padding: [null, 0, null, '0']
           text: Details
         type: form:dep_lin1x4oec0ytd:_Components.Button
-      data_bindings: []
       layout_properties: {slot: card-content-container-slot}
-      name: grid_panel_1
-      properties:
-        background: ''
-        role: null
-        spacing:
-          margin: ['0', 25, null, '0']
-          padding: ['8', 59, null, '10']
-        spacing_above: none
-        spacing_below: none
-      type: GridPanel
+      name: column_panel_2
+      properties: {col_spacing: small, col_widths: '{"GDBEUP":40,"NNLLTH":20}'}
+      type: ColumnPanel
     layout_properties: {slot: card-content-slot}
-    name: card_content_container_2
+    name: card_content_container_1
     properties:
-      margin: ['0', '0', '4', '0']
+      margin: ['16', '16', '8', '16']
     type: form:dep_lin1x4oec0ytd:_Components.Card.CardContentContainer
-  layout_properties: {full_width_row: false, grid_position: 'CLDWJS,DXCBJV'}
-  name: card_1
-  properties:
-    align: left
-    orientation: column
-    role: ''
-    spacing:
-      margin: ['0', '0', null, '0']
-  type: form:dep_lin1x4oec0ytd:_Components.Card
+  layout_properties: {grid_position: 'FZUOXQ,XAQPTX'}
+  name: interactive_card_1
+  properties: {enabled: true, orientation: row}
+  type: form:dep_lin1x4oec0ytd:_Components.InteractiveCard
 container:
   properties:
-    col_spacing: small
+    col_spacing: tiny
     spacing:
-      margin: ['0', '0', null, 0]
+      margin: ['0', '0', '0', 0]
       padding: [null, '0', null, 0]
   type: ColumnPanel
 is_package: true
