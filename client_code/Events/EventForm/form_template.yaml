@@ -82,7 +82,7 @@ components_by_slot:
       properties:
         bold: true
         spacing:
-          margin: ['16', null, '0', '0']
+          margin: ['16', null, '8', '0']
           padding: [null, null, null, '0']
         text: Q&A Summary
       type: form:dep_lin1x4oec0ytd:_Components.Text
