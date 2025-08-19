@@ -1,0 +1,15 @@
+components:
+- data_bindings:
+  - {code: 'self.item[''question'']', property: text, writeback: false}
+  layout_properties: {grid_position: 'QPZVQH,AETICH'}
+  name: lbl_question
+  properties: {bold: true, font_size: 11, icon: 'mi:question_answer', icon_size: 12}
+  type: form:dep_lin1x4oec0ytd:_Components.Text
+- data_bindings:
+  - {code: 'self.item[''answer'']', property: text, writeback: false}
+  layout_properties: {grid_position: 'DPQGNK,QEFIMD'}
+  name: lbl_answer
+  properties: {font_size: 11, icon: 'mi:quickreply', icon_size: 12}
+  type: form:dep_lin1x4oec0ytd:_Components.Text
+container: {type: ColumnPanel}
+is_package: true

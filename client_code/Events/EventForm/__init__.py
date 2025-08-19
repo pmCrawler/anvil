@@ -12,32 +12,49 @@ class EventForm(EventFormTemplate):
         # Set Form properties and Data Bindings.
         self.init_components(**properties)
         self.description = ""
-        self.answers = []
         self.current_question = ""
+        self.answers = []
+        self.count = 0
+        self.cpanel_questions.visible = False
+        self.cpanel_summary.visible = False
 
     def btn_submit_answer_click(self, **event_args):
         """This method is called when the component is clicked."""
-        answer = self.txt_answer_input.text
-        self.answers.append((self.current_question, answer))
-        self.txt_answer_input.text = ""
 
-        next_q = anvil.server.call(
-            "generate_next_question",
-            self.description,
-            self.answers,
-        )
+        self.count += 1
+        answer = self.input_answer.text
+        self.answers.append({"question": self.current_question, "answer": answer})
+        self.input_answer.text = ""
 
-        if "That's all I need" in next_q:
-            self.txt_question_label.text = "Thanks! You're all set."
-            self.submit_answer_btn.enabled = False
+        if self.count == 2:
+            self.label_question.text = (
+                "Thanks! You're all set. Submit to get the party started!"
+            )
+            self.input_answer.visible = False
+            self.btn_submit_answer.visible = False
+
+            self.cpanel_summary.visible = True
+            self.rpanel_qna.items = self.answers
         else:
-            self.current_question = next_q
-            self.txt_question_label.text = next_q
+            next_q = anvil.server.call(
+                "generate_next_question",
+                self.description,
+                self.answers,
+            )
+            self.current_question = f"""{next_q}_{self.count}"""
+            self.label_question.text = self.current_question
+
+    def btn_continue_click(self, **event_args):
+        """This method is called when the component is clicked."""
+        self.start_wizard()
+        self.cpanel_questions.visible = True
+        self.cpanel_start.visible = False
 
     def start_wizard(self):
-        self.description = self.txt_input_description.text
-        self.answers = []
+        self.description = self.input_description.text
         self.current_question = anvil.server.call(
-            "generate_next_question", self.description, []
+            "generate_next_question",
+            self.description,
+            [],
         )
-        self.txt_question_label.text = self.current_question
+        self.label_question.text = self.current_question
