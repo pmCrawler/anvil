@@ -11,6 +11,7 @@ class EventForm(EventFormTemplate):
     def __init__(self, **properties):
         # Set Form properties and Data Bindings.
         self.init_components(**properties)
+
         self.description = ""
         self.current_question = ""
         self.answers = []
@@ -59,3 +60,8 @@ class EventForm(EventFormTemplate):
             [],
         )
         self.label_question.text = self.current_question
+
+    def btn_event_ai_click(self, **event_args):
+        """This method is called when the component is clicked."""
+
+        pass

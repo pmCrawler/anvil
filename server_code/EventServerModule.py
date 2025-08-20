@@ -435,8 +435,3 @@ def get_event(id):
 @anvil.server.callable
 def get_events():
     return events
-
-
-@anvil.server.callable
-def get_ai_response():
-    return ai_response

@@ -6,20 +6,29 @@ from anvil.tables import app_tables
 import anvil.server
 
 # import openai  # or your preferred AI provider
-import requests
-
+import anvil.http
 
 # openai.api_key = "your-openai-api-key"
-@anvil.server.callable
-def get_event_data(inputs):
-    #  http://localhost:5678/webhook-test/dafb4274-ddf0-4874-a0e1-5a362c525170
-    # return "call to get_event_data"
+inputs = {
+    "event_title": "sample event",
+    "event_description": "hosting my first book club event",
+    "event_type": "book club",
+    "event_date": "4/4/2026",
+    "guest_count": 30,
+    "venue_type": "club house",
+    "food_bev": True,
+    "event_setting": "indoor",
+}
+n8n_url = "http://localhost:5678/webhook/dafb4274-ddf0-4874-a0e1-5a362c525170"
 
-    resp = requests.get(
-        "http://localhost:5678/webhook-test/dafb4274-ddf0-4874-a0e1-5a362c525170"
-    )
-    return resp
-    pass
+
+@anvil.server.callable
+def get_ai_response(inputs):
+    # return "call to get_event_data"
+    resp = anvil.http.request(n8n_url, data=inputs, json=True)
+    ai_resp = resp["data"][0]["message"]["content"]
+    print(ai_resp)
+    return ai_resp
 
 
 @anvil.server.callable
