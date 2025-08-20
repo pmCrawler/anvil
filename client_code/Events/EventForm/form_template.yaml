@@ -14,16 +14,19 @@ components_by_slot:
       type: form:dep_lin1x4oec0ytd:_Components.Text
     - layout_properties: {grid_position: 'LZVRMW,JITNFM'}
       name: input_description
-      properties: {align: left, appearance: outlined, border_color: 'theme:Secondary Container', character_limit: 100, display_bold: false, display_font_size: 12, height: 60, label: Describe your event, label_bold: true, label_color: '', label_font_size: 12, placeholder: 'I''m planning my sister''s first baby shower. I want ideas for the menu, theme, etc.', subcontent_color: '#525252', subcontent_font_size: 9, supporting_text: ''}
+      properties: {align: left, appearance: outlined, border_color: 'theme:Secondary Container', character_limit: 100, display_bold: false, display_font_size: null, height: 60, label: Describe your event, label_bold: true, label_color: '', label_font_size: null, placeholder: 'I''m planning my sister''s first baby shower. I want ideas for the menu, theme, etc.', subcontent_color: '#525252', subcontent_font_size: 9, supporting_text: ''}
       type: form:dep_lin1x4oec0ytd:_Components.TextInput.TextArea
     - components:
       - data_bindings: []
         layout_properties: {grid_position: 'ZECAWY,TKNNBC BTORBN,RIVCUT'}
         name: input_datetime
         properties:
+          align: left
+          background: theme:Surface Variant
           bold: false
+          border: '#707973'
           font: ''
-          font_size: 12
+          font_size: 13
           margin: ['4', null, '0', null]
           pick_time: true
           placeholder: Date & Time
@@ -31,41 +34,47 @@ components_by_slot:
       - layout_properties: {grid_position: 'ZECAWY,TKNNBC LSMFOY,GFMPDA'}
         name: input_budget
         properties:
-          appearance: outlined
-          display_font_size: 12
+          appearance: filled
+          background_color: theme:Surface Variant
+          border_color: theme:Outline
+          display_font_size: null
           label: Budget
           label_bold: true
-          label_font_size: 12
+          label_font_size: null
           leading_icon: mi:wallet
           leading_icon_color: theme:Tertiary
-          margin: ['4', null, '4', null]
+          margin: ['8', null, '4', null]
           placeholder: $500
           type: number
         type: form:dep_lin1x4oec0ytd:_Components.TextInput.TextBox
-      - layout_properties: {grid_position: 'ZECAWY,ZWYABD RXWOOH,ZFYALB'}
+      - layout_properties: {grid_position: 'ZECAWY,ZWYABD RXWOOH,ZFYALB', row_background: ''}
         name: input_venue
         properties:
-          appearance: outlined
-          display_font_size: 12
+          appearance: filled
+          background_color: theme:Surface Variant
+          border_color: theme:Outline
+          display_font_size: null
           label: Venue
           label_bold: true
-          label_font_size: 12
+          label_font_size: null
           leading_icon: mi:place
           leading_icon_color: theme:Tertiary
-          margin: ['0', null, '0', null]
+          margin: ['0', null, '4', null]
           placeholder: home, community center, etc.
         type: form:dep_lin1x4oec0ytd:_Components.TextInput.TextBox
       - data_bindings: []
-        layout_properties: {grid_position: 'ZECAWY,ZWYABD'}
+        layout_properties: {grid_position: 'ZECAWY,ZWYABD', row_background: ''}
         name: input_guest_count
         properties:
-          appearance: outlined
+          appearance: filled
+          background_color: theme:Surface Variant
+          border_color: theme:Outline
           character_limit: 0
-          display_font_size: 12
+          display_font_size: null
           error: false
           label: Guest Count
           label_bold: true
-          label_font_size: 12
+          label_font_size: null
           leading_icon: mi:people_alt
           leading_icon_color: theme:Tertiary
           margin: ['0', null, '0', null]
@@ -75,7 +84,7 @@ components_by_slot:
       layout_properties: {grid_position: 'XAANJQ,RVGQIZ'}
       name: cpanel_inputs
       properties:
-        col_spacing: tiny
+        col_spacing: medium
         spacing:
           margin: ['4', null, '4', null]
         spacing_above: medium
@@ -85,9 +94,10 @@ components_by_slot:
       layout_properties: {grid_position: 'WDTLFS,XTCBFV'}
       name: btn_start
       properties:
+        align: center
         appearance: text
         bold: true
-        font_size: 12
+        font_size: null
         icon: mi:arrow_right
         icon_align: right
         icon_size: 30
@@ -135,9 +145,10 @@ components_by_slot:
       layout_properties: {grid_position: 'LRGBJG,NUZMZC'}
       name: btn_submit_answer
       properties:
+        align: center
         appearance: text
         bold: true
-        font_size: 12
+        font_size: null
         icon: mi:arrow_right
         icon_align: right
         icon_size: 30
@@ -157,7 +168,8 @@ components_by_slot:
       name: text_1
       properties:
         bold: true
-        font_size: 12
+        font_size: null
+        scale: large
         spacing:
           margin: ['16', null, '8', '0']
           padding: [null, null, null, '0']
