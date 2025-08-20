@@ -1,5 +1,10 @@
 components_by_slot:
   content:
+  - event_bindings: {click: btn_new_event_click}
+    layout_properties: {}
+    name: btn_new_event
+    properties: {align: center, appearance: filled, icon: 'mi:add', tooltip: Plan an event}
+    type: form:dep_lin1x4oec0ytd:_Components.Button
   - layout_properties: {}
     name: repeating_panel_1
     properties:

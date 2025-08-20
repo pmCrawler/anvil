@@ -14,3 +14,7 @@ class EventList(EventListTemplate):
         self.init_components(**properties)
         self.events = anvil.server.call("get_events")
         self.repeating_panel_1.items = self.events
+
+    def btn_new_event_click(self, **event_args):
+        """This method is called when the component is clicked."""
+        open_form("Events.EventForm")
