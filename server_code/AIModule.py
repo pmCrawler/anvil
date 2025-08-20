@@ -4,9 +4,22 @@ import anvil.tables as tables
 import anvil.tables.query as q
 from anvil.tables import app_tables
 import anvil.server
+
 # import openai  # or your preferred AI provider
+import requests
+
 
 # openai.api_key = "your-openai-api-key"
+@anvil.server.callable
+def get_event_data(inputs):
+    #  http://localhost:5678/webhook-test/dafb4274-ddf0-4874-a0e1-5a362c525170
+    # return "call to get_event_data"
+
+    resp = requests.get(
+        "http://localhost:5678/webhook-test/dafb4274-ddf0-4874-a0e1-5a362c525170"
+    )
+    return resp
+    pass
 
 
 @anvil.server.callable
