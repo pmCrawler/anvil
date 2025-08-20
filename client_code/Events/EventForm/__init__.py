@@ -44,11 +44,12 @@ class EventForm(EventFormTemplate):
             self.current_question = f"""{next_q}_{self.count}"""
             self.label_question.text = self.current_question
 
-    def btn_continue_click(self, **event_args):
+    def btn_start_click(self, **event_args):
         """This method is called when the component is clicked."""
         self.start_wizard()
+        self.btn_start.visible = False
         self.cpanel_questions.visible = True
-        self.cpanel_start.visible = False
+        self.cpanel_start.visible = True
 
     def start_wizard(self):
         self.description = self.input_description.text

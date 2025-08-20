@@ -1,24 +1,100 @@
 components_by_slot:
   content:
   - components:
+    - layout_properties: {grid_position: 'VYIOYF,MVUBWP'}
+      name: txt_new_heading
+      properties:
+        bold: true
+        scale: large
+        spacing:
+          margin: [null, null, '10', null]
+          padding: ['5', null, '5', '16']
+        style: label
+        text: New Event
+      type: form:dep_lin1x4oec0ytd:_Components.Text
     - layout_properties: {grid_position: 'LZVRMW,JITNFM'}
       name: input_description
-      properties: {align: left, appearance: outlined, border_color: 'theme:Secondary Container', character_limit: 100, display_bold: false, display_font_size: 11, height: 60, label: Describe your event, label_bold: true, label_color: '', label_font_size: 11, placeholder: 'e.g. I''m planning my sister''s themed first baby shower. I want ideas for a menu, etc.', subcontent_color: '#525252', subcontent_font_size: 9, supporting_text: We'll ask a few questions to get started}
+      properties: {align: left, appearance: outlined, border_color: 'theme:Secondary Container', character_limit: 100, display_bold: false, display_font_size: 12, height: 60, label: Describe your event, label_bold: true, label_color: '', label_font_size: 12, placeholder: 'I''m planning my sister''s first baby shower. I want ideas for the menu, theme, etc.', subcontent_color: '#525252', subcontent_font_size: 9, supporting_text: ''}
       type: form:dep_lin1x4oec0ytd:_Components.TextInput.TextArea
-    - event_bindings: {click: btn_continue_click}
+    - components:
+      - data_bindings: []
+        layout_properties: {grid_position: 'ZECAWY,TKNNBC BTORBN,RIVCUT'}
+        name: input_datetime
+        properties:
+          bold: false
+          font: ''
+          font_size: 12
+          margin: ['4', null, '0', null]
+          pick_time: true
+          placeholder: Date & Time
+        type: DatePicker
+      - layout_properties: {grid_position: 'ZECAWY,TKNNBC LSMFOY,GFMPDA'}
+        name: input_budget
+        properties:
+          appearance: outlined
+          display_font_size: 12
+          label: Budget
+          label_bold: true
+          label_font_size: 12
+          leading_icon: mi:wallet
+          leading_icon_color: theme:Tertiary
+          margin: ['4', null, '4', null]
+          placeholder: $500
+          type: number
+        type: form:dep_lin1x4oec0ytd:_Components.TextInput.TextBox
+      - layout_properties: {grid_position: 'ZECAWY,ZWYABD RXWOOH,ZFYALB'}
+        name: input_venue
+        properties:
+          appearance: outlined
+          display_font_size: 12
+          label: Venue
+          label_bold: true
+          label_font_size: 12
+          leading_icon: mi:place
+          leading_icon_color: theme:Tertiary
+          margin: ['0', null, '0', null]
+          placeholder: home, community center, etc.
+        type: form:dep_lin1x4oec0ytd:_Components.TextInput.TextBox
+      - data_bindings: []
+        layout_properties: {grid_position: 'ZECAWY,ZWYABD'}
+        name: input_guest_count
+        properties:
+          appearance: outlined
+          character_limit: 0
+          display_font_size: 12
+          error: false
+          label: Guest Count
+          label_bold: true
+          label_font_size: 12
+          leading_icon: mi:people_alt
+          leading_icon_color: theme:Tertiary
+          margin: ['0', null, '0', null]
+          placeholder: '25'
+          type: number
+        type: form:dep_lin1x4oec0ytd:_Components.TextInput.TextBox
+      layout_properties: {grid_position: 'XAANJQ,RVGQIZ'}
+      name: cpanel_inputs
+      properties:
+        col_spacing: tiny
+        spacing:
+          margin: ['4', null, '4', null]
+        spacing_above: medium
+        spacing_below: medium
+      type: ColumnPanel
+    - event_bindings: {click: btn_start_click}
       layout_properties: {grid_position: 'WDTLFS,XTCBFV'}
-      name: btn_continue
+      name: btn_start
       properties:
         appearance: text
         bold: true
-        font_size: 11
+        font_size: 12
         icon: mi:arrow_right
         icon_align: right
         icon_size: 30
         spacing:
           margin: ['0', '0', '0', '0']
           padding: [null, '16', '0', '16']
-        text: Continue
+        text: Start
       type: form:dep_lin1x4oec0ytd:_Components.Button
     layout_properties: {}
     name: cpanel_start
@@ -52,7 +128,7 @@ components_by_slot:
         label_font_size: null
         leading_icon: ''
         margin: ['20', null, null, null]
-        placeholder: e.g. the event will be hosted at my house, indoors.
+        placeholder: ''
         subcontent_font_size: 9
       type: form:dep_lin1x4oec0ytd:_Components.TextInput.TextBox
     - event_bindings: {click: btn_submit_answer_click}
@@ -61,14 +137,14 @@ components_by_slot:
       properties:
         appearance: text
         bold: true
-        font_size: 11
+        font_size: 12
         icon: mi:arrow_right
         icon_align: right
         icon_size: 30
         spacing:
           margin: ['0', '0', '0', '0']
           padding: [null, '16', null, '16']
-        text: Submit
+        text: Next
       type: form:dep_lin1x4oec0ytd:_Components.Button
     layout_properties: {}
     name: cpanel_questions
@@ -81,6 +157,7 @@ components_by_slot:
       name: text_1
       properties:
         bold: true
+        font_size: 12
         spacing:
           margin: ['16', null, '8', '0']
           padding: [null, null, null, '0']
