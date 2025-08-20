@@ -6,7 +6,8 @@ import anvil.tables as tables
 import anvil.tables.query as q
 from anvil.tables import app_tables
 from .EventCardTemplate import EventCardTemplate
-import requests
+import anvil.http
+
 
 inputs = {
     "Event Title": "sample event",
@@ -26,10 +27,12 @@ class EventList(EventListTemplate):
         self.init_components(**properties)
         # resp = anvil.server.call("get_event_data", inputs)
         # print(resp)
-
-        resp = requests.get(
-            "http://localhost:5678/webhook-test/dafb4274-ddf0-4874-a0e1-5a362c525170"
+        resp = anvil.http.request(
+            "http://localhost:5678/webhook/dafb4274-ddf0-4874-a0e1-5a362c525170",
+            data=inputs,
+            json=True,
         )
+        print(resp)
 
         self.events = anvil.server.call("get_events")
         self.repeating_panel_1.items = self.events
