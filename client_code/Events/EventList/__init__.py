@@ -10,14 +10,14 @@ import anvil.http
 
 
 inputs = {
-    "Event Title": "sample event",
-    "Type": "book club",
-    "Date": "4/4/2026",
-    "Guest Count": 30,
-    "Venue Type": "club house",
-    "Food and Beverage": True,
-    "Event Setting": "indoor",
-    "Extra Info": "hosting my first book club event",
+    "event_title": "sample event",
+    "event_description": "hosting my first book club event",
+    "event_type": "book club",
+    "event_date": "4/4/2026",
+    "guest_count": 30,
+    "venue_type": "club house",
+    "food_bev": True,
+    "event_setting": "indoor",
 }
 
 
