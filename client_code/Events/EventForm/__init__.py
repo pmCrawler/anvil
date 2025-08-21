@@ -6,6 +6,7 @@ import anvil.tables as tables
 import anvil.tables.query as q
 from anvil.tables import app_tables
 from ... import Events
+import anvil.http
 
 
 class EventForm(EventFormTemplate):
@@ -75,6 +76,7 @@ class EventForm(EventFormTemplate):
             "food_bev": True if self.switch_food.selected else False,
             "event_setting": self.rgp_setting.selected_value,
         }
+
         resp = anvil.http.request(
             "http://localhost:5678/webhook/dafb4274-ddf0-4874-a0e1-5a362c525170",
             data=user_input,
