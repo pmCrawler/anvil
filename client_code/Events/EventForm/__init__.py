@@ -64,4 +64,14 @@ class EventForm(EventFormTemplate):
     def btn_event_ai_click(self, **event_args):
         """This method is called when the component is clicked."""
 
+        inputs = {
+            "event_title": self.input_title,
+            "event_description": self.input_description.text,
+            "event_date": self.input_datetime,
+            "guest_count": self.input_guest_count,
+            "budget": self.input_budget,
+            "venue_type": self.input_venue,
+            "food_bev": "",
+            "event_setting": "",
+        }
         pass
