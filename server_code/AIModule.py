@@ -4,7 +4,7 @@ import anvil.tables as tables
 import anvil.tables.query as q
 from anvil.tables import app_tables
 import anvil.server
-import anvil.http
+import requests
 
 # import openai  # or your preferred AI provider
 
@@ -25,10 +25,19 @@ n8n_url = "http://localhost:5678/webhook/dafb4274-ddf0-4874-a0e1-5a362c525170"
 @anvil.server.callable
 def get_ai_response(user_input):
     # return "call to get_event_data"
-    ai_resp = {}
-    resp = anvil.http.request(n8n_url, data=user_input, json=True)
-    ai_resp = resp["data"][0]["message"]["content"]
-    return ai_resp
+    # ai_resp = {}
+    # print(user_input)
+    # resp = anvil.http.request(
+    #     "http://localhost:5678/webhook/dafb4274-ddf0-4874-a0e1-5a362c525170",
+    #     data=user_input,
+    #     json=True,
+    # )
+
+    resp = requests.get(n8n_url, user_input)
+
+    # ai_resp = resp["data"][0]["message"]["content"]
+    # return ai_resp
+    return resp.json()
 
 
 @anvil.server.callable

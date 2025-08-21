@@ -66,12 +66,12 @@ class EventForm(EventFormTemplate):
         """This method is called when the component is clicked."""
 
         user_input = {
-            "event_title": self.input_title,
+            "event_title": self.input_title.text,
             "event_description": self.input_description.text,
-            "event_datetime": self.input_datetime,
-            "guest_count": self.input_guest_count,
-            "budget": self.input_budget,
-            "venue_type": self.input_venue,
+            "event_datetime": str(self.input_datetime.date),
+            "guest_count": self.input_guest_count.text,
+            "budget": self.input_budget.text,
+            "venue_type": self.input_venue_type.text,
             "food_bev": True if self.switch_food.selected else False,
             "event_setting": self.rgp_setting.selected_value,
         }
