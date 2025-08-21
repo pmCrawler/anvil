@@ -5,6 +5,7 @@ import m3.components as m3
 import anvil.tables as tables
 import anvil.tables.query as q
 from anvil.tables import app_tables
+from ... import Events
 
 
 class EventForm(EventFormTemplate):
@@ -75,5 +76,5 @@ class EventForm(EventFormTemplate):
             "event_setting": self.rgp_setting.selected_value,
         }
         resp = anvil.server.call("get_ai_response", user_input)
-        
+        open_form("Events.EventAI", **resp)
         pass
