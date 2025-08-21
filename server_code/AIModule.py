@@ -4,9 +4,9 @@ import anvil.tables as tables
 import anvil.tables.query as q
 from anvil.tables import app_tables
 import anvil.server
+import anvil.http
 
 # import openai  # or your preferred AI provider
-import anvil.http
 
 # openai.api_key = "your-openai-api-key"
 inputs = {
