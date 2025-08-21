@@ -82,5 +82,7 @@ class EventForm(EventFormTemplate):
             data=user_input,
             json=True,
         )
-        open_form("Events.EventAI", **resp)
+
+        fmt_resp = resp[0]["message"]["content"]
+        open_form("Events.EventAI", **fmt_resp)
         pass
