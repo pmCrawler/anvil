@@ -75,6 +75,10 @@ class EventForm(EventFormTemplate):
             "food_bev": True if self.switch_food.selected else False,
             "event_setting": self.rgp_setting.selected_value,
         }
-        resp = anvil.server.call("get_ai_response", user_input)
+        resp = anvil.http.request(
+            "http://localhost:5678/webhook/dafb4274-ddf0-4874-a0e1-5a362c525170",
+            data=user_input,
+            json=True,
+        )
         open_form("Events.EventAI", **resp)
         pass

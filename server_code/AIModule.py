@@ -33,11 +33,12 @@ def get_ai_response(user_input):
     #     json=True,
     # )
 
-    resp = requests.get(n8n_url, user_input)
+    # resp = requests.get(n8n_url, user_input)
 
     # ai_resp = resp["data"][0]["message"]["content"]
     # return ai_resp
-    return resp.json()
+    # return resp.json()
+    pass
 
 
 @anvil.server.callable
