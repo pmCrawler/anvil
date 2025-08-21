@@ -23,9 +23,9 @@ n8n_url = "http://localhost:5678/webhook/dafb4274-ddf0-4874-a0e1-5a362c525170"
 
 
 @anvil.server.callable
-def get_ai_response(inputs):
+def get_ai_response(user_input):
     # return "call to get_event_data"
-    resp = anvil.http.request(n8n_url, data=inputs, json=True)
+    resp = anvil.http.request(n8n_url, data=user_input, json=True)
     ai_resp = resp["data"][0]["message"]["content"]
     print(ai_resp)
     return ai_resp

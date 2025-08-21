@@ -14,7 +14,8 @@ class EventAI(EventAITemplate):
 
         # Store selected values for each section
         self.selected_values = {}
-        self.ai_response = anvil.server.call("get_ai_response")
+        # self.ai_response = anvil.server.call("get_ai_response")
+        self.ai_response = properties
         self.process_json_response(self.ai_response)
 
     def process_json_response(self, json_response):

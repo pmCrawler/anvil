@@ -61,17 +61,19 @@ class EventForm(EventFormTemplate):
         )
         self.label_question.text = self.current_question
 
-    def btn_event_ai_click(self, **event_args):
+    def btn_call_ai_click(self, **event_args):
         """This method is called when the component is clicked."""
 
-        inputs = {
+        user_input = {
             "event_title": self.input_title,
             "event_description": self.input_description.text,
-            "event_date": self.input_datetime,
+            "event_datetime": self.input_datetime,
             "guest_count": self.input_guest_count,
             "budget": self.input_budget,
             "venue_type": self.input_venue,
-            "food_bev": "",
-            "event_setting": "",
+            "food_bev": True if self.switch_food.selected else False,
+            "event_setting": self.rgp_setting.selected_value,
         }
+        resp = anvil.server.call("get_ai_response", user_input)
+        
         pass
