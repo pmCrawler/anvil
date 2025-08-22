@@ -39,7 +39,6 @@ class EventForm(EventFormTemplate):
         self.user_input = self.get_user_input()
         resp = anvil.http.request(QUESTION_WF_URL, data=self.user_input, json=True)
 
-        pprint(resp)
         self.current_question = resp
         self.label_question.text = self.current_question
 
@@ -70,7 +69,7 @@ class EventForm(EventFormTemplate):
     def btn_call_ai_click(self, **event_args):
         """This method is called when the component is clicked."""
 
-        pprint(self.user_input)
+        print(self.user_input)
         resp = anvil.http.request(EVENT_WF_URL, data=self.user_input, json=True)
         pass
         open_form("Events.EventAI", **resp)
