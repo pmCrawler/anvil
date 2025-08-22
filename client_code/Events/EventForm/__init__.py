@@ -56,16 +56,34 @@ class EventForm(EventFormTemplate):
 
     def start_wizard(self):
         self.description = self.input_description.text
-        self.current_question = anvil.server.call(
-            "generate_next_question",
-            self.description,
-            [],
+        # self.current_question = anvil.server.call(
+        #     "generate_next_question",
+        #     self.description,
+        #     [],
+        # )=
+        user_input = self.get_user_input()
+        self.current_question = anvil.http.request(
+            "http://localhost:5678/webhook-test/69aee61f-e514-417d-ad16-0615b6e1a9c9",
+            data=user_input,
+            json=True,
         )
         self.label_question.text = self.current_question
 
     def btn_call_ai_click(self, **event_args):
         """This method is called when the component is clicked."""
 
+        user_input = self.get_user_input()
+        resp = anvil.http.request(
+            "http://localhost:5678/webhook/dafb4274-ddf0-4874-a0e1-5a362c525170",
+            data=user_input,
+            json=True,
+        )
+
+        fmt_resp = resp[0]["message"]["content"]
+        open_form("Events.EventAI", **fmt_resp)
+        pass
+
+    def get_user_input(self):
         user_input = {
             "event_title": self.input_title.text,
             "event_description": self.input_description.text,
@@ -76,13 +94,4 @@ class EventForm(EventFormTemplate):
             "food_bev": True if self.switch_food.selected else False,
             "event_setting": self.rgp_setting.selected_value,
         }
-
-        resp = anvil.http.request(
-            "http://localhost:5678/webhook/dafb4274-ddf0-4874-a0e1-5a362c525170",
-            data=user_input,
-            json=True,
-        )
-
-        fmt_resp = resp[0]["message"]["content"]
-        open_form("Events.EventAI", **fmt_resp)
-        pass
+        return user_input
