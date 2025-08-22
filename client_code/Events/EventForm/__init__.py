@@ -39,7 +39,7 @@ class EventForm(EventFormTemplate):
         self.user_input = self.get_user_input()
         resp = anvil.http.request(QUESTION_WF_URL, data=self.user_input, json=True)
 
-        self.current_question = resp
+        self.current_question = resp["question"]
         self.label_question.text = self.current_question
 
     def btn_submit_answer_click(self, **event_args):
@@ -63,7 +63,7 @@ class EventForm(EventFormTemplate):
             next_q = anvil.http.request(
                 QUESTION_WF_URL, data=self.user_input, json=True
             )
-            self.current_question = next_q
+            self.current_question = next_q["question"]
             self.label_question.text = self.current_question
 
     def btn_call_ai_click(self, **event_args):
