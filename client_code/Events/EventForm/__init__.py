@@ -60,10 +60,10 @@ class EventForm(EventFormTemplate):
             self.cpanel_summary.visible = True
             self.rpanel_qna.items = self.answers
         else:
-            next_q = anvil.http.request(
-                QUESTION_WF_URL, data=self.user_input, json=True
-            )
-            self.current_question = next_q["question"]
+            # next_q = anvil.http.request(
+            #     QUESTION_WF_URL, data=self.user_input, json=True
+            # )
+            self.current_question = resp["question"]
             self.label_question.text = self.current_question
 
     def btn_call_ai_click(self, **event_args):
