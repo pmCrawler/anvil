@@ -47,7 +47,7 @@ class EventForm(EventFormTemplate):
 
         answer = self.input_answer.text
         self.answers.append({"question": self.current_question, "answer": answer})
-        self.user_input.update({"qna": self.answers})
+        self.user_input.update({"qna": self.answers.})
 
         self.input_answer.text = ""
         resp = anvil.http.request(QUESTION_WF_URL, data=self.user_input, json=True)
