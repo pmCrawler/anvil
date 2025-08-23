@@ -23,7 +23,7 @@ class EventForm(EventFormTemplate):
         self.current_question = ""
 
         self.answers = []
-        self.user_input = {}
+        # self.user_input = {}
 
     def btn_start_click(self, **event_args):
         """This method is called when the component is clicked."""
@@ -47,7 +47,7 @@ class EventForm(EventFormTemplate):
 
         answer = self.input_answer.text
         self.answers.append({"question": self.current_question, "answer": answer})
-        self.user_input.update({"qna": self.answers.})
+        self.user_input.update({"qna": self.answers})
 
         self.input_answer.text = ""
         resp = anvil.http.request(QUESTION_WF_URL, data=self.user_input, json=True)
@@ -84,6 +84,6 @@ class EventForm(EventFormTemplate):
             "venue_type": self.input_venue_type.text,
             "food_bev": True if self.switch_food.selected else False,
             "event_setting": self.rgp_setting.selected_value,
-            "qna": self.answers,
+            # "qna": self.answers,
         }
         return self.user_input
