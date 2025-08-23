@@ -9,7 +9,7 @@ import json
 
 
 class EventAI(EventAITemplate):
-    def __init__(self, **properties):
+    def __init__(self, ai_resp, **properties):
         # Set Form properties and Data Bindings.
         self.init_components(**properties)
 
@@ -17,7 +17,7 @@ class EventAI(EventAITemplate):
         self.selected_values = {}
 
         # self.ai_response = anvil.server.call("get_ai_response")
-        self.ai_response = self.load_sample_data()  # properties
+        self.ai_response = ai_resp  # properties  # self.load_sample_data()
         self.process_json_response(self.ai_response)
 
     def process_json_response(self, json_response):
