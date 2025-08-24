@@ -18,6 +18,7 @@ class EventForm(EventFormTemplate):
         self.init_components(**properties)
         self.cpanel_questions.visible = False
         self.cpanel_summary.visible = False
+        self.event_ai.content_panel.visible = False
 
         self.description = ""
         self.current_question = ""
@@ -40,8 +41,10 @@ class EventForm(EventFormTemplate):
         self.user_input = self.get_user_input()
         resp = anvil.http.request(EVENT_WF_URL, data=self.user_input, json=True)
 
-        self.current_question = resp["question"]
-        self.label_question.text = self.current_question
+        # self.current_question = resp["question"]
+        # self.label_question.text = self.current_question
+        self.event_ai.content_panel.visible = True
+        self.event_ai.process_json_response(resp)
 
     def btn_submit_answer_click(self, **event_args):
         """This method is called when the component is clicked."""
