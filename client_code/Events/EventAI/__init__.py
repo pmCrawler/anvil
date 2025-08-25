@@ -1,5 +1,6 @@
 from ._anvil_designer import EventAITemplate
 from anvil import *
+import anvil.users
 import anvil.server
 import m3.components as m3
 import anvil.tables as tables
@@ -60,13 +61,13 @@ class EventAI(EventAITemplate):
         # Add the main container to the form
         self.content_panel.add_component(main_container)
 
-        # Add a submit button at the bottom
-        submit_btn = m3.Button(
-            text="Save",
-            appearance="filled",
-        )
-        submit_btn.set_event_handler("click", self.submit_selections)
-        self.content_panel.add_component(submit_btn)
+        # # Add a submit button at the bottom
+        # submit_btn = m3.Button(
+        #     text="Save",
+        #     appearance="filled",
+        # )
+        # submit_btn.set_event_handler("click", self.submit_selections)
+        # self.content_panel.add_component(submit_btn)
 
     def create_accordion_section(self, key, value):
         """
