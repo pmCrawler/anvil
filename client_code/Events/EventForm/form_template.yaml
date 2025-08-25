@@ -215,7 +215,7 @@ components_by_slot:
       type: form:dep_lin1x4oec0ytd:_Components.Divider
     - layout_properties: {grid_position: 'YXNRUJ,TOEYSZ'}
       name: heading_ai_resp
-      properties: {bold: true, font_size: null, scale: small, style: title, text: AI Results}
+      properties: {bold: true, font_size: null, scale: medium, style: title, text: AI Results}
       type: form:dep_lin1x4oec0ytd:_Components.Heading
     - layout_properties: {full_width_row: false, grid_position: 'OTWHGK,GNUNLB'}
       name: event_ai

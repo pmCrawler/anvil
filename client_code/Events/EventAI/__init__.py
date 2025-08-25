@@ -61,7 +61,10 @@ class EventAI(EventAITemplate):
         self.content_panel.add_component(main_container)
 
         # Add a submit button at the bottom
-        submit_btn = m3.Button(text="Create Plan", appearance="tonal")
+        submit_btn = m3.Button(
+            text="Save",
+            appearance="filled",
+        )
         submit_btn.set_event_handler("click", self.submit_selections)
         self.content_panel.add_component(submit_btn)
 
