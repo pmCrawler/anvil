@@ -14,72 +14,21 @@ EVENT_WF_URL = "http://localhost:5678/webhook/dafb4274-ddf0-4874-a0e1-5a362c5251
 
 class EventForm(EventFormTemplate):
     def __init__(self, **properties):
-        # Set Form properties and Data Bindings.
         self.init_components(**properties)
-        self.cpanel_questions.visible = False
-        self.cpanel_summary.visible = False
-        self.event_ai.content_panel.visible = False
-
-        self.description = ""
-        self.current_question = ""
-
-        self.answers = []
-        # self.user_input = {"qna": self.answers}
+        # self.event_ai.content_panel.visible = False
         self.user_input = dict()
 
     def btn_start_click(self, **event_args):
         """This method is called when the component is clicked."""
 
-        self.btn_start.visible = True
-        self.cpanel_start.visible = True
-        self.cpanel_questions.visible = False
-        self.start_wizard()
-
-    def start_wizard(self):
-        """Start Q&A wizard to collect more info using dynamic AI-driven questions."""
-
         self.user_input = self.get_user_input()
-        resp = anvil.http.request(EVENT_WF_URL, data=self.user_input, json=True)
+        # resp = anvil.http.request(EVENT_WF_URL, data=self.user_input, json=True)
+        resp = self.event_ai.load_sample_data()
 
-        # self.current_question = resp["question"]
-        # self.label_question.text = self.current_question
-        self.event_ai.content_panel.visible = True
+        self.btn_start.visible = False
+        self.cpanel_eventai.visible = True
+
         self.event_ai.process_json_response(resp)
-
-    def btn_submit_answer_click(self, **event_args):
-        """This method is called when the component is clicked."""
-
-        answer = self.input_answer.text
-        self.answers.append({"question": self.current_question, "answer": answer})
-        self.user_input.update({
-            "qna": [{"question": self.current_question, "answer": answer}]
-        })
-
-        self.input_answer.text = ""
-        resp = anvil.http.request(QUESTION_WF_URL, data=self.user_input, json=True)
-
-        if not resp or resp["question"] == "":
-            self.label_question.text = resp["question"]
-            self.input_answer.visible = False
-            self.btn_submit_answer.visible = False
-
-            self.cpanel_summary.visible = True
-            self.rpanel_qna.items = self.answers
-        else:
-            # next_q = anvil.http.request(
-            #     QUESTION_WF_URL, data=self.user_input, json=True
-            # )
-            self.current_question = resp["question"]
-            self.label_question.text = self.current_question
-
-    def btn_call_ai_click(self, **event_args):
-        """This method is called when the component is clicked."""
-
-        self.user_input = self.get_user_input()
-        print(self.user_input)
-        resp = anvil.http.request(EVENT_WF_URL, data=self.user_input, json=True)
-        pass
-        open_form("Events.EventAI", resp)
 
     def get_user_input(self):
         self.user_input = {
@@ -91,6 +40,5 @@ class EventForm(EventFormTemplate):
             "venue_type": self.input_venue_type.text,
             "food_bev": True if self.switch_food.selected else False,
             "event_setting": self.rgp_setting.selected_value,
-            # "qna": self.answers,
         }
         return self.user_input

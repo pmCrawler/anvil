@@ -316,11 +316,11 @@ class EventAI(EventAITemplate):
                         )
                     else:
                         value_component.add_component(
-                            TextArea(text=f"• {str(item)}", font_size=12),
+                            m3.Text(text=f"• {str(item)}", font_size=12),
                         )
         else:
             # Simple value - let it flow naturally without width restriction
-            value_component = TextArea(text=str(field_value), font_size=13)
+            value_component = m3.Text(text=str(field_value), font_size=13)
 
         # [H.E. 8/21/25] - added "width" arg to add_component
         row_container.add_component(value_component, width="50%", expand=True)

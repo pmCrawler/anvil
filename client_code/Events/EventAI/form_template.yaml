@@ -2,7 +2,14 @@ components_by_slot:
   content:
   - layout_properties: {}
     name: content_panel
-    properties: {col_spacing: small}
+    properties:
+      col_spacing: tiny
+      spacing:
+        margin: [null, '0', null, null]
+        padding: [null, null, null, null]
+      spacing_above: none
+      spacing_below: none
+      visible: true
     type: ColumnPanel
 is_package: true
 layout: {type: 'form:Frame'}
