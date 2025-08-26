@@ -70,16 +70,8 @@ class AIResponse(AIResponseTemplate):
         # self.cpanel_ai_resp.add_component(submit_btn)
 
     def create_accordion_section(self, key, value):
-        """
-        Create an accordion section for a root element
+        """Create an accordion section for a root element"""
 
-        Args:
-            key: The name of the root element
-            value: The value (can be string, dict, or list)
-
-        Returns:
-            An Anvil component containing the accordion
-        """
         # Create the accordion container
         accordion = ColumnPanel(
             spacing_above="none",
@@ -102,7 +94,7 @@ class AIResponse(AIResponseTemplate):
 
         # Create header container
         # header_container = ColumnPanel()
-        header_container = m3.Text(scale="small")
+        header_container = m3.Text(scale="small", )
 
         # Use Button with custom styling for the accordion header
         header_btn = m3.Button(

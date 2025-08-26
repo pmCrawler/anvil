@@ -1,5 +1,10 @@
 components:
-- layout_properties: {full_width_row: false, grid_position: 'IIKJUF,LCHLDU'}
+- layout_properties: {grid_position: 'GULTCD,ZLRBEN'}
+  name: heading_1
+  properties: {bold: true, scale: medium, style: title, text: Options}
+  type: form:dep_lin1x4oec0ytd:_Components.Heading
+- components: []
+  layout_properties: {full_width_row: false, grid_position: 'IIKJUF,LCHLDU'}
   name: cpanel_ai_resp
   properties: {}
   type: ColumnPanel
