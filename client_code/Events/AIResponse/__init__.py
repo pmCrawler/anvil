@@ -14,10 +14,6 @@ from ._anvil_designer import AIResponseTemplate
 class AIResponse(AIResponseTemplate):
     """Component for rendering AI response data as interactive accordions"""
 
-    # Class constants
-    IDENTIFIER_FIELDS = ["name", "title", "id", "theme", "menu_option"]
-    SELECTION_FIELDS = ["name", "theme", "menu_option", "task", "item"]
-
     def __init__(self, resp=None, **properties):
         self.init_components(**properties)
         self.selected_values = {}
@@ -304,16 +300,16 @@ class AIResponse(AIResponseTemplate):
 
     def get_item_summary(self, item_dict):
         """Get a summary string for a dictionary item"""
-        # Look for common identifier fields
-        for key in self.IDENTIFIER_FIELDS:
-            if key in item_dict:
+        # Try to find the first available key that might be descriptive
+        for key in item_dict.keys():
+            if any(identifier in key.lower() for identifier in ['name', 'title', 'id', 'theme', 'type', 'task']):
                 return str(item_dict[key])
-
-        # Return first value if no identifier found
+        
+        # Return first key-value pair if no descriptive field found
         if item_dict:
             first_key = list(item_dict.keys())[0]
             return f"{first_key}: {item_dict[first_key]}"
-
+        
         return "Item"
 
     def create_dict_display(self, data_dict):
@@ -347,9 +343,9 @@ class AIResponse(AIResponseTemplate):
             result += f"  Index: {data['index']}\n"
 
             if isinstance(data["value"], dict):
+                # Display all key-value pairs for selected items
                 for key, value in data["value"].items():
-                    if key in self.SELECTION_FIELDS:
-                        result += f"  {self.format_title(key)}: {value}\n"
+                    result += f"  {self.format_title(key)}: {value}\n"
             result += "\n"
 
         return result
