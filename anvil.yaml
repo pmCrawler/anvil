@@ -3,15 +3,13 @@ db_schema:
   ai_response:
     client: none
     columns:
-    - admin_ui: {order: 0, width: 200}
-      name: id
-      type: number
-    - admin_ui: {order: 1, width: 200}
-      name: event_id
-      type: number
     - admin_ui: {order: 2, width: 200}
       name: ai_response
       type: simpleObject
+    - admin_ui: {order: 1, width: 200}
+      name: event_id
+      target: event
+      type: link_single
     server: full
     title: ai_response
   event:
