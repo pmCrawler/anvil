@@ -360,11 +360,18 @@ class AIResponse(AIResponseTemplate):
 
     def load_sample_data(self, **event_args):
         """Load and process sample data"""
+
+    # Example usage - call this from your form's init or a button click
+    def load_sample_data(self, **event_args):
+        """
+        Load and process sample data
+        """
+        # Your AI response data here
         sample_data = {
             "themes": [
                 {
                     "theme": "Anfield Atmosphere",
-                    "description": "Bring the spirit of Anfield home with red and white decorations, banners, and vintage football memorabilia.",
+                    "description": "Bring the spirit of Anfield home with red and white decorations, banners, and vintage football memorabilia. Create a mini-hall of fame with iconic moments from Liverpool's history.",
                     "colors": "Liverpool Red, White, and Black",
                     "decorIdeas": [
                         "Bunting with Liverpool motifs",
@@ -374,19 +381,157 @@ class AIResponse(AIResponseTemplate):
                 },
                 {
                     "theme": "Modern Fan Zone",
-                    "description": "A sleek, contemporary design that uses LED lighting, dynamic visuals, and interactive displays.",
+                    "description": "A sleek, contemporary design that uses LED lighting, dynamic visuals, and interactive displays. Perfect for a season opener party.",
                     "colors": "Red, Metallic Silver, and Black",
                     "decorIdeas": [
                         "LED strips in key areas",
                         "Digital photo booth with Liverpool filters",
-                        "Modern table centerpieces",
+                        "Modern table centerpieces with mini footballs",
+                    ],
+                },
+                {
+                    "theme": "Retro Football Fiesta",
+                    "description": "A nostalgic tribute to football's golden eras with vintage posters, retro props, and classic tunes. Emphasize fun, games, and conversation.",
+                    "colors": "Deep Red, Cream, and Navy Blue",
+                    "decorIdeas": [
+                        "Retro vinyl records playing classic sports anthems",
+                        "Vintage football jerseys on the walls",
+                        "Old-school pennants and scarves",
                     ],
                 },
             ],
+            "menus": [
+                {
+                    "type": "British Pub Fare",
+                    "description": "Classic pub-inspired snacks and finger foods that keep the party spirit alive. Think hearty, shareable dishes with a twist.",
+                    "options": [
+                        "Mini fish and chips in cones",
+                        "Scotch eggs",
+                        "Pub-style sliders",
+                        "Loaded fries",
+                    ],
+                    "beverageSuggestions": [
+                        "Craft beers",
+                        "Cider",
+                        "Non-alcoholic ginger beer",
+                    ],
+                    "budgetAllocation": "Approximately 50% of the total budget",
+                },
+                {
+                    "type": "Gourmet Game Day",
+                    "description": "Elevate the typical game day experience with gourmet twists on traditional favorites. Focus on quality, presentation, and shareable plates.",
+                    "options": [
+                        "Gourmet mini burgers",
+                        "Truffle fries",
+                        "Artisan pizzas cut into bite-sized pieces",
+                        "Exotic dips with artisan bread",
+                    ],
+                    "beverageSuggestions": [
+                        "Specialty cocktails with a red twist",
+                        "Mocktails",
+                        "Premium soft drinks",
+                    ],
+                    "budgetAllocation": "Approximately 60% of the total budget including some premium ingredients",
+                },
+                {
+                    "type": "Interactive Snack Stations",
+                    "description": "Set up self-serve stations that allow guests to customize their food. The fun of building your own dish adds to the interactive vibe.",
+                    "options": [
+                        "DIY nacho bar with assorted toppings",
+                        "Build-your-own slider station",
+                        "Custom hot dog stand with varied condiments",
+                    ],
+                    "beverageSuggestions": [
+                        "Soda bar with mix-in options",
+                        "Infused water",
+                    ],
+                    "budgetAllocation": "Approximately 45% of the total budget",
+                },
+            ],
+            "tasks": [
+                {
+                    "task": "Decorations and Setup",
+                    "details": "Purchase or gather Liverpool-themed decorations, banners, and props; set up the space with designated photo zones and seating areas.",
+                    "duration": "3-4 hours",
+                    "due_date": "2025-08-20",
+                },
+                {
+                    "task": "Menu Planning and Food Prep",
+                    "details": "Finalize the menu, confirm ingredients, prepare or coordinate any pre-cooked items, and set up snack stations or serving areas.",
+                    "duration": "2-3 hours",
+                    "due_date": "2025-08-20",
+                },
+                {
+                    "task": "Audio/Visual Setup",
+                    "details": "Set up the viewing area with proper lighting, sound systems, and test streaming the game to ensure a seamless viewing experience.",
+                    "duration": "1-2 hours",
+                    "due_date": "2025-08-20",
+                },
+                {
+                    "task": "Icebreakers and Game Setup",
+                    "details": "Plan and gather materials for interactive games and icebreaker activities. Set up any required equipment or props.",
+                    "duration": "1 hour",
+                    "due_date": "2025-08-20",
+                },
+            ],
+            "budget_tracker": [
+                {
+                    "category": "Decorations",
+                    "suggested_amount": 150,
+                    "notes": "Allocate funds to purchase or rent Liverpool-themed decor items, including banners, balloons, and photo props.",
+                },
+                {
+                    "category": "Food and Beverages",
+                    "suggested_amount": 300,
+                    "notes": "This covers ingredients, possibly pre-made food items, beverages, and any extra serving supplies. Adjust based on menu choice.",
+                },
+                {
+                    "category": "Audio/Visual Equipment",
+                    "suggested_amount": 100,
+                    "notes": "If additional equipment such as a projector or speakers are needed, these funds should cover any rental fees.",
+                },
+                {
+                    "category": "Miscellaneous & Games",
+                    "suggested_amount": 50,
+                    "notes": "For icebreaker props, small awards for game winners, or any last-minute supplies.",
+                },
+            ],
+            "icebreakers": [
+                {
+                    "name": "Liverpool Trivia Challenge",
+                    "details": "Prepare a set of trivia questions revolving around Liverpool's history, players, and memorable games. Divide guests into teams and award small prizes for winners.",
+                },
+                {
+                    "name": "Football Bingo",
+                    "details": "Create bingo cards with common match events (e.g., a corner, a foul, a goal celebration). As the game progresses, guests mark their cards.",
+                },
+                {
+                    "name": "Fan Stories Sharing",
+                    "details": "Encourage guests to share their favorite Liverpool memory or game experience. This can be a round-robin where everyone gets to speak briefly.",
+                },
+            ],
+            "games": [
+                {
+                    "name": "Mini Indoor Penalty Shootout",
+                    "details": "Set up a small goal (or target area) in a hallway or open space and have guests take turns trying to score using a soft football.",
+                },
+                {
+                    "name": "Football Pictionary",
+                    "details": "Prepare a list of football-related terms and have guests draw them within a time limit while their team guesses the term.",
+                },
+                {
+                    "name": "Score Prediction Game",
+                    "details": "Before the match starts, have guests predict the final score. Award a fun prize to the person whose prediction is the closest.",
+                },
+            ],
             "recommendations": [
-                "Test streaming and sound systems in advance",
-                "Create themed invitation e-card",
-                "Prepare backup plan for technical issues",
+                "Ensure you test your streaming and sound systems well in advance to avoid any technical difficulties during the game.",
+                "Consider creating a themed invitation e-card in Liverpool colors to build excitement among attendees.",
+                "Prepare a backup plan for any potential weather or technical issues, even though it's an indoor event.",
+                "Set up a dedicated area for a short 'pre-game' discussion or analysis, encouraging fans to share their predictions and insights.",
+                "Use social media or a group chat to share updates, photos, and memorable moments during the event to enhance engagement.",
             ],
         }
         return sample_data
+        # self.process_json_response(sample_data)
+        # Any code you write here will run before the form opens.
