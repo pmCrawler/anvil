@@ -93,18 +93,22 @@ class AIResponse(AIResponseTemplate):
 
     def _create_accordion_header(self, key):
         """Create accordion header with button"""
-        header_container = m3.Text(scale="small")
-        header_btn = m3.Button(
+
+        # header_container = m3.Text(scale="small")
+        header_container = ColumnPanel(background="theme:Surface")
+        header_btn = m3.Link(
             text=f"▶ {self.format_title(key)}",
             align="left",
             icon_align="left",
-            appearance="tonal",
+            # appearance="text",
+            underline=False,
         )
         header_container.add_component(header_btn)
         return header_container, header_btn
 
     def _setup_accordion_toggle(self, header_btn, content_panel, card, key):
         """Setup accordion toggle functionality"""
+
         is_expanded = {"value": False}
 
         def toggle_accordion(**event_args):
@@ -304,7 +308,7 @@ class AIResponse(AIResponseTemplate):
         if item_dict:
             first_key = list(item_dict.keys())[0]
             return f"{first_key}: {item_dict[first_key]}"
-        
+
         return "Item"
 
     def create_dict_display(self, data_dict):

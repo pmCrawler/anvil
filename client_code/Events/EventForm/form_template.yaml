@@ -42,7 +42,7 @@ components_by_slot:
         name: input_venue_type
         properties:
           appearance: outlined
-          background_color: theme:Surface
+          background_color: '#F8FAF6'
           border_color: theme:Outline
           display_font_size: 11
           display_text_color: theme:On Surface Variant
