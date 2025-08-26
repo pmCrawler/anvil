@@ -300,12 +300,7 @@ class AIResponse(AIResponseTemplate):
 
     def get_item_summary(self, item_dict):
         """Get a summary string for a dictionary item"""
-        # Try to find the first available key that might be descriptive
-        for key in item_dict.keys():
-            if any(identifier in key.lower() for identifier in ['name', 'title', 'id', 'theme', 'type', 'task']):
-                return str(item_dict[key])
-        
-        # Return first key-value pair if no descriptive field found
+        # Return first key-value pair from whatever fields are available
         if item_dict:
             first_key = list(item_dict.keys())[0]
             return f"{first_key}: {item_dict[first_key]}"
