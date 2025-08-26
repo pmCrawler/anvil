@@ -1,0 +1,12 @@
+components:
+- layout_properties: {full_width_row: false, grid_position: 'IIKJUF,LCHLDU'}
+  name: cpanel_ai_resp
+  properties: {}
+  type: ColumnPanel
+container:
+  properties:
+    col_spacing: tiny
+    spacing:
+      margin: ['0', '16', '0', null]
+  type: ColumnPanel
+is_package: true

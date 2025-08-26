@@ -28,6 +28,12 @@ def save_event(user_input):
         food_bev=user_input["food_bev"],
         event_setting=user_input["event_setting"],
         ai_response=user_input["ai_response"],
+        location={
+            "venue_name": "The Morrison Residence",
+            "address": "456 Oak Avenue, Portland, OR 97204",
+            "coordinates": {"lat": 45.5152, "lng": -122.6784},
+            "indoor": True,
+        },
     )
     return row.get_id()
 
