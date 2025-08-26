@@ -94,14 +94,16 @@ class AIResponse(AIResponseTemplate):
 
         # Create header container
         # header_container = ColumnPanel()
-        header_container = m3.Text(scale="small", )
+        header_container = m3.Text(
+            scale="small",
+        )
 
         # Use Button with custom styling for the accordion header
         header_btn = m3.Button(
             text=f"▶ {self.format_title(key)}",
             align="left",
             icon_align="left",
-            appearance="text",
+            appearance="tonal",
         )
 
         def toggle_accordion(**event_args):
@@ -158,7 +160,7 @@ class AIResponse(AIResponseTemplate):
         # card.add_component(header_container)
         card.add_component(card_content)
 
-        accordion.add_component(header_container)
+        accordion.add_component(header_container, full_width_row=True)
         accordion.add_component(card)
 
         return accordion

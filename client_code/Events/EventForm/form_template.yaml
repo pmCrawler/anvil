@@ -191,7 +191,7 @@ components_by_slot:
       name: btn_start
       properties:
         align: left
-        appearance: filled
+        appearance: tonal
         bold: true
         font_size: 12
         icon: ''
@@ -218,7 +218,10 @@ components_by_slot:
     layout_properties: {}
     name: btn_save
     properties:
+      appearance: tonal
+      border: ''
       spacing:
+        margin: [null, '32', null, '32']
         padding: [null, '16', null, '16']
       text: Save
     type: form:dep_lin1x4oec0ytd:_Components.Button
