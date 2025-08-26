@@ -18,5 +18,4 @@ unique_ids:
   scripts: {}
   server_modules:
     AIModule: '1755613154543220085243148.27682'
-    DbModule: '1755196895842291526624697.91113'
     EventServerModule: '175502065147669584109963.6717'
