@@ -7,13 +7,13 @@ from anvil.tables import app_tables
 
 @anvil.server.callable
 def get_event(id):
-    event = (e for e in events if e["id"] == id)
+    event = (e for e in EVENTS if e["id"] == id)
     return event
 
 
 @anvil.server.callable
 def get_events():
-    return events
+    return EVENTS
 
 
 @anvil.server.callable
@@ -361,7 +361,7 @@ def save_event(user_input):
 #     }
 # ]
 
-events = [
+EVENTS = [
     {
         "id": 1,
         "event_title": "Mystery Book Club: And Then There Were None",
