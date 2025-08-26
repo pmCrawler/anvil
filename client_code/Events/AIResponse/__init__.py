@@ -95,13 +95,15 @@ class AIResponse(AIResponseTemplate):
         """Create accordion header with button"""
 
         # header_container = m3.Text(scale="small")
-        header_container = ColumnPanel(background="theme:Surface")
+        header_container = ColumnPanel(background="theme:Surface Container")
         header_btn = m3.Link(
-            text=f"▶ {self.format_title(key)}",
+            text=f"{self.format_title(key)}",
             align="left",
+            icon="mi:arrow_right",
+            icon_size="14px",
             icon_align="left",
-            # appearance="text",
             underline=False,
+            bold=True,
         )
         header_container.add_component(header_btn)
         return header_container, header_btn
@@ -116,8 +118,9 @@ class AIResponse(AIResponseTemplate):
             content_panel.visible = is_expanded["value"]
             card.visible = is_expanded["value"]
 
-            arrow = "▼" if is_expanded["value"] else "▶"
-            header_btn.text = f"{arrow} {self.format_title(key)}"
+            arrow = "mi:arrow_drop_down" if is_expanded["value"] else "mi:arrow_right"
+            header_btn.text = f"{self.format_title(key)}"
+            header_btn.icon = arrow
 
             if is_expanded["value"]:
                 header_btn.background = "theme:Primary 100"
@@ -199,9 +202,6 @@ class AIResponse(AIResponseTemplate):
             text=f"{section_key.removesuffix('s').title()} #{option_number}",
             font_size=14,
             bold=True,
-            spacing_above="none",
-            spacing_below="none",
-            spacing="small",
         )
 
     def _setup_radio_selection(self, radio, main_panel, section_key, index, item):

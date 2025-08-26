@@ -1,8 +1,23 @@
 components:
-- layout_properties: {grid_position: 'GULTCD,ZLRBEN'}
+- data_bindings: []
+  layout_properties: {grid_position: 'GULTCD,ZLRBEN'}
   name: heading_1
-  properties: {bold: true, scale: medium, style: title, text: Options}
+  properties:
+    bold: true
+    border: ''
+    line_height: 1px
+    role: ''
+    scale: large
+    spacing:
+      margin: [0, null, '', null]
+      padding: [0, null, null, '8']
+    style: title
+    text: Options
   type: form:dep_lin1x4oec0ytd:_Components.Heading
+- layout_properties: {grid_position: 'OKACNP,HTRNUC'}
+  name: divider_1
+  properties: {type: full_width}
+  type: form:dep_lin1x4oec0ytd:_Components.Divider
 - components: []
   layout_properties: {full_width_row: false, grid_position: 'IIKJUF,LCHLDU'}
   name: cpanel_ai_resp
