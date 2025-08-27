@@ -51,7 +51,7 @@ class EventForm(EventFormTemplate):
         """This method is called when the component is clicked."""
 
         self.user_input.update({"ai_response": self.resp})
-        selections = self.event_ai.selected_values
+        selections = self.event_ai.get_selected_values()
         print(selections)
         id = anvil.server.call("save_event", self.user_input)
         print(id)
