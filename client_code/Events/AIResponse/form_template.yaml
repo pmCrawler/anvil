@@ -21,7 +21,9 @@ components:
 - components: []
   layout_properties: {full_width_row: false, grid_position: 'IIKJUF,LCHLDU'}
   name: cpanel_ai_resp
-  properties: {}
+  properties:
+    spacing:
+      margin: ['0', null, '0', null]
   type: ColumnPanel
 container:
   properties:
