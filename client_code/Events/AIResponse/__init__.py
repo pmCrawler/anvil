@@ -78,7 +78,6 @@ class AIResponse(AIResponseTemplate):
 
         header_container, header_btn = self._create_accordion_header(key)
         self._setup_accordion_toggle(header_btn, content_panel, card, key)
-
         self._populate_content_panel(content_panel, value, key)
 
         # Assemble components
@@ -95,7 +94,13 @@ class AIResponse(AIResponseTemplate):
         """Create accordion header with button"""
 
         # header_container = m3.Text(scale="small")
-        header_container = ColumnPanel(background="theme:Surface Container")
+        header_container = ColumnPanel(
+            background="theme:Surface Container",
+            spacing_above="small",
+            spacing_below="small",
+            wrap_on="mobile",
+        )
+
         header_btn = m3.Link(
             text=f"{self.format_title(key)}",
             align="left",
@@ -104,6 +109,7 @@ class AIResponse(AIResponseTemplate):
             icon_align="left",
             underline=False,
             bold=True,
+            spacing="16px",
         )
         header_container.add_component(header_btn)
         return header_container, header_btn
@@ -123,7 +129,7 @@ class AIResponse(AIResponseTemplate):
             header_btn.icon = arrow
 
             if is_expanded["value"]:
-                header_btn.background = "theme:Primary 100"
+                header_btn.background = "theme:Surface Variant"
                 header_btn.role = "filled-button"
             else:
                 header_btn.background = "theme:Gray 50"

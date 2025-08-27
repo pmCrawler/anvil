@@ -43,9 +43,9 @@ is_package: true
 layout:
   properties:
     background_color: '#fcfcfc'
-    content_padding: ['5', '5', '5', '5']
+    content_padding: ['0', '0', '0', '0']
     navigation_rail_collapse_to: modal_navigation_drawer
-    navigation_rail_color: '#fcfcfc'
+    navigation_rail_color: '#f5f5f5'
     navigation_rail_vertical_align: top
     show_sidesheet: false
     text_color: ''

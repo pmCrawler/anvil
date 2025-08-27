@@ -141,7 +141,7 @@ components_by_slot:
         vertical_align: full
       type: FlowPanel
     - components:
-      - layout_properties: {col_xs: 0, row: NUDKQY, width_xs: 2}
+      - layout_properties: {width: 97.014083984375}
         name: Setting
         properties:
           align: left
@@ -153,44 +153,33 @@ components_by_slot:
           text: Setting
           text_color: ''
         type: form:dep_lin1x4oec0ytd:_Components.Text
-      - components:
-        - layout_properties: {slot: default}
-          name: radio_indoor
-          properties:
-            font_size: null
-            selected: true
-            spacing:
-              margin: [null, null, null, null]
-              padding: ['0', '', null, null]
-            text: Indoor
-            value: indoor
-          type: form:dep_lin1x4oec0ytd:_Components.RadioButton
-        - layout_properties: {slot: default}
-          name: radio_outdoor
-          properties:
-            selected: false
-            spacing:
-              padding: [null, null, null, null]
-            text: Outdoor
-            value: outdoor
-          type: form:dep_lin1x4oec0ytd:_Components.RadioButton
-        layout_properties: {col_xs: 2, row: NUDKQY, width_xs: 1}
-        name: rgp_setting
-        properties: {}
-        type: form:dep_lin1x4oec0ytd:_Components.RadioGroupPanel
-      layout_properties: {grid_position: 'NBVQOM,WXBTBG'}
-      name: grid_panel_1
-      properties:
-        spacing:
-          margin: ['0', null, null, null]
-          padding: ['0', null, null, null]
-        spacing_above: none
-      type: GridPanel
+      - name: radio_indoor
+        properties:
+          font_size: null
+          selected: true
+          spacing:
+            margin: [null, null, null, null]
+            padding: ['0', '', null, null]
+          text: Indoor
+          value: indoor
+        type: form:dep_lin1x4oec0ytd:_Components.RadioButton
+      - name: radio_outdoor
+        properties:
+          selected: false
+          spacing:
+            padding: [null, null, null, null]
+          text: Outdoor
+          value: outdoor
+        type: form:dep_lin1x4oec0ytd:_Components.RadioButton
+      layout_properties: {grid_position: 'VKHXTI,UYKSPY'}
+      name: flow_panel_4
+      properties: {gap: none, vertical_align: middle}
+      type: FlowPanel
     - event_bindings: {click: btn_start_click}
       layout_properties: {full_width_row: false, grid_position: 'WDTLFS,XTCBFV'}
       name: btn_start
       properties:
-        align: full
+        align: center
         appearance: filled
         bold: true
         font_size: null
@@ -199,7 +188,7 @@ components_by_slot:
         icon_size: null
         spacing:
           margin: ['4', '0', '4', '8']
-          padding: ['0', '0', '0', '0']
+          padding: ['0', '24', '0', '24']
         text: Start
       type: form:dep_lin1x4oec0ytd:_Components.Button
     layout_properties: {}
@@ -210,25 +199,25 @@ components_by_slot:
         margin: [null, '16', '8', null]
         padding: [null, null, '4', null]
     type: ColumnPanel
-  - layout_properties: {}
-    name: event_ai
-    properties: {}
-    type: form:Events.AIResponse
   - components:
+    - layout_properties: {grid_position: 'BDSIKI,COQVIE'}
+      name: event_ai
+      properties: {}
+      type: form:Events.AIResponse
     - event_bindings: {click: btn_save_click}
       layout_properties: {grid_position: 'OFXZXH,ZEWZGJ'}
       name: btn_save
       properties:
-        align: full
+        align: center
         appearance: filled
         border: ''
         spacing:
           margin: [null, '0', null, '0']
-          padding: [null, '0', null, '0']
+          padding: [null, '24', null, '24']
         text: Save
       type: form:dep_lin1x4oec0ytd:_Components.Button
     layout_properties: {}
-    name: column_panel_1
+    name: cpanel_options
     properties: {}
     type: ColumnPanel
 is_package: true

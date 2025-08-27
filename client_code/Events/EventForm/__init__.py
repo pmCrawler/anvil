@@ -20,7 +20,7 @@ class EventForm(EventFormTemplate):
         # self.event_ai.content_panel.visible = False
         self.user_input = dict()
         self.event_ai.visible = False
-        self.btn_save.visible = False
+        self.cpanel_options.visible = False
 
     def btn_start_click(self, **event_args):
         """This method is called when the component is clicked."""
@@ -32,7 +32,7 @@ class EventForm(EventFormTemplate):
         self.btn_start.visible = False
         self.event_ai.visible = True
         self.event_ai.process_json_response(self.resp)
-        self.btn_save.visible = True
+        self.cpanel_options.visible = True
 
     def get_user_input(self):
         self.user_input = {

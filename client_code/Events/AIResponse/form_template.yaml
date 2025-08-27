@@ -12,7 +12,7 @@ components:
       margin: [0, null, '', null]
       padding: [0, null, null, '8']
     style: title
-    text: Options
+    text: Ideas
   type: form:dep_lin1x4oec0ytd:_Components.Heading
 - layout_properties: {grid_position: 'OKACNP,HTRNUC'}
   name: divider_1
