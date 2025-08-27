@@ -359,9 +359,6 @@ class AIResponse(AIResponseTemplate):
         """Get the currently selected values"""
         return self.selected_values
 
-    def load_sample_data(self, **event_args):
-        """Load and process sample data"""
-
     # Example usage - call this from your form's init or a button click
     def load_sample_data(self, **event_args):
         """
