@@ -55,6 +55,9 @@ db_schema:
     - admin_ui: {order: 5.5, width: 200}
       name: location
       type: simpleObject
+    - admin_ui: {order: 12, width: 200}
+      name: event_options
+      type: simpleObject
     server: full
     title: event
   files:
