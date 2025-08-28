@@ -149,7 +149,8 @@ class AIResponse(AIResponseTemplate):
 
     def _add_list_items(self, content_panel, items, section_key):
         """Add list items with radio buttons"""
-        radio_group = []
+        radio_group = m3.RadioGroup()
+
         for idx, item in enumerate(items):
             item_panel = self.create_item_panel(item, section_key, idx, radio_group)
             if item_panel:
@@ -167,11 +168,12 @@ class AIResponse(AIResponseTemplate):
         main_panel = self._create_item_container()
         header_section = self._create_item_header()
         radio = self._create_radio_button(section_key, index)
+        radio_group.buttons.append(radio)
 
         self._setup_radio_selection(radio, main_panel, section_key, index, item)
-        radio_group.append(radio)
 
         header_section.add_component(radio)
+        # header_section.add_component(radio_group)
         main_panel.add_component(header_section)
 
         content_table = self._create_item_content(item)
