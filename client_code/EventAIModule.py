@@ -6,5 +6,10 @@ from anvil.tables import app_tables
 from pydantic import BaseModel
 
 
+class EventAISchema(BaseModel):
+
+    class Themes(BaseModel):
+        theme: str
+
 def say_hello():
     print("Hello, world")
