@@ -53,6 +53,10 @@ class EventForm(EventFormTemplate):
         self.user_input.update({"ai_response": self.resp})
         selections = self.event_ai.get_selected_values()
         print(selections)
-        id = anvil.server.call("save_event", self.user_input)
-        print(id)
+        event = anvil.server.call("save_event", self.user_input)
+
+        # Add a row to the 'notes' table, referencing her
+        # tasks = app_tables.tasks.add_row(=jane_smith, Text="Jane is a good kid")
+        app_tables.tasks.add_row(event_id=event, )
+        print(event)
         pass

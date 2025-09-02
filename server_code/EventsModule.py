@@ -2,6 +2,7 @@ import anvil.users
 import anvil.secrets
 import anvil.files
 import anvil.server
+import anvil.tables
 from anvil.tables import app_tables
 
 
@@ -17,8 +18,9 @@ def get_events(user_id):
 
 
 @anvil.server.callable
+@anvil.tables.in_transaction
 def save_event(user_input):
-    row = app_tables.event.add_row(
+    event = app_tables.event.add_row(
         title=user_input["title"],
         description=user_input["description"],
         event_datetimetime=user_input["event_datetimetime"],
@@ -35,7 +37,10 @@ def save_event(user_input):
             "indoor": True,
         },
     )
-    return row.get_id()
+
+    tasks = user_input["tasks"]
+    app_tables.tasks.add_row(event_id=event.get_id())
+    return event
 
 
 EVENTS = [

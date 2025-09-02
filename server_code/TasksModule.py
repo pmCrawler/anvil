@@ -16,4 +16,4 @@ def save_tasks(tasks):
         by_datetime=tasks["by_datetime"],
         is_done=False,
     )
-    return row.get_id()
+    return row
