@@ -74,6 +74,24 @@ db_schema:
       type: string
     server: full
     title: Files
+  tasks:
+    client: none
+    columns:
+    - admin_ui: {order: 0, width: 200}
+      name: event_id
+      target: event
+      type: link_single
+    - admin_ui: {order: 1, width: 200}
+      name: description
+      type: string
+    - admin_ui: {order: 2, width: 200}
+      name: by_datetime
+      type: datetime
+    - admin_ui: {order: 3, width: 200}
+      name: is_done
+      type: bool
+    server: full
+    title: tasks
   users:
     client: none
     columns:
