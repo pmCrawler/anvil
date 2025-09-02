@@ -4,6 +4,7 @@ import anvil.files
 import anvil.server
 import anvil.tables
 from anvil.tables import app_tables
+from datetime import date
 
 
 @anvil.server.callable
@@ -23,10 +24,10 @@ def save_event(user_input):
     event = app_tables.event.add_row(
         title=user_input["title"],
         description=user_input["description"],
-        event_datetimetime=user_input["event_datetimetime"],
+        event_datetime=user_input["event_datetime"],
         venue_type=user_input["venue_type"],
-        guest_count=user_input["guest_count"],
-        budget=user_input["budget"],
+        guest_count=int(user_input["guest_count"]),
+        budget=int(user_input["budget"]),
         food_bev=user_input["food_bev"],
         event_setting=user_input["event_setting"],
         ai_response=user_input["ai_response"],
@@ -38,8 +39,17 @@ def save_event(user_input):
         },
     )
 
-    tasks = user_input["tasks"]
-    app_tables.tasks.add_row(event_id=event.get_id())
+    # tasks = user_input["tasks"]
+    tasks = user_input["ai_response"]["tasks"]
+    for t in tasks:
+        app_tables.tasks.add_row(
+            event_id=event.get_id(),
+            task=t["task"],
+            details=t["details"],
+            duration=t["duration"],
+            due_date=date(t["due_date"]),
+            is_done=False,
+        )
     return event
 
 

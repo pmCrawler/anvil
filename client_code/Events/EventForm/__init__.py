@@ -53,10 +53,16 @@ class EventForm(EventFormTemplate):
         self.user_input.update({"ai_response": self.resp})
         selections = self.event_ai.get_selected_values()
         print(selections)
-        event = anvil.server.call("save_event", self.user_input)
+
+        try:
+            event = anvil.server.call("save_event", self.user_input)
+        except Exception as e:
+            print(e)
 
         # Add a row to the 'notes' table, referencing her
         # tasks = app_tables.tasks.add_row(=jane_smith, Text="Jane is a good kid")
-        app_tables.tasks.add_row(event_id=event, )
+        # tasks = self.user_input["ai_response"]["tasks"]
+        # print(tasks)
+        # app_tables.tasks.add_row(event_id=event, )
         print(event)
         pass

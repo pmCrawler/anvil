@@ -82,14 +82,20 @@ db_schema:
       target: event
       type: link_single
     - admin_ui: {order: 1, width: 200}
-      name: description
+      name: task
       type: string
     - admin_ui: {order: 2, width: 200}
-      name: by_datetime
+      name: due_date
       type: datetime
     - admin_ui: {order: 3, width: 200}
       name: is_done
       type: bool
+    - admin_ui: {order: 1.5, width: 200}
+      name: details
+      type: string
+    - admin_ui: {order: 1.75, width: 200}
+      name: duration
+      type: string
     server: full
     title: tasks
   users:
