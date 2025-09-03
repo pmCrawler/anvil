@@ -15,7 +15,8 @@ def startup():
 
     # open_form("Events.EventList")
     # open_form("Events.EventAI")
-    open_form("Events.EventForm")
+    # open_form("Events.EventForm")
+    open_form("Events.EventView")
 
 
 startup()
