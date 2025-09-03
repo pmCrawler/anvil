@@ -3,7 +3,8 @@
 # import anvil.files
 import anvil.server
 import anvil.tables
-from anvil.tables import app_tables, error
+from anvil.tables import app_tables
+from anvil.tables import TableError
 from datetime import date
 
 
@@ -55,45 +56,35 @@ def save_event(user_input):
 
 @anvil.server.callable
 @anvil.tables.in_transaction
-def upsert_event_data(event_id=None, form_data={}):
-    if event_id:
-        event_row = app_tables.events.get_by_id(event_id)
-        if not event_row:
-            raise ValueError("Event not found")
-        for key, value in form_data.items():
-            event_row[key] = value
+def upsert_event_data(form_data):
+    try:
+        event_row = app_tables.event.add_row(
+            title=form_data["title"],
+            description=form_data["description"],
+            event_datetime=form_data["event_datetime"],
+            venue_type=form_data["venue_type"],
+            guest_count=int(form_data["guest_count"]),
+            budget=int(form_data["budget"]),
+            food_bev=form_data["food_bev"],
+            event_setting=form_data["event_setting"],
+            ai_response=form_data["ai_response"],
+            location={
+                "venue_name": "The Morrison Residence",
+                "address": "456 Oak Avenue, Portland, OR 97204",
+                "coordinates": {"lat": 45.5152, "lng": -122.6784},
+                "indoor": True,
+            },
+        )
+        for task in form_data["ai_response"]["tasks"]:
+            app_tables.tasks.add_row(**task, event_link=event_row)
 
-        # Delete existing tasks
-        for task in app_tables.tasks.search(event_link=event_row):
-            task.delete()
-    else:
-        try:
-            event_row = app_tables.events.add_row(
-                title=form_data["title"],
-                description=form_data["description"],
-                event_datetime=form_data["event_datetime"],
-                venue_type=form_data["venue_type"],
-                guest_count=int(form_data["guest_count"]),
-                budget=int(form_data["budget"]),
-                food_bev=form_data["food_bev"],
-                event_setting=form_data["event_setting"],
-                ai_response=form_data["ai_response"],
-                location={
-                    "venue_name": "The Morrison Residence",
-                    "address": "456 Oak Avenue, Portland, OR 97204",
-                    "coordinates": {"lat": 45.5152, "lng": -122.6784},
-                    "indoor": True,
-                },
-            )
-
-        except error.TableError as e:
-            return {"success": False, "error": str(e)}
+    except TableError as e:
+        return {"success": False, "error": str(e)}
 
     # Add new tasks
     try:
-        for task in form_data["ai_response"]["tasks"]:
-            app_tables.tasks.add_row(**task, event_link=event_row)
-    except error.TableError as e:
+
+    except TableError as e:
         return {"success": False, "error": str(e)}
 
     return {"success": True, "event_id": event_row.get_id()}

@@ -52,16 +52,9 @@ class EventForm(EventFormTemplate):
 
         # selections = self.event_ai.get_selected_values()
         self.user_input.update({"ai_response": self.resp})
+        result = anvil.server.call("upsert_event_data", self.user_input)
 
-        try:
-            event = anvil.server.call("upsert_event", self.user_input)
-        except Exception as e:
-            print(e)
-
-        # Add a row to the 'notes' table, referencing her
-        # tasks = app_tables.tasks.add_row(=jane_smith, Text="Jane is a good kid")
-        # tasks = self.user_input["ai_response"]["tasks"]
-        # print(tasks)
-        # app_tables.tasks.add_row(event_id=event, )
-        print(event)
-        pass
+        if result["success"]:
+            Notification("Event and tasks saved!", timeout=5).show()
+        else:
+            Notification(f"Error: {result['error']}", timeout=5, style="danger").show()
