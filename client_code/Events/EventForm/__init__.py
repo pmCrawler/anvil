@@ -50,12 +50,11 @@ class EventForm(EventFormTemplate):
     def btn_save_click(self, **event_args):
         """This method is called when the component is clicked."""
 
+        # selections = self.event_ai.get_selected_values()
         self.user_input.update({"ai_response": self.resp})
-        selections = self.event_ai.get_selected_values()
-        print(selections)
 
         try:
-            event = anvil.server.call("save_event", self.user_input)
+            event = anvil.server.call("upsert_event", self.user_input)
         except Exception as e:
             print(e)
 
