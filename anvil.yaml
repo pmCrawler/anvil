@@ -84,9 +84,6 @@ db_schema:
     - admin_ui: {order: 1, width: 200}
       name: task
       type: string
-    - admin_ui: {order: 2, width: 200}
-      name: due_date
-      type: datetime
     - admin_ui: {order: 3, width: 200}
       name: is_done
       type: bool
@@ -96,6 +93,9 @@ db_schema:
     - admin_ui: {order: 1.75, width: 200}
       name: duration
       type: string
+    - admin_ui: {order: 1.625, width: 200}
+      name: due_date
+      type: datetime
     server: full
     title: tasks
   users:

@@ -3,9 +3,8 @@
 # import anvil.files
 import anvil.server
 import anvil.tables
-from anvil.tables import app_tables
-from anvil.tables import TableError
-from datetime import date
+from anvil.tables import app_tables, TableError, Transaction
+from datetime import datetime
 
 
 @anvil.server.callable
@@ -40,7 +39,7 @@ def save_event(user_input):
         },
     )
 
-    # tasks = user_input["tasks"]
+    # tasks=user_input["tasks"]
     tasks = user_input["ai_response"]["tasks"]
     for t in tasks:
         app_tables.tasks.add_row(
@@ -55,44 +54,49 @@ def save_event(user_input):
 
 
 @anvil.server.callable
-@anvil.tables.in_transaction
 def upsert_event_data(form_data):
-    try:
-        event_row = app_tables.event.Row()
-        eveupdate(title = form_data["title"]
-        , description = form_data["description"]
-        , event_datetime = form_data["event_datetime"]
-        , venue_type = form_data["venue_type"]
-        , guest_count = int(form_data["guest_count"])
-        , budget = int(form_data["budget"])
-        , food_bev = form_data["food_bev"]
-        , event_setting = form_data["event_setting"]
-        , ai_response = form_data["ai_response"]
-        , location = {
-            "venue_name": "The Morrison Residence",
-            "address": "456 Oak Avenue, Portland, OR 97204",
-            "coordinates": {"lat": 45.5152, "lng": -122.6784},
-            "indoor": True,
-        }
-        )
-        print(event_row)
-        , save()
-        # add new tasks
-        task_list = form_data["ai_response"]["tasks"]
-        for task in task_list:
-            result = None
-            result = app_tables.tasks.add_row(**task, event_link=event_row)
-            if not result:
-                raise TableError("Task not saved.")
+    with Transaction() as txn:
+        try:
+            event_row = app_tables.event.add_row(
+                title=form_data["title"],
+                description=form_data["description"],
+                event_datetime=form_data["event_datetime"],
+                venue_type=form_data["venue_type"],
+                guest_count=int(form_data["guest_count"]),
+                budget=int(form_data["budget"]),
+                food_bev=form_data["food_bev"],
+                event_setting=form_data["event_setting"],
+                ai_response=form_data["ai_response"],
+                location={
+                    "venue_name": "The Morrison Residence",
+                    "address": "456 Oak Avenue, Portland, OR 97204",
+                    "coordinates": {"lat": 45.5152, "lng": -122.6784},
+                    "indoor": True,
+                },
+            )
+            # add new tasks
+            task_list = form_data["ai_response"]["tasks"]
+            for task in task_list:
+                result = None
+                result = app_tables.tasks.add_row(
+                        task=task["task"],
+                        "details": task["details"],
+                        "duration": task["duration"],
+                        "due_date": datetime.fromisoformat(task["due_date"]),
+                    },
+                    event_link=event_row,
+                )
+                if not result:
+                    raise TableError("Task not saved. Attempt Rollback")
+        except TableError as e:
+            txn.abort()
+            return {"success": False, "error": str(e)}
 
-        return {
-            "success": True,
-            "event_id": , get_id(),
-            "task_count": len(task_list),
-        }
-    except TableError as e:
-        raise e
-        return {"success": False, "error": str(e)}
+    return {
+        "success": True,
+        "event_id": event_row.get_id(),
+        "task_count": len(task_list),
+    }
 
 
 EVENTS = [
