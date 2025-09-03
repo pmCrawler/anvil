@@ -52,9 +52,11 @@ class EventForm(EventFormTemplate):
 
         # selections = self.event_ai.get_selected_values()
         self.user_input.update({"ai_response": self.resp})
-        result = anvil.server.call("upsert_event_data", self.user_input)
-
-        if result["success"]:
-            Notification("Event and tasks saved!", timeout=5).show()
-        else:
+        try:
+            result = anvil.server.call("upsert_event_data", self.user_input)
+            Notification(
+                f"""Event and tasks saved! Task Count: {result["task_count"]}""",
+                timeout=5,
+            ).show()
+        except Exception as e:
             Notification(f"Error: {result['error']}", timeout=5, style="danger").show()
