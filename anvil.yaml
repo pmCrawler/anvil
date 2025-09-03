@@ -3,59 +3,59 @@ db_schema:
   ai_response:
     client: none
     columns:
-    - admin_ui: {order: 2, width: 200}
-      name: ai_response
-      type: simpleObject
-    - admin_ui: {order: 1, width: 200}
+    - admin_ui: {width: 200}
       name: event_id
       target: event
       type: link_single
+    - admin_ui: {width: 200}
+      name: ai_response
+      type: simpleObject
     server: full
     title: ai_response
   event:
     client: search
     columns:
-    - admin_ui: {order: 1, width: 200}
-      name: title
-      type: string
-    - admin_ui: {order: 3, width: 200}
-      name: guest_count
-      type: number
-    - admin_ui: {order: 4, width: 200}
-      name: budget
-      type: number
-    - admin_ui: {order: 5, width: 200}
-      name: venue_type
-      type: string
-    - admin_ui: {order: 6, width: 200}
-      name: notes
-      type: string
-    - admin_ui: {order: 0.5, width: 200}
+    - admin_ui: {width: 200}
       name: user_id
       target: users
       type: link_single
-    - admin_ui: {order: 2, width: 200}
+    - admin_ui: {width: 200}
+      name: title
+      type: string
+    - admin_ui: {width: 200}
       name: description
       type: string
-    - admin_ui: {order: 8, width: 200}
-      name: food_bev
-      type: bool
-    - admin_ui: {order: 9, width: 200}
-      name: event_setting
-      type: string
-    - admin_ui: {order: 2.5, width: 200}
+    - admin_ui: {width: 200}
       name: event_datetime
       type: datetime
-    - admin_ui: {order: 10, width: 200}
-      name: venue
-      type: simpleObject
-    - admin_ui: {order: 11, width: 200}
-      name: ai_response
-      type: simpleObject
-    - admin_ui: {order: 5.5, width: 200}
+    - admin_ui: {width: 200}
+      name: guest_count
+      type: number
+    - admin_ui: {width: 200}
+      name: budget
+      type: number
+    - admin_ui: {width: 200}
+      name: venue_type
+      type: string
+    - admin_ui: {width: 200}
       name: location
       type: simpleObject
-    - admin_ui: {order: 12, width: 200}
+    - admin_ui: {width: 200}
+      name: notes
+      type: string
+    - admin_ui: {width: 200}
+      name: food_bev
+      type: bool
+    - admin_ui: {width: 200}
+      name: event_setting
+      type: string
+    - admin_ui: {width: 200}
+      name: venue
+      type: simpleObject
+    - admin_ui: {width: 200}
+      name: ai_response
+      type: simpleObject
+    - admin_ui: {width: 200}
       name: event_options
       type: simpleObject
     server: full
@@ -63,13 +63,13 @@ db_schema:
   files:
     client: none
     columns:
-    - admin_ui: {order: 0, width: 200}
+    - admin_ui: {width: 200}
       name: path
       type: string
-    - admin_ui: {order: 1, width: 200}
+    - admin_ui: {width: 200}
       name: file
       type: media
-    - admin_ui: {order: 2, width: 200}
+    - admin_ui: {width: 200}
       name: file_version
       type: string
     server: full
@@ -77,46 +77,43 @@ db_schema:
   tasks:
     client: none
     columns:
-    - admin_ui: {order: 0, width: 200}
-      name: event_id
-      target: event
-      type: link_single
-    - admin_ui: {order: 1, width: 200}
+    - {admin_ui: null, name: event_link, target: event, type: link_single}
+    - admin_ui: {width: 200}
       name: task
       type: string
-    - admin_ui: {order: 3, width: 200}
-      name: is_done
-      type: bool
-    - admin_ui: {order: 1.5, width: 200}
+    - admin_ui: {order: 1.5, width: 537}
       name: details
       type: string
-    - admin_ui: {order: 1.75, width: 200}
-      name: duration
-      type: string
-    - admin_ui: {order: 1.625, width: 200}
+    - admin_ui: {width: 200}
       name: due_date
       type: datetime
+    - admin_ui: {width: 200}
+      name: duration
+      type: string
+    - admin_ui: {width: 200}
+      name: is_done
+      type: bool
     server: full
     title: tasks
   users:
     client: none
     columns:
-    - admin_ui: {order: 0, width: 200}
+    - admin_ui: {width: 200}
       name: email
       type: string
-    - admin_ui: {order: 1, width: 200}
+    - admin_ui: {width: 200}
       name: enabled
       type: bool
-    - admin_ui: {order: 2, width: 200}
+    - admin_ui: {width: 200}
       name: last_login
       type: datetime
-    - admin_ui: {order: 3, width: 200}
+    - admin_ui: {width: 200}
       name: password_hash
       type: string
-    - admin_ui: {order: 4, width: 200}
+    - admin_ui: {width: 200}
       name: n_password_failures
       type: number
-    - admin_ui: {order: 5, width: 200}
+    - admin_ui: {width: 200}
       name: confirmed_email
       type: bool
     server: full

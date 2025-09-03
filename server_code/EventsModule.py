@@ -79,11 +79,10 @@ def upsert_event_data(form_data):
             for task in task_list:
                 result = None
                 result = app_tables.tasks.add_row(
-                        task=task["task"],
-                        "details": task["details"],
-                        "duration": task["duration"],
-                        "due_date": datetime.fromisoformat(task["due_date"]),
-                    },
+                    task=task["task"],
+                    details=task["details"],
+                    duration=task["duration"],
+                    due_date=datetime.fromisoformat(task["due_date"]),
                     event_link=event_row,
                 )
                 if not result:
