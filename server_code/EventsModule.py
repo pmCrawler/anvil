@@ -8,14 +8,18 @@ from datetime import datetime
 
 
 @anvil.server.callable
-def get_event(id):
-    event = (e for e in EVENTS if e["id"] == id)
+def get_event(id=None):
+    event = app_tables.event.get(
+        description="another one"
+    )  # (e for e in EVENTS if e["id"] == id)
     return event
 
 
 @anvil.server.callable
-def get_events(user_id):
-    return EVENTS
+def get_events(user_id=None):
+    events = app_tables.event.search()
+    return events
+    # return EVENTS
 
 
 @anvil.server.callable
