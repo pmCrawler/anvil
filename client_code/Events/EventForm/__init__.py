@@ -11,8 +11,6 @@ import anvil.http
 import json
 
 
-
-
 QUESTION_WF_URL = "http://localhost:5678/webhook/69aee61f-e514-417d-ad16-0615b6e1a9c9"
 EVENT_WF_URL = "http://localhost:5678/webhook/dafb4274-ddf0-4874-a0e1-5a362c525170"
 
@@ -53,14 +51,17 @@ class EventForm(EventFormTemplate):
     def btn_save_click(self, **event_args):
         """This method is called when the component is clicked."""
 
-        
-        # selections = self.event_ai.get_selected_values()
-        self.user_input.update({"ai_response": self.resp})
-        result = anvil.server.call("upsert_event_data", self.user_input)
-        if result["success"]:
-            Notification(
-                f"""Event and tasks saved! Task Count: {result["task_count"]}""",
-                timeout=5,
-            ).show()
-        else:
-            Notification(f"Error: {result['error']}", timeout=5, style="danger").show()
+        # FOR TESTING ONLY
+        open_form("Events.EventView", event_id=4270964888)
+
+        # # selections = self.event_ai.get_selected_values()
+        # self.user_input.update({"ai_response": self.resp})
+        # result = anvil.server.call("upsert_event_data", self.user_input)
+        # if result["success"]:
+        #     Notification(
+        #         f"""Event and tasks saved! Task Count: {result["task_count"]}""",
+        #         timeout=5,
+        #     ).show()
+        #     open_form("Events.EventView", event_id=result["event_id"])
+        # else:
+        #     Notification(f"Error: {result['error']}", timeout=5, style="danger").show()
