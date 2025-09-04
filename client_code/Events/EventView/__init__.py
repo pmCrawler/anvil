@@ -14,27 +14,29 @@ class EventView(EventViewTemplate):
         # Set Form properties and Data Bindings.
         self.init_components(**properties)
 
-        map = GoogleMap()
-        green_icon = GoogleMap.Icon(
-            url="http://maps.google.com/mapfiles/kml/paddle/grn-blank.png",
-            size="10",
-            scaled_size="18",
+        # map = GoogleMap()
+        # green_icon = GoogleMap.Icon(
+        #     url="http://maps.google.com/mapfiles/kml/paddle/grn-blank.png",
+        #     size="10",
+        #     scaled_size="18",
+        # )
+        self.lbl_info = Label(
+            text="The Morrison Residence\n456 Oak Avenue\nPortland, OR 97204"
         )
         marker = GoogleMap.Marker(
             animation=GoogleMap.Animation.DROP,
-            icon=green_icon,
-            position=GoogleMap.LatLng(52.2053, 0.1218),
-            title="The Morrison Residence",
-            # label="The Morrison Residence",
+            position=GoogleMap.LatLng(45.5152, -122.6784),  # (52.2053, 0.1218),
+            title=self.lbl_info.text,
             visible=True,
         )
-        map.center = marker.position
-        map.height = "350"
-        map.margin = "16"
-        map.zoom = 15
+        self.google_map_1.center = marker.position
+        self.google_map_1.height = "150"
+        # self.google_map_1.margin = "36"
+        self.google_map_1.zoom = 15
 
-        map.add_component(marker)
-        self.content_panel.add_component(map)
+        self.google_map_1.add_component(marker)
+        # self.content_panel.add_component(map)
+        # self.linear_panel_1.add_component(map)
         # map.center = GoogleMap.LatLng(45.5152, -122.6784)
         # map.zoom = 13
         # map.disable_default_ui = True
