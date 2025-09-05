@@ -8,7 +8,6 @@ import anvil.tables.query as q
 from anvil.tables import app_tables
 import json
 from datetime import date
-from pprint import pprint
 
 
 class EventView(EventViewTemplate):
@@ -20,7 +19,7 @@ class EventView(EventViewTemplate):
         # FOR TESTING ONLY
         event_id = 4270964888
         event = anvil.server.call("get_event_by_id", event_id)
-        pprint(event)
+        print(event)
 
         self.lbl_info = Label(
             text="The Morrison Residence\n456 Oak Avenue\nPortland, OR 97204"

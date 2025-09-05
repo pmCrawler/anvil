@@ -2,18 +2,23 @@
 # import anvil.secrets
 # import anvil.files
 import anvil.server
+
 import anvil.tables
 from anvil.tables import app_tables, TableError, Transaction
 from datetime import datetime
+from anvil_extras import serialisation
+
+schema = serialisation.datatable_schema("event")
 
 
 @anvil.server.callable
 def get_event_by_id(id=None):
     # [996976,4270964888]
-    # event = app_tables.event.get(description="another one")
-    event = app_tables.event.get_by_id(id)
+    event = app_tables.event.get(description="another one")
+    # event = app_tables.event.get_by_id(id)
+    result = schema.dump(event)
     # (e for e in EVENTS if e["id"] == id)
-    return event.
+    return result
 
 
 @anvil.server.callable

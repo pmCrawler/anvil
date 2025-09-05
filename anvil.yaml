@@ -133,7 +133,14 @@ package_name: Adura
 runtime_options:
   client_version: '3'
   server_spec: {base: python310-standard}
-  server_version: python3-full
+  server_spec_disabled:
+    base: python310-minimal
+    requirements: |-
+      psycopg2==2.9.10
+      pydantic==2.11.0b1
+      openai==1.102.0
+      pprint3x==3.10.4.6
+  server_version: python3-sandbox
   version: 3
 services:
 - client_config: {enable_v2: true}
