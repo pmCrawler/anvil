@@ -6,6 +6,7 @@ import anvil.server
 # import anvil.tables
 from anvil.tables import app_tables, TableError, Transaction
 from datetime import datetime
+from anvil.tables import query as q
 
 # from anvil_extras import serialisation
 # schema = serialisation.datatable_schema("event", with_id=True)
@@ -14,10 +15,11 @@ from datetime import datetime
 @anvil.server.callable
 def get_event_by_id(id=None):
     # [996976,4270964888]
-    event = app_tables.event.search(description="another one")
-    # event = app_tables.event.get_by_id(id)
+    # event = app_tables.event.get(description="another one")
+    result = app_tables.event.get_by_id(id)  # "event_datetime"
+    return result
+
     # result = schema.dump(event)
-    return event  # result
 
 
 @anvil.server.callable
