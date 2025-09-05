@@ -132,7 +132,7 @@ native_deps: null
 package_name: Adura
 runtime_options:
   client_version: '3'
-  server_spec: null
+  server_spec: {base: python310-standard}
   server_spec_disabled:
     base: python310-standard
     requirements: |-
