@@ -125,7 +125,7 @@ dependencies:
   version: {version_tag: v1.2.6}
 - dep_id: dep_2f7icy2h7qt8
   resolution_hints: {app_id: C6ZZPAPN4YYF5NVJ, name: Anvil Extras, package_name: anvil_extras}
-  version: {version_tag: v3.3.0}
+  version: {branch: master}
 metadata: {description: Self-hosted event planning, title: Adura}
 name: Adura
 native_deps: null
