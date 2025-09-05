@@ -1,4 +1,0 @@
-psycopg2==2.9.10
-pydantic==2.11.0b1
-openai==1.102.0
-pprint3x==3.10.4.6

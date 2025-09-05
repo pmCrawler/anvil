@@ -132,9 +132,9 @@ native_deps: null
 package_name: Adura
 runtime_options:
   client_version: '3'
-  server_spec: {base: python310-standard}
+  server_spec: null
   server_spec_disabled:
-    base: python310-minimal
+    base: python310-standard
     requirements: |-
       psycopg2==2.9.10
       pydantic==2.11.0b1
@@ -143,8 +143,8 @@ runtime_options:
   server_version: python3-sandbox
   version: 3
 services:
-- client_config: {enable_v2: true}
-  server_config: {auto_create_missing_columns: true}
+- client_config: {enable_v2: false}
+  server_config: {auto_create_missing_columns: false}
   source: /runtime/services/tables.yml
 - client_config: {}
   server_config: {file_table: files}

@@ -3,12 +3,12 @@
 # import anvil.files
 import anvil.server
 
-import anvil.tables
-from anvil.tables import app_tables, TableError, Transaction
+from anvil.tables import app_tables
+from anvil.tables import TableError, Transaction
 from datetime import datetime
 from anvil_extras import serialisation
 
-schema = serialisation.datatable_schema("event")
+schema = serialisation.datatable_schema("event", with_id=True)
 
 
 @anvil.server.callable
