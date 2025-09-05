@@ -13,7 +13,7 @@ def get_event_by_id(id=None):
     # event = app_tables.event.get(description="another one")
     event = app_tables.event.get_by_id(id)
     # (e for e in EVENTS if e["id"] == id)
-    return event
+    return event.
 
 
 @anvil.server.callable
