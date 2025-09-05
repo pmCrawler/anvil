@@ -21,19 +21,43 @@ class EventView(EventViewTemplate):
         self.heading_title.text = event["title"]
         self.column_panel_1.col_spacing = "none"
 
-        for k, v in event:
-            if not k == "ai_response" and v is not None:
-                lbl_field = m3.Text(
+        self.grid_panel = GridPanel(spacing_above="None", spacing_below="None")
+        row = 0
+        col = 0
+
+        for i, (k, v) in enumerate(event.items()):
+            if k != "ai_response" and v is not None:
+                lbl_key = m3.Text(
                     text=k.title().replace("_", " "),
                     bold=True,
                     font_size=12,
                 )
                 if k == "location":
                     v = f"""{v["venue_name"]}\n{v["address"]}"""
-                lbl_value = m3.Text(text=v, font_size=12)
-                self.column_panel_1.add_component(Spacer(height="10px"))
-                self.column_panel_1.add_component(lbl_field)
-                self.column_panel_1.add_component(lbl_value)
+
+                lbl_value = m3.Text(text=str(v), font_size=12)
+
+                # Add key label
+                self.grid_panel.add_component(
+                    lbl_key,
+                    row=row,
+                    col_xs=col,
+                    width_xs=3,
+                )
+                # Add value label
+                self.grid_panel.add_component(
+                    lbl_value,
+                    row=row,
+                    col_xs=col + 3,
+                    width_xs=3,
+                )
+                # Move to next pair
+                col += 6
+                if col >= 12:
+                    col = 0
+                    row += 1
+
+        self.column_panel_1.add_component(self.grid_panel, full_width_row=True)
 
         self.lbl_info = Label(
             text="The Morrison Residence\n456 Oak Avenue\nPortland, OR 97204"

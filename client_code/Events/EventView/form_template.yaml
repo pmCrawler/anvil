@@ -20,7 +20,7 @@ components_by_slot:
       col_spacing: none
       col_widths: '{}'
       spacing:
-        margin: ['4', null, '4', null]
+        margin: ['4', '16', '4', '16']
         padding: [null, '8', null, '8']
       spacing_above: none
       spacing_below: none
@@ -33,10 +33,12 @@ components_by_slot:
       height: 109
       keyboard_shortcuts: false
       map_type_control: false
-      margin: ['0', '16', '0', '16']
+      margin: ['0', 50%, '0', '16']
       rotate_control: false
       scale_control: false
       scroll_wheel: false
+      spacing_above: large
+      spacing_below: medium
       street_view_control: false
       zoom_control: false
     type: GoogleMap
