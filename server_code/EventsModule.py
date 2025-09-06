@@ -7,7 +7,6 @@ import anvil.server
 from anvil.tables import app_tables, TableError, Transaction
 from datetime import datetime
 from anvil.tables import query as q
-
 # from anvil_extras import serialisation
 # schema = serialisation.datatable_schema("event", with_id=True)
 
@@ -19,7 +18,11 @@ def get_event_by_id(id=None):
     result = app_tables.event.get_by_id(id)  # "event_datetime"
     return result
 
-    # result = schema.dump(event)
+
+@anvil.server.callable
+def get_event_task_count(id=None):
+    cnt = len(app_tables.tasks.search(event_link=get_event_by_id(id)))
+    return cnt
 
 
 @anvil.server.callable
