@@ -7,7 +7,7 @@ import anvil.tables as tables
 import anvil.tables.query as q
 from anvil.tables import app_tables
 import json
-from datetime import date
+from datetime import datetime
 from collections import OrderedDict
 
 
@@ -25,6 +25,7 @@ class EventView(EventViewTemplate):
         ]
 
         event = anvil.server.call("get_event_by_id", event_id)
+        fmt_datetime = datetime.strftime(event["event_datetime"], "%MMM-%d-%Y")
 
         self.cpanel_main.col_spacing = "none"
         self.grid_panel = GridPanel(spacing_above="None", spacing_below="None")
@@ -44,6 +45,8 @@ class EventView(EventViewTemplate):
             )
             if k == "location":
                 v = f"""{v["venue_name"]}\n{v["address"]}"""
+            if k == "event_datetime":
+                v = fmt_datetime
 
             lbl_value = m3.Text(text=str(v), font_size=12)
             # Add key label

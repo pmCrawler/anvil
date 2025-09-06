@@ -7,7 +7,6 @@ import anvil.server
 from anvil.tables import app_tables, TableError, Transaction
 from datetime import datetime
 from anvil.tables import query as q
-
 # from anvil_extras import serialisation
 # schema = serialisation.datatable_schema("event", with_id=True)
 
