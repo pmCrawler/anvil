@@ -52,7 +52,7 @@ components_by_slot:
         height: 109
         keyboard_shortcuts: false
         map_type_control: false
-        margin: ['4', 50%, '0', '4']
+        margin: ['4', 75%, '0', '4']
         rotate_control: false
         scale_control: false
         scroll_wheel: false
