@@ -20,9 +20,13 @@ def get_event_by_id(id=None):
 
 
 @anvil.server.callable
-def get_event_task_count(id=None):
-    cnt = len(app_tables.tasks.search(event_link=get_event_by_id(id)))
-    return cnt
+def get_event_task_counts(id=None):
+    tasks = app_tables.tasks.search(event_link=get_event_by_id(id))
+    tot_cnt = len(tasks)
+    compl_cnt = len([t for t in tasks if t["is_done"]])
+    incompl_cnt = tot_cnt - compl_cnt
+    pct_compl = round((compl_cnt / tot_cnt) * 100, 0)
+    return tot_cnt, compl_cnt, incompl_cnt, pct_compl
 
 
 @anvil.server.callable

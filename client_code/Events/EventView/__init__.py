@@ -30,7 +30,10 @@ class EventView(EventViewTemplate):
 
         event = anvil.server.call("get_event_by_id", event_id)
         key_vals = OrderedDict((k, event[k]) for k in lst_keys if k in event)
-        cnt_tasks = anvil.server.call("get_event_task_count", event_id)
+        tot_cnt, compl_cnt, incompl_cnt, pct_compl = anvil.server.call(
+            "get_event_task_counts",
+            event_id,
+        )
 
         self.heading_title.text = event["title"]
         self.txt_description.text = event["description"]
@@ -44,7 +47,7 @@ class EventView(EventViewTemplate):
                 k = "When"
                 v = datetime.strftime(
                     event["event_datetime"],
-                    "%a, %b %d, %Y at %I:%M %p",
+                    "%a, %b %d, %Y at %-I:%M %p",
                 )
 
             k = "Guests" if k == "guest_count" else k
@@ -61,8 +64,21 @@ class EventView(EventViewTemplate):
                 row += 1
         self.cpanel_data.add_component(self.grid_panel)
 
+        if pct_compl < 60:
+            val_task_bg = "#f8a4af"  # red
+        elif pct_compl >= 80:
+            val_task_bg = "#97f9a4"  # green
+        else:
+            val_task_bg = "#f0b090"  # orange
+
         lbl_task_count = m3.Text(text="Tasks", bold=True, font_size=12)
-        val_task_count = m3.Text(text=cnt_tasks, font_size=12)
+        val_task_count = m3.Text(
+            text=f"""  {compl_cnt} of {tot_cnt} done""",
+            font_size=12,
+            background_color=val_task_bg,
+            align="center",
+            line_height=2,
+        )
 
         self.grid_panel.add_component(lbl_task_count, col_xs=0, width_xs=1)
         self.grid_panel.add_component(val_task_count, col_xs=1, width_xs=2)

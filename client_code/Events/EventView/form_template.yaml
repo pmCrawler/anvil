@@ -6,12 +6,13 @@ components_by_slot:
       layout_properties: {grid_position: 'UAJNCU,TURAXA'}
       name: heading_title
       properties:
+        align: left
         background_color: theme:Surface
         bold: true
         line_height: '0'
         scale: small
         spacing:
-          padding: [null, '8', null, '0']
+          padding: ['4', '8', null, '0']
         style: title
         text_color: ''
       type: form:dep_lin1x4oec0ytd:_Components.Heading
