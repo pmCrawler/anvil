@@ -64,6 +64,7 @@ class EventView(EventViewTemplate):
                 row += 1
         self.cpanel_data.add_component(self.grid_panel)
 
+        val_task_bg = None
         if pct_compl < 60:
             val_task_bg = "#f8a4af"  # red
         elif pct_compl >= 80:
@@ -71,13 +72,16 @@ class EventView(EventViewTemplate):
         else:
             val_task_bg = "#f0b090"  # orange
 
-        lbl_task_count = m3.Text(text="Tasks", bold=True, font_size=12)
-        val_task_count = m3.Text(
-            text=f"""  {compl_cnt} of {tot_cnt} done""",
+        lbl_task_count = m3.Text(
+            text="Tasks",
+            bold=True,
             font_size=12,
-            background_color=val_task_bg,
-            align="center",
-            line_height=2,
+        )
+        val_task_count = m3.Text(
+            text=f"""{compl_cnt} of {tot_cnt} done""",
+            font_size=12,
+            align="left",
+            text_color=val_task_bg,
         )
 
         self.grid_panel.add_component(lbl_task_count, col_xs=0, width_xs=1)
@@ -90,6 +94,7 @@ class EventView(EventViewTemplate):
                 text="The Morrison Residence\n456 Oak Avenue\nPortland, OR 97204"
             ),
             visible=True,
+            
         )
         self.google_map_1.center = marker.position
         self.google_map_1.height = "100"

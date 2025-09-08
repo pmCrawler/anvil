@@ -9,6 +9,7 @@ components_by_slot:
         align: left
         background_color: theme:Surface
         bold: true
+        icon: ''
         line_height: '0'
         scale: small
         spacing:
