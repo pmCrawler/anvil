@@ -7,17 +7,16 @@ import anvil.server
 from anvil.tables import app_tables, TableError, Transaction
 from datetime import datetime
 from anvil.tables import query as q
-from collections import OrderedDict, 
+from collections import OrderedDict, Counter, defaultdict
 
 
 @anvil.server.callable
 def get_event_data(id=None):
-    event = get_event_by_id(id)
-    OrderedDict((k, event[k]) for k in lst_keys if k in event)
+    event = app_tables.event.get_by_id(id)
     tasks = get_event_tasks(id)
+    counts = Counter(event["ai_response"])
     # ADD other event info here, e.g. budget, etc.
-
-    return event, tasks
+    return event, tasks, counts
 
 
 @anvil.server.callable

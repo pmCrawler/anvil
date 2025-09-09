@@ -23,11 +23,13 @@ class EventView(EventViewTemplate):
             "guest_count",
         ]
 
-        event, tasks = anvil.server.call("get_event_data", event_id)
-        key_vals = OrderedDict((k, event[k]) for k in lst_keys if k in event)
+        self.event, self.tasks, self.counts = anvil.server.call(
+            "get_event_data", event_id
+        )
+        key_vals = OrderedDict((k, self.event[k]) for k in lst_keys if k in self.event)
 
-        self.heading_title.text = event["title"]
-        self.txt_description.text = event["description"]
+        self.heading_title.text = self.event["title"]
+        self.txt_description.text = self.event["description"]
 
         row, col = 0, 0
         for k, v in key_vals.items():
@@ -37,7 +39,7 @@ class EventView(EventViewTemplate):
             if k == "event_datetime":
                 k = "When"
                 v = datetime.strftime(
-                    event["event_datetime"],
+                    self.event["event_datetime"],
                     "%a, %b %d, %Y at %-I:%M %p",
                 )
 
@@ -47,7 +49,9 @@ class EventView(EventViewTemplate):
             lbl_key = m3.Text(text=k.title().replace("_", " "), bold=True, font_size=12)
             lbl_val = m3.Text(text=str(v), font_size=12)
             self.gpnl_event.add_component(lbl_key, row=row, col_xs=col, width_xs=1)
-            self.gpnl_event.add_component(lbl_val, row=row, col_xs=col + 1, width_xs=4)
+            self.gpnl_event.add_component(
+                lbl_val, row=row, col_xs=col + 1, width_xs=4
+            )
             # Move to next pair
             col += 6
             if col >= 12:
@@ -55,9 +59,9 @@ class EventView(EventViewTemplate):
                 row += 1
 
         val_task_bg = None
-        if pct_compl < 60:
+        if self.tasks["pct_compl"] < 60:
             val_task_bg = "#f8a4af"  # red
-        elif pct_compl >= 80:
+        elif self.tasks["pct_compl"] >= 80:
             val_task_bg = "#97f9a4"  # green
         else:
             val_task_bg = "#f0b090"  # orange
@@ -68,7 +72,7 @@ class EventView(EventViewTemplate):
             font_size=12,
         )
         val_task_count = m3.Text(
-            text=f"""{event["compl_cnt"]} of {event["tot_cnt"]} done""",
+            text=f"""{self.tasks["compl_cnt"]} of {self.tasks["tot_cnt"]} done""",
             font_size=12,
             align="left",
             text_color=val_task_bg,
@@ -90,4 +94,5 @@ class EventView(EventViewTemplate):
         self.google_map_1.zoom = 15
         self.google_map_1.add_component(marker)
 
-    def _load_event_data()
+    def _load_event_data(event):
+        pass
