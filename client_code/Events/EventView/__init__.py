@@ -42,7 +42,7 @@ class EventView(EventViewTemplate):
                 k = "When"
                 v = datetime.strftime(
                     event_data["event_datetime"],
-                    "%a, %b %d, %Y at %-I:%M %p",
+                    "%a, %b %-d, %Y @ %-I:%M %p",
                 )
 
             k = "Guests" if k == "guest_count" else k
@@ -60,13 +60,15 @@ class EventView(EventViewTemplate):
 
         self._load_map_components(event_data["location"])
 
-    def _bind_task_details(self, tasks):
-        print(tasks)
+    def _bind_task_details(self, task_list):
+        print(task_list)
+
+        self.rpnl_tasks.items = task_list["tasks"]
 
         val_task_bg = None
-        if tasks["pct_compl"] < 60:
+        if task_list["pct_compl"] < 60:
             val_task_bg = "#f8a4af"  # red
-        elif tasks["pct_compl"] >= 80:
+        elif task_list["pct_compl"] >= 80:
             val_task_bg = "#97f9a4"  # green
         else:
             val_task_bg = "#f0b090"  # orange
@@ -77,7 +79,7 @@ class EventView(EventViewTemplate):
             font_size=12,
         )
         val_task_count = m3.Text(
-            text=f"""{tasks["compl_cnt"]} of {tasks["tot_cnt"]} done""",
+            text=f"""{task_list["compl_cnt"]} of {task_list["tot_cnt"]} done""",
             font_size=12,
             align="left",
             text_color=val_task_bg,
@@ -85,7 +87,6 @@ class EventView(EventViewTemplate):
 
         self.gpnl_event.add_component(lbl_task_count, col_xs=0, width_xs=1)
         self.gpnl_event.add_component(val_task_count, col_xs=1, width_xs=2)
-        pass
 
     def _load_map_components(self, location):
         marker = GoogleMap.Marker(

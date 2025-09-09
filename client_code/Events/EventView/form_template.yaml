@@ -55,6 +55,24 @@ components_by_slot:
         street_view_control: false
         zoom_control: false
       type: GoogleMap
+    - components:
+      - components:
+        - name: rpnl_tasks
+          properties: {item_template: Events.EventView.RowTemplate4}
+          type: RepeatingPanel
+        layout_properties: {grid_position: 'ZOWCCD,FCDKTR'}
+        name: data_grid_1
+        properties:
+          columns:
+          - {data_key: task, id: GNDVSD, title: Task}
+          - {data_key: due_date, id: EZWMKP, title: Due Date}
+          - {data_key: duration, expand: false, id: ZHMLRN, title: Duration}
+          - {data_key: is_done, id: QEYFRB, title: 'Done?'}
+        type: DataGrid
+      layout_properties: {grid_position: 'QJHRKW,QCNJDC'}
+      name: cpnl_tasks
+      properties: {}
+      type: ColumnPanel
     - layout_properties: {grid_position: 'LTLMIH,YZHVYX'}
       name: cpnl_options
       properties: {}
