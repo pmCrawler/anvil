@@ -24,9 +24,9 @@ class EventView(EventViewTemplate):
             "guest_count",
         ]
 
-        self.cpanel_main.col_spacing = "none"
-        self.cpanel_data.col_spacing = "none"
-        self.grid_panel = GridPanel(spacing_above="None", spacing_below="None")
+        self.cpnl_main.col_spacing = "none"
+        self.cpnl_data.col_spacing = "none"
+        self.gpnl = GridPanel(spacing_above="None", spacing_below="None")
 
         event = anvil.server.call("get_event_by_id", event_id)
         key_vals = OrderedDict((k, event[k]) for k in lst_keys if k in event)
@@ -55,14 +55,15 @@ class EventView(EventViewTemplate):
 
             lbl_key = m3.Text(text=k.title().replace("_", " "), bold=True, font_size=12)
             lbl_val = m3.Text(text=str(v), font_size=12)
-            self.grid_panel.add_component(lbl_key, row=row, col_xs=col, width_xs=1)
-            self.grid_panel.add_component(lbl_val, row=row, col_xs=col + 1, width_xs=4)
+            self.gpnl.add_component(lbl_key, row=row, col_xs=col, width_xs=1)
+            self.gpnl.add_component(lbl_val, row=row, col_xs=col + 1, width_xs=4)
             # Move to next pair
             col += 6
             if col >= 12:
                 col = 0
                 row += 1
-        self.cpanel_data.add_component(self.grid_panel)
+
+        self.cpnl_data.add_component(self.gpnl)
 
         val_task_bg = None
         if pct_compl < 60:
@@ -84,8 +85,8 @@ class EventView(EventViewTemplate):
             text_color=val_task_bg,
         )
 
-        self.grid_panel.add_component(lbl_task_count, col_xs=0, width_xs=1)
-        self.grid_panel.add_component(val_task_count, col_xs=1, width_xs=2)
+        self.gpnl.add_component(lbl_task_count, col_xs=0, width_xs=1)
+        self.gpnl.add_component(val_task_count, col_xs=1, width_xs=2)
 
         marker = GoogleMap.Marker(
             animation=GoogleMap.Animation.DROP,
@@ -94,7 +95,6 @@ class EventView(EventViewTemplate):
                 text="The Morrison Residence\n456 Oak Avenue\nPortland, OR 97204"
             ),
             visible=True,
-            
         )
         self.google_map_1.center = marker.position
         self.google_map_1.height = "100"

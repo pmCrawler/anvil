@@ -63,6 +63,10 @@ components_by_slot:
         street_view_control: false
         zoom_control: false
       type: GoogleMap
+    - layout_properties: {grid_position: 'LTLMIH,YZHVYX'}
+      name: cpan_options
+      properties: {}
+      type: ColumnPanel
     layout_properties: {}
     name: cpanel_main
     properties:
