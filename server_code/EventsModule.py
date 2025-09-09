@@ -7,26 +7,40 @@ import anvil.server
 from anvil.tables import app_tables, TableError, Transaction
 from datetime import datetime
 from anvil.tables import query as q
-# from anvil_extras import serialisation
-# schema = serialisation.datatable_schema("event", with_id=True)
+from collections import OrderedDict, 
+
+
+@anvil.server.callable
+def get_event_data(id=None):
+    event = get_event_by_id(id)
+    OrderedDict((k, event[k]) for k in lst_keys if k in event)
+    tasks = get_event_tasks(id)
+    # ADD other event info here, e.g. budget, etc.
+
+    return event, tasks
 
 
 @anvil.server.callable
 def get_event_by_id(id=None):
     # [996976,4270964888]
-    # event = app_tables.event.get(description="another one")
     result = app_tables.event.get_by_id(id)  # "event_datetime"
     return result
 
 
 @anvil.server.callable
-def get_event_task_counts(id=None):
+def get_event_tasks(id=None):
     tasks = app_tables.tasks.search(event_link=get_event_by_id(id))
     tot_cnt = len(tasks)
     compl_cnt = len([t for t in tasks if t["is_done"]])
     incompl_cnt = tot_cnt - compl_cnt
     pct_compl = round((compl_cnt / tot_cnt) * 100, 0)
-    return tot_cnt, compl_cnt, incompl_cnt, pct_compl
+    return {
+        "tasks": tasks,
+        "tot_cnt": tot_cnt,
+        "compl_cnt": compl_cnt,
+        "incompl_cnt": incompl_cnt,
+        "pct_compl": pct_compl,
+    }
 
 
 @anvil.server.callable
