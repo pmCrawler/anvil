@@ -16,6 +16,11 @@ class EventView(EventViewTemplate):
         # Set Form properties and Data Bindings.
         self.init_components(**properties)
 
+        event_data, tasks, counts = anvil.server.call("get_event_data", event_id)
+        self._bind_event_details(event_data)
+        self._bind_task_details(tasks)
+
+    def _bind_event_details(self, event_data):
         lst_keys = [
             "event_datetime",
             "location",
@@ -23,15 +28,12 @@ class EventView(EventViewTemplate):
             "guest_count",
         ]
 
-        self.event, self.tasks, self.counts = anvil.server.call(
-            "get_event_data", event_id
-        )
-        key_vals = OrderedDict((k, self.event[k]) for k in lst_keys if k in self.event)
+        self.heading_title.text = event_data["title"]
+        self.txt_description.text = event_data["description"]
 
-        self.heading_title.text = self.event["title"]
-        self.txt_description.text = self.event["description"]
-
+        key_vals = OrderedDict((k, event_data[k]) for k in lst_keys if k in event_data)
         row, col = 0, 0
+
         for k, v in key_vals.items():
             if k == "location":
                 k = "Where"
@@ -39,7 +41,7 @@ class EventView(EventViewTemplate):
             if k == "event_datetime":
                 k = "When"
                 v = datetime.strftime(
-                    self.event["event_datetime"],
+                    event_data["event_datetime"],
                     "%a, %b %d, %Y at %-I:%M %p",
                 )
 
@@ -49,19 +51,22 @@ class EventView(EventViewTemplate):
             lbl_key = m3.Text(text=k.title().replace("_", " "), bold=True, font_size=12)
             lbl_val = m3.Text(text=str(v), font_size=12)
             self.gpnl_event.add_component(lbl_key, row=row, col_xs=col, width_xs=1)
-            self.gpnl_event.add_component(
-                lbl_val, row=row, col_xs=col + 1, width_xs=4
-            )
+            self.gpnl_event.add_component(lbl_val, row=row, col_xs=col + 1, width_xs=4)
             # Move to next pair
             col += 6
             if col >= 12:
                 col = 0
                 row += 1
 
+        self._load_map_components(event_data["location"])
+
+    def _bind_task_details(self, tasks):
+        print(tasks)
+
         val_task_bg = None
-        if self.tasks["pct_compl"] < 60:
+        if tasks["pct_compl"] < 60:
             val_task_bg = "#f8a4af"  # red
-        elif self.tasks["pct_compl"] >= 80:
+        elif tasks["pct_compl"] >= 80:
             val_task_bg = "#97f9a4"  # green
         else:
             val_task_bg = "#f0b090"  # orange
@@ -72,7 +77,7 @@ class EventView(EventViewTemplate):
             font_size=12,
         )
         val_task_count = m3.Text(
-            text=f"""{self.tasks["compl_cnt"]} of {self.tasks["tot_cnt"]} done""",
+            text=f"""{tasks["compl_cnt"]} of {tasks["tot_cnt"]} done""",
             font_size=12,
             align="left",
             text_color=val_task_bg,
@@ -80,19 +85,19 @@ class EventView(EventViewTemplate):
 
         self.gpnl_event.add_component(lbl_task_count, col_xs=0, width_xs=1)
         self.gpnl_event.add_component(val_task_count, col_xs=1, width_xs=2)
+        pass
 
+    def _load_map_components(self, location):
         marker = GoogleMap.Marker(
             animation=GoogleMap.Animation.DROP,
-            position=GoogleMap.LatLng(45.5152, -122.6784),
-            title=m3.Text(
-                text="The Morrison Residence\n456 Oak Avenue\nPortland, OR 97204"
+            position=GoogleMap.LatLng(
+                location["coordinates"]["lat"],
+                location["coordinates"]["lng"],
             ),
+            title=m3.Text(text=f"""{location["venue_name"]}\n{location["address"]}"""),
             visible=True,
         )
         self.google_map_1.center = marker.position
         self.google_map_1.height = "100"
         self.google_map_1.zoom = 15
         self.google_map_1.add_component(marker)
-
-    def _load_event_data(event):
-        pass
