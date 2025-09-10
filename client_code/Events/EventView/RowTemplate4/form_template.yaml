@@ -1,6 +1,0 @@
-components: []
-container:
-  data_bindings:
-  - {code: 'self.item[''due_date'']', property: item, writeback: false}
-  type: DataRowPanel
-is_package: true

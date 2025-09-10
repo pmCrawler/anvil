@@ -128,7 +128,7 @@ dependencies:
   version: {branch: published}
 metadata: {description: Self-hosted event planning, title: Adura}
 name: Adura
-native_deps: null
+native_deps: {head_html: ''}
 package_name: Adura
 runtime_options:
   client_version: '3'

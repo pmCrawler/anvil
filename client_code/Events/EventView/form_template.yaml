@@ -38,36 +38,22 @@ components_by_slot:
       name: gpnl_event
       properties: {spacing_above: none, spacing_below: none}
       type: GridPanel
-    - layout_properties: {grid_position: 'NLYRLW,ACMMYN'}
-      name: google_map_1
-      properties:
-        draggable: true
-        fullscreen_control: false
-        height: 109
-        keyboard_shortcuts: false
-        map_type_control: false
-        margin: ['4', 75%, '0', '4']
-        rotate_control: false
-        scale_control: false
-        scroll_wheel: false
-        spacing_above: large
-        spacing_below: medium
-        street_view_control: false
-        zoom_control: false
-      type: GoogleMap
     - components:
       - components:
         - name: rpnl_tasks
-          properties: {item_template: Events.EventView.RowTemplate4}
+          properties: {item_template: Events.EventView.RowTemplate1}
           type: RepeatingPanel
         layout_properties: {grid_position: 'ZOWCCD,FCDKTR'}
         name: data_grid_1
         properties:
+          auto_header: false
           columns:
           - {data_key: task, id: GNDVSD, title: Task}
           - {data_key: due_date, id: EZWMKP, title: Due Date}
           - {data_key: duration, expand: false, id: ZHMLRN, title: Duration}
           - {data_key: is_done, id: QEYFRB, title: 'Done?'}
+          show_page_controls: false
+          wrap_on: never
         type: DataGrid
       layout_properties: {grid_position: 'QJHRKW,QCNJDC'}
       name: cpnl_tasks
@@ -85,5 +71,23 @@ components_by_slot:
         margin: ['4', '8', '4', '8']
         padding: ['0', '8', '8', '8']
     type: ColumnPanel
+  - layout_properties: {}
+    name: google_map_1
+    properties:
+      draggable: true
+      fullscreen_control: false
+      height: 109
+      keyboard_shortcuts: false
+      map_type_control: false
+      margin: ['4', 75%, '0', '4']
+      rotate_control: false
+      scale_control: false
+      scroll_wheel: false
+      spacing_above: large
+      spacing_below: medium
+      street_view_control: false
+      visible: false
+      zoom_control: false
+    type: GoogleMap
 is_package: true
 layout: {type: 'form:Frame'}
