@@ -62,7 +62,7 @@ class EventView(EventViewTemplate):
 
     def _bind_task_details(self, task_list):
         print(task_list)
-
+        self.rpnl_tasklist.items = task_list["tasks"]
         self.rpnl_tasks.items = task_list["tasks"]
 
         val_task_bg = None
