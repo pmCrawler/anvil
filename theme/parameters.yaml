@@ -48,7 +48,5 @@ color_scheme:
   - {color: 'rgba(239,241,237, 0.12)', name: Inverse On Surface Overlay 2}
   preset_groups: []
 roles:
-- components: [card]
-  display_in_toolbox: true
-  name: custom-card
-  title: card-role
+- components: [RepeatingPanel, ColumnPanel]
+  name: item-border

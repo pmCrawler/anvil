@@ -56,7 +56,7 @@ components_by_slot:
         type: form:dep_lin1x4oec0ytd:_Components.Divider
       - layout_properties: {grid_position: 'HVZWGY,KOTLDM'}
         name: rpnl_tasklist
-        properties: {item_template: Events.EventView.ItemTemplate2}
+        properties: {item_template: Events.EventView.ItemTemplate2, role: null}
         type: RepeatingPanel
       layout_properties: {grid_position: 'QJHRKW,QCNJDC'}
       name: cpnl_tasks
