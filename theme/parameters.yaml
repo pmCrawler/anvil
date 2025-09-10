@@ -48,5 +48,6 @@ color_scheme:
   - {color: 'rgba(239,241,237, 0.12)', name: Inverse On Surface Overlay 2}
   preset_groups: []
 roles:
-- components: [RepeatingPanel, ColumnPanel]
-  name: item-border
+- {components: null, name: item-border}
+- {components: null, name: column-border}
+- {components: null, name: 'column-border:last-child'}
