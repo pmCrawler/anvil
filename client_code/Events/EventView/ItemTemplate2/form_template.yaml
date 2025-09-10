@@ -1,11 +1,5 @@
 components:
 - data_bindings:
-  - {code: 'self.item[''is_done'']', property: text, writeback: false}
-  layout_properties: {grid_position: 'HHAFCE,OGVXWH'}
-  name: cbx_isdone
-  properties: {text: self}
-  type: form:dep_lin1x4oec0ytd:_Components.Checkbox
-- data_bindings:
   - {code: 'self.item[''task'']', property: text, writeback: false}
   layout_properties: {grid_position: 'HHAFCE,PSWJNO'}
   name: txt_task
@@ -17,7 +11,14 @@ components:
   name: txt_due_date
   properties: {line_height: '3', scale: small}
   type: form:dep_lin1x4oec0ytd:_Components.Text
+- data_bindings:
+  - {code: 'self.item[''status'']', property: text, writeback: false}
+  layout_properties: {grid_position: 'HHAFCE,EISVRV'}
+  name: txt_status
+  properties: {line_height: '3', scale: small}
+  type: form:dep_lin1x4oec0ytd:_Components.Text
 container:
-  properties: {col_widths: '{"OGVXWH":15,"PSWJNO":25,"DHRJUP":40}'}
+  data_bindings: []
+  properties: {border: '', col_spacing: none, col_widths: '{"PSWJNO":30,"DHRJUP":35,"EISVRV":20}', role: null}
   type: ColumnPanel
 is_package: true

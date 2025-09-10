@@ -1,0 +1,13 @@
+.item-border {
+    border-bottom: 1px solid lightgray;
+    display: flex;
+}
+
+.column-border {
+    border-right: 1px solid lightgray;
+    padding: 8px;
+}
+
+.column-border:last-child {
+    border-right: none;
+}

@@ -39,6 +39,21 @@ components_by_slot:
       properties: {spacing_above: none, spacing_below: none}
       type: GridPanel
     - components:
+      - layout_properties: {grid_position: 'VEUTLM,QJQMEI'}
+        name: hd_tasks
+        properties:
+          bold: true
+          line_height: '0.15'
+          scale: medium
+          spacing:
+            padding: [null, null, null, null]
+          style: title
+          text: Tasks
+        type: form:dep_lin1x4oec0ytd:_Components.Heading
+      - layout_properties: {grid_position: 'SNDJBN,ULUVBL'}
+        name: divider_2
+        properties: {}
+        type: form:dep_lin1x4oec0ytd:_Components.Divider
       - layout_properties: {grid_position: 'HVZWGY,KOTLDM'}
         name: rpnl_tasklist
         properties: {item_template: Events.EventView.ItemTemplate2}
