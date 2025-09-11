@@ -14,9 +14,9 @@ from collections import OrderedDict, Counter, defaultdict
 def get_event_data(id=None):
     event = app_tables.event.get_by_id(id)
     tasks = get_event_tasks(id)
-    counts = Counter(event["ai_response"])
+    options = Counter(event["ai_response"])
     # ADD other event info here, e.g. budget, etc.
-    return event, tasks, counts
+    return event, tasks, options
 
 
 @anvil.server.callable

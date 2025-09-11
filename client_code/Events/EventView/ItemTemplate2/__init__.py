@@ -6,6 +6,7 @@ import anvil.users
 import anvil.tables as tables
 import anvil.tables.query as q
 from anvil.tables import app_tables
+from datetime import datetime
 
 
 class ItemTemplate2(ItemTemplate2Template):
@@ -13,7 +14,16 @@ class ItemTemplate2(ItemTemplate2Template):
         # Set Form properties and Data Bindings.
         self.init_components(**properties)
 
-        # Any code you write here will run before the form opens.
+        self.txt_status.icon = "mi:check_box"
+        if self.txt_status.text == "In progress":
+            self.txt_status.text_color = self.txt_status.icon_color = "orange"
+        elif self.txt_status.text == "Done":
+            self.txt_status.text_color = self.txt_status.icon_color = "lightgreen"
+        else:
+            self.txt_status.text_color = self.txt_status.icon_color = "blue"
+
+        fmt_time = self.txt_due_date.text
+        self.txt_due_date.text = datetime.strftime(fmt_time, "%m-%d-%Y")
 
     def txt_task_show(self, **event_args):
         """This method is called when the component is shown on the screen."""

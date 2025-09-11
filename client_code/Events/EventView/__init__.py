@@ -16,9 +16,10 @@ class EventView(EventViewTemplate):
         # Set Form properties and Data Bindings.
         self.init_components(**properties)
 
-        event_data, tasks, counts = anvil.server.call("get_event_data", event_id)
+        event_data, tasks, options = anvil.server.call("get_event_data", event_id)
         self._bind_event_details(event_data)
         self._bind_task_details(tasks)
+        self._bind_budget_tracker(options['budget_tracker'])
 
     def _bind_event_details(self, event_data):
         lst_keys = [
@@ -63,28 +64,32 @@ class EventView(EventViewTemplate):
     def _bind_task_details(self, task_list):
         self.rpnl_tasklist.items = task_list["tasks"]
 
-        val_task_bg = None
-        if task_list["pct_compl"] < 60:
-            val_task_bg = "#f8a4af"  # red
-        elif task_list["pct_compl"] >= 80:
-            val_task_bg = "#97f9a4"  # green
-        else:
-            val_task_bg = "#f0b090"  # orange
+    def _bind_budget_tracker(self, bt):
 
-        lbl_task_count = m3.Text(
-            text="Tasks",
-            bold=True,
-            font_size=12,
-        )
-        val_task_count = m3.Text(
-            text=f"""{task_list["compl_cnt"]} of {task_list["tot_cnt"]} done""",
-            font_size=12,
-            align="left",
-            text_color=val_task_bg,
-        )
+        print(bt)
+        pass
+        # val_task_bg = None
+        # if task_list["pct_compl"] < 60:
+        #     val_task_bg = "#f8a4af"  # red
+        # elif task_list["pct_compl"] >= 80:
+        #     val_task_bg = "#97f9a4"  # green
+        # else:
+        #     val_task_bg = "#f0b090"  # orange
 
-        self.gpnl_event.add_component(lbl_task_count, col_xs=0, width_xs=1)
-        self.gpnl_event.add_component(val_task_count, col_xs=1, width_xs=2)
+        # lbl_task_count = m3.Text(
+        #     text="Tasks",
+        #     bold=True,
+        #     font_size=12,
+        # )
+        # val_task_count = m3.Text(
+        #     text=f"""{task_list["compl_cnt"]} of {task_list["tot_cnt"]} done""",
+        #     font_size=12,
+        #     align="left",
+        #     text_color=val_task_bg,
+        # )
+
+        # self.gpnl_event.add_component(lbl_task_count, col_xs=0, width_xs=1)
+        # self.gpnl_event.add_component(val_task_count, col_xs=1, width_xs=2)
 
     def _load_map_components(self, location):
         marker = GoogleMap.Marker(
