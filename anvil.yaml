@@ -13,7 +13,7 @@ db_schema:
     server: full
     title: ai_response
   event:
-    client: search
+    client: none
     columns:
     - admin_ui: {width: 200}
       name: user_id
@@ -163,3 +163,4 @@ services:
   source: /runtime/services/anvil/users.yml
 startup: {module: StartupModule, type: module}
 startup_form: null
+uplink_visible: true
