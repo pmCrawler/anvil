@@ -19,7 +19,7 @@ class EventView(EventViewTemplate):
         event_data, tasks, options = anvil.server.call("get_event_data", event_id)
         self._bind_event_details(event_data)
         self._bind_task_details(tasks)
-        self._bind_budget_tracker(options['budget_tracker'])
+        self._bind_budget_tracker(options["budget_tracker"])
 
     def _bind_event_details(self, event_data):
         lst_keys = [
@@ -65,8 +65,7 @@ class EventView(EventViewTemplate):
         self.rpnl_tasklist.items = task_list["tasks"]
 
     def _bind_budget_tracker(self, bt):
-
-        print(bt)
+        self.rpnl_budget.items = bt
         pass
         # val_task_bg = None
         # if task_list["pct_compl"] < 60:
