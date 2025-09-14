@@ -22,23 +22,25 @@ class EventView(EventViewTemplate):
         self._bind_budget_tracker(options["budget_tracker"])
 
     def _bind_event_details(self, event_data):
+        # lst_keys = [
+        #     {"key": "event_datetime", "icon": "mi:calendar_clock"},
+        #     {"key": "location", "icon": "mi:location_on"},
+        #     {"key": "budget", "icon": "mi:money_bag"},
+        #     {"key": "guest_count", "icon": "mi:people_alt"},
+        # ]
         lst_keys = [
-            {"key": "event_datetime", "icon": "mi:calendar_clock"},
-            {"key": "location", "icon": "mi:location_on"},
-            {"key": "budget", "icon": "mi:money_bag"},
-            {"key": "guest_count", "icon": "mi:people_alt"},
+            "event_datetime",
+            "location",
+            "budget",
+            "guest_count",
         ]
-
         self.heading_title.text = event_data["title"]
         self.txt_description.text = event_data["description"]
 
-        for k in lst_keys:
-            k.update()
+        # kv = OrderedDict((k.update("val",event_data[k["key"]])) for k in lst_keys if k["key"] in event_data)
 
-        kv = OrderedDict((k.update("val",event_data[k["key"]])) for k in lst_keys if k["key"] in event_data)
-        
         key_vals = OrderedDict(
-            (k["key"], event_data[k["key"]], k['icon']) for k in lst_keys if k["key"] in event_data
+            (k, event_data[k]) for k in lst_keys if k in event_data
         )
         row, col = 0, 0
 
