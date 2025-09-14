@@ -62,7 +62,7 @@ class EventView(EventViewTemplate):
                 text=k.title().replace("_", " "),
                 bold=True,
                 font_size=12,
-                icon=k["icon"],
+                # icon=k["icon"],
             )
             lbl_val = m3.Text(text=str(v), font_size=12)
             self.gpnl_event.add_component(lbl_key, row=row, col_xs=col, width_xs=1)
