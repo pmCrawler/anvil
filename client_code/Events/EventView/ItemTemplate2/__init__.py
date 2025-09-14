@@ -18,7 +18,7 @@ class ItemTemplate2(ItemTemplate2Template):
         if self.txt_status.text == "In progress":
             self.txt_status.text_color = self.txt_status.icon_color = "orange"
         elif self.txt_status.text == "Done":
-            self.txt_status.text_color = self.txt_status.icon_color = "lightgreen"
+            self.txt_status.text_color = self.txt_status.icon_color = "green"
         else:
             self.txt_status.text_color = self.txt_status.icon_color = "blue"
 

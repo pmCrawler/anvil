@@ -43,6 +43,7 @@ components_by_slot:
         name: hd_tasks
         properties:
           bold: true
+          icon: ''
           line_height: '0.15'
           scale: medium
           spacing:

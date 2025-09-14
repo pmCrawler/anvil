@@ -23,16 +23,23 @@ class EventView(EventViewTemplate):
 
     def _bind_event_details(self, event_data):
         lst_keys = [
-            "event_datetime",
-            "location",
-            "budget",
-            "guest_count",
+            {"key": "event_datetime", "icon": "mi:calendar_clock"},
+            {"key": "location", "icon": "mi:location_on"},
+            {"key": "budget", "icon": "mi:money_bag"},
+            {"key": "guest_count", "icon": "mi:people_alt"},
         ]
 
         self.heading_title.text = event_data["title"]
         self.txt_description.text = event_data["description"]
 
-        key_vals = OrderedDict((k, event_data[k]) for k in lst_keys if k in event_data)
+        for k in lst_keys:
+            k.update()
+
+        kv = OrderedDict((k.update("val",event_data[k["key"]])) for k in lst_keys if k["key"] in event_data)
+        
+        key_vals = OrderedDict(
+            (k["key"], event_data[k["key"]], k['icon']) for k in lst_keys if k["key"] in event_data
+        )
         row, col = 0, 0
 
         for k, v in key_vals.items():
@@ -49,7 +56,12 @@ class EventView(EventViewTemplate):
             k = "Guests" if k == "guest_count" else k
             v = f"""${v}""" if k == "budget" else v
 
-            lbl_key = m3.Text(text=k.title().replace("_", " "), bold=True, font_size=12)
+            lbl_key = m3.Text(
+                text=k.title().replace("_", " "),
+                bold=True,
+                font_size=12,
+                icon=k["icon"],
+            )
             lbl_val = m3.Text(text=str(v), font_size=12)
             self.gpnl_event.add_component(lbl_key, row=row, col_xs=col, width_xs=1)
             self.gpnl_event.add_component(lbl_val, row=row, col_xs=col + 1, width_xs=4)
@@ -62,7 +74,8 @@ class EventView(EventViewTemplate):
         self._load_map_components(event_data["location"])
 
     def _bind_task_details(self, task_list):
-        self.rpnl_tasklist.items = task_list["tasks"]
+        _tasks = sorted(task_list["tasks"], key=lambda t: t["due_date"])
+        self.rpnl_tasklist.items = _tasks
 
     def _bind_budget_tracker(self, bt):
         self.rpnl_budget.items = bt
