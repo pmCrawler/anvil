@@ -20,6 +20,7 @@ class EventView(EventViewTemplate):
         self._bind_event_details(event_data)
         self._bind_task_details(tasks)
         self._bind_budget_tracker(options["budget_tracker"])
+        
 
     def _bind_event_details(self, event_data):
         # lst_keys = [
