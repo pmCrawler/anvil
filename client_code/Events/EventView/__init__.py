@@ -9,6 +9,12 @@ from anvil.tables import app_tables
 import json
 from datetime import datetime
 from collections import OrderedDict
+from anvil_extras.persistence import persisted_class
+
+
+@persisted_class
+class Event:
+    key = "title"
 
 
 class EventView(EventViewTemplate):
@@ -16,11 +22,13 @@ class EventView(EventViewTemplate):
         # Set Form properties and Data Bindings.
         self.init_components(**properties)
 
+        event = Event.get("Liverpool season opener party")
+        print(event)
+
         event_data, tasks, options = anvil.server.call("get_event_data", event_id)
         self._bind_event_details(event_data)
         self._bind_task_details(tasks)
         self._bind_budget_tracker(options["budget_tracker"])
-        
 
     def _bind_event_details(self, event_data):
         # lst_keys = [
@@ -40,9 +48,7 @@ class EventView(EventViewTemplate):
 
         # kv = OrderedDict((k.update("val",event_data[k["key"]])) for k in lst_keys if k["key"] in event_data)
 
-        key_vals = OrderedDict(
-            (k, event_data[k]) for k in lst_keys if k in event_data
-        )
+        key_vals = OrderedDict((k, event_data[k]) for k in lst_keys if k in event_data)
         row, col = 0, 0
 
         for k, v in key_vals.items():

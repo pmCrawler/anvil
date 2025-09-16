@@ -11,6 +11,11 @@ from collections import OrderedDict, Counter, defaultdict
 
 
 @anvil.server.callable
+def get_event(title):
+    return app_tables.event.search(title=title)
+
+
+@anvil.server.callable
 def get_event_data(id=None):
     event = app_tables.event.get_by_id(id)
     tasks = get_event_tasks(id)
