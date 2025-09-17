@@ -1,40 +1,78 @@
 components:
-- data_bindings:
-  - {code: 'self.item[''task'']', property: text, writeback: false}
-  event_bindings: {show: txt_task_show}
-  layout_properties: {grid_position: 'ZIIIMG,WAOOLI'}
-  name: txt_task
+- components:
+  - data_bindings:
+    - {code: 'self.item[''task'']', property: text, writeback: false}
+    event_bindings: {show: txt_task_show}
+    layout_properties: {width: 204.65311450195313}
+    name: txt_task
+    properties:
+      align: left
+      bold: true
+      icon: ''
+      icon_color: theme:On Error Container
+      line_height: ''
+      role: [column-border, item-border]
+      scale: small
+      style: body
+    type: form:dep_lin1x4oec0ytd:_Components.Text
+  - data_bindings:
+    - {code: 'self.item[''due_date'']', property: text, writeback: false}
+    layout_properties: {width: 140.81922900390626}
+    name: txt_due_date
+    properties:
+      icon: ''
+      icon_color: theme:On Error Container
+      line_height: ''
+      role: [column-border, item-border]
+      scale: small
+    type: form:dep_lin1x4oec0ytd:_Components.Text
+  - data_bindings:
+    - {code: 'self.item[''status'']', property: text, writeback: false}
+    layout_properties: {width: 138.667}
+    name: txt_status
+    properties:
+      icon: ''
+      line_height: ''
+      role: [column-border, item-border]
+      scale: small
+    type: form:dep_lin1x4oec0ytd:_Components.Text
+  - components: []
+    layout_properties: {expand: false, width: 27.98608701171875}
+    name: lnk_edit_task
+    properties:
+      align: right
+      icon: mi:edit
+      icon_color: theme:Primary
+      icon_size: 18
+      spacing:
+        padding: ['8', null, '8', null]
+      tooltip: Edit task
+    type: form:dep_lin1x4oec0ytd:_Components.Link
+  - layout_properties: {expand: false, width: 27.9}
+    name: lnk_delete_task
+    properties:
+      align: right
+      bold: false
+      icon: mi:delete
+      icon_color: theme:Error
+      icon_size: 18
+      spacing:
+        margin: [null, '', null, '']
+        padding: ['8', '', '8', '']
+      tooltip: Delete task
+      underline: false
+    type: form:dep_lin1x4oec0ytd:_Components.Link
+  layout_properties: {grid_position: 'ZIIIMG,ENMHTW'}
+  name: flow_panel_1
   properties:
-    align: left
-    bold: true
-    icon: ''
-    icon_color: theme:On Error Container
-    line_height: ''
-    role: [column-border, item-border]
-    scale: small
-    style: body
-  type: form:dep_lin1x4oec0ytd:_Components.Text
-- data_bindings:
-  - {code: 'self.item[''due_date'']', property: text, writeback: false}
-  layout_properties: {grid_position: 'ZIIIMG,BOKNHB'}
-  name: txt_due_date
-  properties:
-    icon: ''
-    icon_color: theme:On Error Container
-    line_height: ''
-    role: [column-border, item-border]
-    scale: small
-  type: form:dep_lin1x4oec0ytd:_Components.Text
-- data_bindings:
-  - {code: 'self.item[''status'']', property: text, writeback: false}
-  layout_properties: {grid_position: 'ZIIIMG,YUMRWA'}
-  name: txt_status
-  properties:
-    icon: ''
-    line_height: ''
-    role: [column-border, item-border]
-    scale: small
-  type: form:dep_lin1x4oec0ytd:_Components.Text
+    gap: none
+    spacing:
+      margin: ['0', null, '', null]
+      padding: [null, null, '0', null]
+    spacing_above: none
+    spacing_below: none
+    vertical_align: top
+  type: FlowPanel
 container:
   data_bindings: []
   properties: {border: '', col_spacing: none, col_widths: '{}', role: null, wrap_on: never}
