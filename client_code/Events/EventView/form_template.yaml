@@ -42,18 +42,28 @@ components_by_slot:
       - layout_properties: {grid_position: 'GDJYSO,RASKTY'}
         name: hd_tasks
         properties:
+          align: left
           bold: true
-          icon: ''
-          line_height: '0.15'
+          icon: mi:task_alt
+          line_height: '0.50'
           scale: medium
           spacing:
-            padding: ['12', null, null, null]
+            padding: ['8', null, null, null]
           style: title
           text: Tasks
         type: form:dep_lin1x4oec0ytd:_Components.Heading
+      - layout_properties: {full_width_row: false, grid_position: 'GDJYSO,FVHZOS'}
+        name: btn_add_task
+        properties:
+          align: center
+          appearance: tonal
+          icon: mi:add
+          margin: ['4', '12', '4', '0']
+          tooltip: Add task
+        type: form:dep_lin1x4oec0ytd:_Components.IconButton
       - layout_properties: {grid_position: 'DWMSUL,FEEMIF'}
         name: determinate_1
-        properties: {indicator_colour: 'theme:Primary Container', progress: 0.5, track_colour: 'theme:Secondary Container'}
+        properties: {height: '5', indicator_colour: 'theme:Tertiary', progress: 0.75, track_colour: 'theme:Secondary Container'}
         type: form:dep_zszvm0r77msmxo:ProgressBar.Determinate
       - layout_properties: {grid_position: 'HVZWGY,KOTLDM'}
         name: rpnl_tasklist
@@ -62,14 +72,16 @@ components_by_slot:
       data_bindings: []
       layout_properties: {grid_position: 'QJHRKW,QCNJDC'}
       name: cpnl_tasks
-      properties: {col_spacing: small, role: null}
+      properties: {col_spacing: none, col_widths: '{"RASKTY":28,"FVHZOS":3}', role: null}
       type: ColumnPanel
     - components:
       - layout_properties: {grid_position: 'OJHWEM,KSZZCO'}
         name: heading_1
         properties:
           bold: true
-          line_height: '0.15'
+          icon: mi:wallet
+          line_height: '0.5'
+          scale: medium
           spacing:
             padding: ['12', null, null, null]
           style: title
@@ -85,7 +97,7 @@ components_by_slot:
         type: RepeatingPanel
       layout_properties: {grid_position: 'LTLMIH,YZHVYX'}
       name: cpnl_options
-      properties: {}
+      properties: {col_spacing: none}
       type: ColumnPanel
     layout_properties: {}
     name: cpnl_main

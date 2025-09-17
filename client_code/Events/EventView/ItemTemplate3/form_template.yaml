@@ -3,21 +3,23 @@ components:
   - {code: 'self.item[''category'']', property: text, writeback: false}
   layout_properties: {grid_position: 'GKVLFW,RGUHFT'}
   name: txt_budget_catg
-  properties: {}
+  properties: {bold: true, role: null, scale: small}
   type: form:dep_lin1x4oec0ytd:_Components.Text
 - data_bindings:
   - {code: 'self.item[''notes'']', property: text, writeback: false}
   layout_properties: {grid_position: 'GKVLFW,TNRETS'}
   name: txt_notes
-  properties: {}
+  properties: {role: null, scale: small}
   type: form:dep_lin1x4oec0ytd:_Components.Text
 - data_bindings:
   - {code: 'self.item[''suggested_amount'']', property: text, writeback: false}
   layout_properties: {grid_position: 'GKVLFW,BFFWRV'}
   name: txt_amount
-  properties: {icon: 'mi:money_bag', icon_size: null}
+  properties: {icon: 'mi:money_bag', icon_size: null, role: null, scale: small}
   type: form:dep_lin1x4oec0ytd:_Components.Text
 container:
-  properties: {col_spacing: small, role: item-border}
+  properties:
+    col_spacing: none
+    role: [item-border]
   type: ColumnPanel
 is_package: true
