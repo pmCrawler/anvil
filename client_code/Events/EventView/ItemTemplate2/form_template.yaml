@@ -20,6 +20,6 @@ components:
   type: form:dep_lin1x4oec0ytd:_Components.Text
 container:
   data_bindings: []
-  properties: {border: '', col_spacing: none, col_widths: '{}', role: null}
+  properties: {border: '', col_spacing: small, col_widths: '{}', role: null}
   type: ColumnPanel
 is_package: true
