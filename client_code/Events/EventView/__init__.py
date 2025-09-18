@@ -10,6 +10,8 @@ import json
 from datetime import datetime
 from collections import OrderedDict
 from anvil_extras.persistence import persisted_class
+from anvil_extras import popover
+from ...Tasks.TaskForm import TaskForm
 
 
 @persisted_class
@@ -21,12 +23,10 @@ class EventView(EventViewTemplate):
     def __init__(self, event_id=4270964888, **properties):
         # Set Form properties and Data Bindings.
         self.init_components(**properties)
+        # event = Event.get("Liverpool season opener party")
 
-        event = Event.get("Liverpool season opener party")
-        print(event)
-
-        event_data, tasks, options = anvil.server.call("get_event_data", event_id)
-        self._bind_event_details(event_data)
+        self.event_data, tasks, options = anvil.server.call("get_event_data", event_id)
+        self._bind_event_details(self.event_data)
         self._bind_task_details(tasks)
         self._bind_budget_tracker(options["budget_tracker"])
 
@@ -86,6 +86,11 @@ class EventView(EventViewTemplate):
         _tasks = sorted(task_list["tasks"], key=lambda t: t["due_date"])
         self.rpnl_tasklist.items = _tasks
 
+        # self.refresh_comment_panel_items()
+
+    # def refresh_comment_panel_items(self):
+    #     self.comment_panel.items = anvil.server.call('get_comments', self.item)
+
     def _bind_budget_tracker(self, bt):
         self.rpnl_budget.items = bt
         pass
@@ -126,3 +131,18 @@ class EventView(EventViewTemplate):
         self.google_map_1.height = "100"
         self.google_map_1.zoom = 15
         self.google_map_1.add_component(marker)
+
+    def lnk_add_task_click(self, **event_args):
+        if not popover.has_popover(self.lnk_add_task):
+            self.lnk_add_task.popover(
+                TaskForm(self.event_data),
+                placement="top",
+                trigger="stickyhover",
+                # delay={"show": 2000, "hide": 400},
+                # max_width="500px",
+            )
+            open_form("Tasks.TaskForm", self.event_data)
+        pass
+
+    def btn_add_task_click(self, **event_args):
+        pass

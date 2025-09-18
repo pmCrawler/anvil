@@ -12,7 +12,7 @@ import anvil.server
 def save_task(input):
     app_tables.tasks.add_row(
         event_link=input["event_link"],
-        title=input["title"],
+        task=input["task"],
         details=input["details"],
         due_date=input["due_date"],
         duration=input["duration"],
