@@ -32,7 +32,7 @@ components_by_slot:
       type: form:dep_lin1x4oec0ytd:_Components.Text
     - layout_properties: {grid_position: 'QKJHUY,XTBEST'}
       name: spacer_1
-      properties: {}
+      properties: {height: 15.111083984375}
       type: Spacer
     - layout_properties: {grid_position: 'CWPNMB,GQVQXB'}
       name: gpnl_event
@@ -44,9 +44,9 @@ components_by_slot:
         properties:
           align: left
           bold: true
-          icon: mi:task_alt
+          icon: mi:assignment_turned_in
           icon_color: '#2fb8e9'
-          icon_size: 20
+          icon_size: 21
           line_height: '0.50'
           scale: medium
           spacing:
@@ -57,7 +57,7 @@ components_by_slot:
       - layout_properties: {grid_position: 'GDJYSO,LOCVCZ'}
         name: btn_add_task
         properties:
-          align: center
+          align: left
           appearance: tonal
           icon: mi:add
           margin: ['2', '0', '2', '0']
@@ -74,7 +74,7 @@ components_by_slot:
       data_bindings: []
       layout_properties: {grid_position: 'QJHRKW,QCNJDC'}
       name: cpnl_tasks
-      properties: {col_spacing: none, col_widths: '{"RASKTY":35,"LOCVCZ":25}', role: null, wrap_on: tablet}
+      properties: {col_spacing: none, col_widths: '{"RASKTY":55,"LOCVCZ":5}', role: null, wrap_on: mobile}
       type: ColumnPanel
     - components:
       - layout_properties: {grid_position: 'OJHWEM,KSZZCO'}
@@ -83,7 +83,7 @@ components_by_slot:
           bold: true
           icon: mi:wallet
           icon_color: '#3dd664'
-          icon_size: 20
+          icon_size: 21
           line_height: '0.5'
           scale: medium
           spacing:
