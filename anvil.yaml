@@ -75,7 +75,7 @@ db_schema:
     server: full
     title: Files
   tasks:
-    client: none
+    client: full
     columns:
     - {admin_ui: null, name: event_link, target: event, type: link_single}
     - admin_ui: {width: 200}

@@ -1,0 +1,71 @@
+components:
+- components:
+  - layout_properties: {grid_position: 'IVYHBN,MSEWQE'}
+    name: heading_1
+    properties: {bold: true, style: title, text: New Task}
+    type: form:dep_lin1x4oec0ytd:_Components.Heading
+  - data_bindings: []
+    layout_properties: {grid_position: 'UMIXBF,UGTREF'}
+    name: dd_event_list
+    properties: {label: Event, label_bold: true}
+    type: form:dep_lin1x4oec0ytd:_Components.DropdownMenu
+  - data_bindings:
+    - {code: 'self.item[''title'']', property: text, writeback: false}
+    layout_properties: {grid_position: 'VGSTSI,COYPGP'}
+    name: txtbx_title
+    properties: {label: Title, label_bold: true}
+    type: form:dep_lin1x4oec0ytd:_Components.TextInput.TextBox
+  - data_bindings:
+    - {code: 'self.item[''details'']', property: text, writeback: false}
+    layout_properties: {grid_position: 'NGSPFR,DWEARQ'}
+    name: txtarea_details
+    properties: {display_bold: false, label: Details, label_bold: true}
+    type: form:dep_lin1x4oec0ytd:_Components.TextInput.TextArea
+  - data_bindings:
+    - {code: 'self.item[''due_date'']', property: date, writeback: false}
+    layout_properties: {grid_position: 'TUGXZY,SUONGE'}
+    name: dtpkr_due_date
+    properties: {format: '%m-%d-%Y', placeholder: Due Date}
+    type: DatePicker
+  - layout_properties: {grid_position: 'LPTIEN,SLEZUS'}
+    name: txtbx_duration
+    properties: {display_bold: false, label: Duration, label_bold: true, placeholder: e.g. 2-3 hours, supporting_text: ''}
+    type: form:dep_lin1x4oec0ytd:_Components.TextInput.TextBox
+  - layout_properties: {grid_position: 'FQDFCZ,XAMFKR'}
+    name: text_1
+    properties:
+      bold: true
+      scale: large
+      spacing:
+        padding: [null, null, null, '12']
+      style: label
+      text: Status
+    type: form:dep_lin1x4oec0ytd:_Components.Text
+  - components:
+    - layout_properties: {}
+      name: rb_done
+      properties: {enabled: true, selected: false, text: Done, value: Done}
+      type: form:dep_lin1x4oec0ytd:_Components.RadioButton
+    - layout_properties: {}
+      name: rb_in_progess
+      properties: {selected: false, text: In progress, value: In progress}
+      type: form:dep_lin1x4oec0ytd:_Components.RadioButton
+    - layout_properties: {}
+      name: rb_not_started
+      properties: {selected: true, text: Not started, value: Not started}
+      type: form:dep_lin1x4oec0ytd:_Components.RadioButton
+    layout_properties: {grid_position: 'FQDFCZ,OXVZHU'}
+    name: rgpnl_status
+    properties: {}
+    type: form:dep_lin1x4oec0ytd:_Components.RadioGroupPanel
+  - event_bindings: {click: btn_add_task_click}
+    layout_properties: {grid_position: 'TTSBAK,OFUJIA'}
+    name: btn_add_task
+    properties: {text: Add Task}
+    type: form:dep_lin1x4oec0ytd:_Components.Button
+  layout_properties: {grid_position: 'UQKAJE,WPDGEN'}
+  name: cpnl_new_task
+  properties: {col_widths: '{"XAMFKR":10,"OXVZHU":50}'}
+  type: ColumnPanel
+container: {type: ColumnPanel}
+is_package: true

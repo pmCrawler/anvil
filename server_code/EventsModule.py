@@ -49,7 +49,7 @@ def get_event_tasks(id=None):
 
 @anvil.server.callable
 def get_events(user_id=None):
-    events = app_tables.event.search()
+    events = app_tables.event.search(user_id=user_id)
     return events
     # return EVENTS
 

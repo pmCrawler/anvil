@@ -9,6 +9,18 @@ import anvil.server
 
 
 @anvil.server.callable
+def save_task(input):
+    app_tables.tasks.add_row(
+        event_link=input["event_link"],
+        title=input["title"],
+        details=input["details"],
+        due_date=input["due_date"],
+        duration=input["duration"],
+        status=int(input["status"]),
+    )
+
+
+@anvil.server.callable
 def save_tasks(tasks):
     row = app_tables.tasks.add_row(
         event_id=tasks["event_id"],
