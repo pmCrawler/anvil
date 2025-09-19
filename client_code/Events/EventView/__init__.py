@@ -140,4 +140,7 @@ class EventView(EventViewTemplate):
 
     def btn_add_task_click(self, **event_args):
         self.btn_add_task.pop("show")
+        shown = self.btn_add_task.pop("shown")
+        if not shown:
+            self.refresh_data_bindings()
         pass
