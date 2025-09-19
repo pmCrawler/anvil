@@ -9,17 +9,19 @@ from anvil.tables import app_tables
 
 
 class TaskForm(TaskFormTemplate):
-    def __init__(self, event=None, **properties):
+    def __init__(self, event=None, source=None, **properties):
         # Set Form properties and Data Bindings.
         self.init_components(**properties)
-
+        self.source = source
         self.events = []
         if not event:
             self.events = anvil.server.call("get_events", user_id=None)
+            self.dd_event_list.items = [ev["title"] for ev in self.events]
         else:
             self.events.append(event)
+            self.dd_event_list.items = [ev["title"] for ev in self.events]
+            self.dd_event_list.selected_value = event["title"]
         # self.refresh_comment_panel_items()
-        self.dd_event_list.items = [ev["title"] for ev in self.events]
 
     # def refresh_comment_panel_items(self):
     #     self.comment_panel.items = anvil.server.call("get_comments", self.item)
@@ -31,7 +33,7 @@ class TaskForm(TaskFormTemplate):
             ev for ev in self.events if ev["title"] == self.dd_event_list.selected_value
         ]
         app_tables.tasks.add_row(
-            event_link=selected_event,
+            event_link=selected_event[0],
             task=self.txtbx_title.text,
             details=self.txtarea_details.text,
             due_date=self.dtpkr_due_date.date,
@@ -39,6 +41,9 @@ class TaskForm(TaskFormTemplate):
             status=self.rgpnl_status.selected_value,
         )
 
-        open_form(get_open_form())
+        # open_form(self.source)
         # anvil.server.call("save_task", event_args)
-        pass
+        self.btn_add_task.enabled = False
+        self.btn_add_task.visible = False
+        self.remove_from_parent()
+        return get_open_form()

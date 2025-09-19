@@ -21,14 +21,20 @@ class Event:
 
 class EventView(EventViewTemplate):
     def __init__(self, event_id=4270964888, **properties):
-        # Set Form properties and Data Bindings.
         self.init_components(**properties)
-        # event = Event.get("Liverpool season opener party")
 
         self.event_data, tasks, options = anvil.server.call("get_event_data", event_id)
         self._bind_event_details(self.event_data)
         self._bind_task_details(tasks)
         self._bind_budget_tracker(options["budget_tracker"])
+        self.btn_add_task.popover(
+            TaskForm(event=self.event_data, source=get_open_form()),
+            placement="left",
+            trigger="manual focus",
+            auto_dismiss=True,
+            # One of 'manual', 'focus', 'hover', 'click', (can be a combination of two e.g. 'hover focus'). 'stickyhover' is also available.
+            max_width="500px",
+        )
 
     def _bind_event_details(self, event_data):
         # lst_keys = [
@@ -132,17 +138,6 @@ class EventView(EventViewTemplate):
         self.google_map_1.zoom = 15
         self.google_map_1.add_component(marker)
 
-    def lnk_add_task_click(self, **event_args):
-        if not popover.has_popover(self.lnk_add_task):
-            self.lnk_add_task.popover(
-                TaskForm(self.event_data),
-                placement="top",
-                trigger="stickyhover",
-                # delay={"show": 2000, "hide": 400},
-                # max_width="500px",
-            )
-            open_form("Tasks.TaskForm", self.event_data)
-        pass
-
     def btn_add_task_click(self, **event_args):
+        self.btn_add_task.pop("show")
         pass
