@@ -20,7 +20,6 @@ class TaskForm(TaskFormTemplate):
             self.events.append(event)
         # self.refresh_comment_panel_items()
         self.dd_event_list.items = [ev["title"] for ev in self.events]
-        pass
 
     # def refresh_comment_panel_items(self):
     #     self.comment_panel.items = anvil.server.call("get_comments", self.item)
