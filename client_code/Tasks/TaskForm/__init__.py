@@ -46,4 +46,5 @@ class TaskForm(TaskFormTemplate):
         self.btn_add_task.enabled = False
         self.btn_add_task.visible = False
         self.remove_from_parent()
+        
         return get_open_form()

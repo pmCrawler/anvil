@@ -23,6 +23,7 @@ class EventView(EventViewTemplate):
     def __init__(self, event_id=4270964888, **properties):
         self.init_components(**properties)
 
+        self.event_id = event_id
         self.event_data, tasks, options = anvil.server.call("get_event_data", event_id)
         self._bind_event_details(self.event_data)
         self._bind_task_details(tasks)
@@ -140,7 +141,12 @@ class EventView(EventViewTemplate):
 
     def btn_add_task_click(self, **event_args):
         self.btn_add_task.pop("show")
-        shown = self.btn_add_task.pop("shown")
-        if not shown:
-            self.refresh_data_bindings()
+        # shown = self.btn_add_task.pop("shown")
+        anvil.server.call("get_event_tasks", self.event_id)
+        # self.refresh_data_bindings()
+        self.raise_event()
+        pass
+
+    def btn_add_task_show(self, **event_args):
+        """This method is called when the component is shown on the screen."""
         pass
