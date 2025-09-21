@@ -142,9 +142,11 @@ class EventView(EventViewTemplate):
     def btn_add_task_click(self, **event_args):
         self.btn_add_task.pop("show")
         # shown = self.btn_add_task.pop("shown")
-        anvil.server.call("get_event_tasks", self.event_id)
         # self.refresh_data_bindings()
-        self.raise_event()
+        if not self.btn_add_task.pop("shown"):
+            anvil.server.call("get_event_tasks", self.event_id)
+        
+
         pass
 
     def btn_add_task_show(self, **event_args):

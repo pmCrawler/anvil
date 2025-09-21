@@ -45,6 +45,6 @@ class TaskForm(TaskFormTemplate):
         # anvil.server.call("save_task", event_args)
         self.btn_add_task.enabled = False
         self.btn_add_task.visible = False
-        self.remove_from_parent()
-        
+        # self.remove_from_parent()
+
         return get_open_form()
