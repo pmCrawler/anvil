@@ -73,6 +73,8 @@ class EventView(EventViewTemplate):
 
     def _bind_task_details(self, task_list):
         _tasks = sorted(task_list["tasks"], key=lambda t: t["due_date"])
+        self.txt_count_done.text = f"""Done: {task_list["compl_cnt"]}"""
+        self.txt_count_remains.text = f"""Remains: {task_list["incompl_cnt"]}"""
         self.rpnl_tasklist.items = _tasks
 
     def _bind_budget_tracker(self, bt):

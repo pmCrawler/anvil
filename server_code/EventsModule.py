@@ -35,7 +35,7 @@ def get_event_by_id(id=None):
 def get_event_tasks(id=None):
     tasks = app_tables.tasks.search(event_link=get_event_by_id(id))
     tot_cnt = len(tasks)
-    compl_cnt = len([t for t in tasks if t["is_done"]])
+    compl_cnt = len([t for t in tasks if t["status"] == "Done"])
     incompl_cnt = tot_cnt - compl_cnt
     pct_compl = round((compl_cnt / tot_cnt) * 100, 0)
     return {
