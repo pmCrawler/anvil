@@ -28,22 +28,8 @@ class EventView(EventViewTemplate):
         self._bind_event_details(self.event_data)
         self._bind_task_details(tasks)
         self._bind_budget_tracker(options["budget_tracker"])
-        self.btn_add_task.popover(
-            TaskForm(event=self.event_data, source=get_open_form()),
-            placement="left",
-            trigger="manual focus",
-            auto_dismiss=True,
-            # One of 'manual', 'focus', 'hover', 'click', (can be a combination of two e.g. 'hover focus'). 'stickyhover' is also available.
-            max_width="500px",
-        )
 
     def _bind_event_details(self, event_data):
-        # lst_keys = [
-        #     {"key": "event_datetime", "icon": "mi:calendar_clock"},
-        #     {"key": "location", "icon": "mi:location_on"},
-        #     {"key": "budget", "icon": "mi:money_bag"},
-        #     {"key": "guest_count", "icon": "mi:people_alt"},
-        # ]
         lst_keys = [
             "event_datetime",
             "location",
@@ -52,12 +38,9 @@ class EventView(EventViewTemplate):
         ]
         self.heading_title.text = event_data["title"]
         self.txt_description.text = event_data["description"]
-
-        # kv = OrderedDict((k.update("val",event_data[k["key"]])) for k in lst_keys if k["key"] in event_data)
-
         key_vals = OrderedDict((k, event_data[k]) for k in lst_keys if k in event_data)
-        row, col = 0, 0
 
+        row, col = 0, 0
         for k, v in key_vals.items():
             if k == "location":
                 k = "Where"
@@ -76,7 +59,6 @@ class EventView(EventViewTemplate):
                 text=k.title().replace("_", " "),
                 bold=True,
                 font_size=12,
-                # icon=k["icon"],
             )
             lbl_val = m3.Text(text=str(v), font_size=12)
             self.gpnl_event.add_component(lbl_key, row=row, col_xs=col, width_xs=1)
@@ -93,36 +75,8 @@ class EventView(EventViewTemplate):
         _tasks = sorted(task_list["tasks"], key=lambda t: t["due_date"])
         self.rpnl_tasklist.items = _tasks
 
-        # self.refresh_comment_panel_items()
-
-    # def refresh_comment_panel_items(self):
-    #     self.comment_panel.items = anvil.server.call('get_comments', self.item)
-
     def _bind_budget_tracker(self, bt):
         self.rpnl_budget.items = bt
-        pass
-        # val_task_bg = None
-        # if task_list["pct_compl"] < 60:
-        #     val_task_bg = "#f8a4af"  # red
-        # elif task_list["pct_compl"] >= 80:
-        #     val_task_bg = "#97f9a4"  # green
-        # else:
-        #     val_task_bg = "#f0b090"  # orange
-
-        # lbl_task_count = m3.Text(
-        #     text="Tasks",
-        #     bold=True,
-        #     font_size=12,
-        # )
-        # val_task_count = m3.Text(
-        #     text=f"""{task_list["compl_cnt"]} of {task_list["tot_cnt"]} done""",
-        #     font_size=12,
-        #     align="left",
-        #     text_color=val_task_bg,
-        # )
-
-        # self.gpnl_event.add_component(lbl_task_count, col_xs=0, width_xs=1)
-        # self.gpnl_event.add_component(val_task_count, col_xs=1, width_xs=2)
 
     def _load_map_components(self, location):
         marker = GoogleMap.Marker(
@@ -140,15 +94,21 @@ class EventView(EventViewTemplate):
         self.google_map_1.add_component(marker)
 
     def btn_add_task_click(self, **event_args):
+        task_form = TaskForm(event=self.event_data)
+        task_form.set_event_handler("x-refresh_parent", self.refresh_tasks)
+
+        self.btn_add_task.popover(
+            task_form,
+            placement="left",
+            trigger="manual",
+            auto_dismiss=True,
+            max_width="500px",
+        )
         self.btn_add_task.pop("show")
-        # shown = self.btn_add_task.pop("shown")
-        # self.refresh_data_bindings()
-        if not self.btn_add_task.pop("shown"):
-            anvil.server.call("get_event_tasks", self.event_id)
-        
 
-        pass
-
-    def btn_add_task_show(self, **event_args):
-        """This method is called when the component is shown on the screen."""
-        pass
+    def refresh_tasks(self, **event_args):
+        task_list = anvil.server.call(
+            "get_event_tasks",
+            self.event_id,
+        )
+        self._bind_task_details(task_list)

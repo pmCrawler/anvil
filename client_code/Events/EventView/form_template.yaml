@@ -54,7 +54,7 @@ components_by_slot:
           style: title
           text: Tasks
         type: form:dep_lin1x4oec0ytd:_Components.Heading
-      - event_bindings: {click: btn_add_task_click, show: btn_add_task_show}
+      - event_bindings: {click: btn_add_task_click}
         layout_properties: {grid_position: 'GDJYSO,LOCVCZ'}
         name: btn_add_task
         properties:

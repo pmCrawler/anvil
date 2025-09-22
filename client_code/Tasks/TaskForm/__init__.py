@@ -40,11 +40,8 @@ class TaskForm(TaskFormTemplate):
             duration=self.txtbx_duration.text,
             status=self.rgpnl_status.selected_value,
         )
+        # Raise a custom event to notify the parent form
+        self.raise_event("x-refresh_parent")
 
-        # open_form(self.source)
-        # anvil.server.call("save_task", event_args)
-        self.btn_add_task.enabled = False
-        self.btn_add_task.visible = False
-        # self.remove_from_parent()
-
-        return get_open_form()
+        # Inside TaskForm
+        self.popper.pop("hide")
