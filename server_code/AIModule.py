@@ -8,6 +8,7 @@ from anvil.tables import app_tables
 import anvil.server
 import requests
 
+
 # import openai  # or your preferred AI provider
 
 # openai.api_key = "your-openai-api-key"

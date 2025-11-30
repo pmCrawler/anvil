@@ -10,7 +10,6 @@ from ... import Events
 import anvil.http
 import json
 
-
 QUESTION_WF_URL = "http://localhost:5678/webhook/69aee61f-e514-417d-ad16-0615b6e1a9c9"
 EVENT_WF_URL = "http://localhost:5678/webhook/dafb4274-ddf0-4874-a0e1-5a362c525170"
 
