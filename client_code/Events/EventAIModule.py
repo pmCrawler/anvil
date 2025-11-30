@@ -3,12 +3,12 @@ import anvil.users
 import anvil.tables as tables
 import anvil.tables.query as q
 from anvil.tables import app_tables
-from pydantic import BaseModel
 
 from dataclasses import dataclass
+from pydantic import BaseModel, Field
+from typing import List, Literal, Optional, Union
 
 
-# Event Details (Input)
 @dataclass
 class EventDetails:
     title: str
@@ -19,6 +19,7 @@ class EventDetails:
     venue_type: str = "home"
 
 
+# Event Details (Input)
 events = [
     # EventDetails(
     #     title="Gender Reveal Party",
@@ -53,6 +54,7 @@ events = [
         venue_type="home",
     ),
 ]
+
 
 system_prompt = """You are Alma, an expert event planning AI assistant.
 
@@ -109,11 +111,6 @@ Ensure ALL fields are populated. Use empty lists [] if truly nothing applies, bu
 """
 
 user_prompt = "Create a comprehensive event plan appropriate for this type of event."
-
-
-from typing import List, Literal, Optional, Union
-
-from pydantic import BaseModel, Field
 
 
 # Base Models for Common Components
@@ -223,5 +220,6 @@ class EventPlan(BaseModel):
     reasoning: str = Field(..., description="Explanation of choices made")
 
 
-def say_hello():
-    print("Hello, world")
+if __name__ == "__main__":
+    event = events[0]
+    print(event)
