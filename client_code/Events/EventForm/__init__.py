@@ -9,6 +9,17 @@ from anvil.tables import app_tables
 from ... import Events
 import anvil.http
 import json
+from dataclasses import dataclass
+
+@dataclass
+class EventDetails:
+    title: str
+    description: str
+    event_date: str
+    guest_count: int = 20
+    total_budget: int = 500
+    venue_type: str = "home"
+
 
 QUESTION_WF_URL = "http://localhost:5678/webhook/69aee61f-e514-417d-ad16-0615b6e1a9c9"
 EVENT_WF_URL = "http://localhost:5678/webhook/dafb4274-ddf0-4874-a0e1-5a362c525170"
