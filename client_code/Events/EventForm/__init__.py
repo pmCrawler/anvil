@@ -9,16 +9,6 @@ from anvil.tables import app_tables
 from ... import Events
 import anvil.http
 import json
-from dataclasses import dataclass
-
-@dataclass
-class EventDetails:
-    title: str
-    description: str
-    event_date: str
-    guest_count: int = 20
-    total_budget: int = 500
-    venue_type: str = "home"
 
 
 QUESTION_WF_URL = "http://localhost:5678/webhook/69aee61f-e514-417d-ad16-0615b6e1a9c9"
@@ -32,6 +22,8 @@ class EventForm(EventFormTemplate):
         self.user_input = dict()
         self.event_ai.visible = False
         self.cpanel_options.visible = False
+        self.details = anvil.server.call("get_event_details")
+        pass
 
     def btn_start_click(self, **event_args):
         """This method is called when the component is clicked."""
@@ -56,6 +48,8 @@ class EventForm(EventFormTemplate):
             "food_bev": True if self.switch_food.selected else False,
             "event_setting": self.rgp_setting.selected_value,
         }
+        event_details = anvil.server.call("get_event_details")
+        print(event_details)
         return self.user_input
 
     def btn_save_click(self, **event_args):

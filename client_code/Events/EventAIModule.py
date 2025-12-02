@@ -4,56 +4,9 @@ import anvil.tables as tables
 import anvil.tables.query as q
 from anvil.tables import app_tables
 
-from dataclasses import dataclass
+
 from pydantic import BaseModel, Field
 from typing import List, Literal, Optional, Union
-
-
-@dataclass
-class EventDetails:
-    title: str
-    description: str
-    event_date: str
-    guest_count: int = 20
-    total_budget: int = 500
-    venue_type: str = "home"
-
-
-# Event Details (Input)
-events = [
-    # EventDetails(
-    #     title="Gender Reveal Party",
-    #     description="A celebration to reveal the gender of our second child to friends and family",
-    #     event_date="2025-12-15",
-    #     guest_count=30,
-    #     total_budget=1000,
-    #     venue_type="home",
-    # ),
-    # EventDetails(
-    #     title="Monthly Book Club Meeting",
-    #     description="Discussion of this month's book 'The Midnight Library' with regular reading group",
-    #     event_date="2025-11-30",
-    #     guest_count=8,
-    #     total_budget=100,
-    #     venue_type="home",
-    # ),
-    # EventDetails(
-    #     title="Tech Meetup",
-    #     description="Monthly gathering for developers and data scientists to share projects and network",
-    #     event_date="2025-11-20",
-    #     guest_count=40,
-    #     total_budget=500,
-    #     venue_type="office",
-    # ),
-    EventDetails(
-        title="Liverpool vs West Ham Football Match Viewing Party",
-        description="A gathering to watch the Liverpool vs West Ham football match with friends and family",
-        event_date="2025-11-30",
-        guest_count=10,
-        total_budget=300,
-        venue_type="home",
-    ),
-]
 
 
 system_prompt = """You are Alma, an expert event planning AI assistant.

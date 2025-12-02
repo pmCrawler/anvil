@@ -7,6 +7,41 @@ import anvil.tables.query as q
 from anvil.tables import app_tables
 import anvil.server
 import requests
+from dataclasses import dataclass
+
+
+@dataclass
+class EventDetails:
+    title: str
+    description: str
+    event_date: str
+    guest_count: int = 20
+    total_budget: int = 500
+    venue_type: str = "home"
+
+    def __dict__(self):
+        return {
+            "title": self.title,
+            "description": self.description,
+            "event_date": self.event_date,
+            "guest_count": self.guest_count,
+            "total_budget": self.total_budget,
+            "venue_type": self.venue_type,
+        }
+
+
+@anvil.server.callable
+def get_event_details():
+    # Event Details (Input)
+    event = EventDetails(
+        title="Liverpool vs West Ham Football Match Viewing Party",
+        description="A gathering to watch the Liverpool vs West Ham football match with friends and family",
+        event_date="2025-11-30",
+        guest_count=10,
+        total_budget=300,
+        venue_type="home",
+    )
+    return event.__dict__()
 
 
 # import openai  # or your preferred AI provider
