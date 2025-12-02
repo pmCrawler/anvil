@@ -171,8 +171,3 @@ class EventPlan(BaseModel):
     logistics: List[str] = Field(..., description="General logistical considerations")
     contingency_notes: List[str] = Field(..., description="Backup plans and what-ifs")
     reasoning: str = Field(..., description="Explanation of choices made")
-
-
-if __name__ == "__main__":
-    event = events[0]
-    print(event)
