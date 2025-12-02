@@ -22,8 +22,8 @@ class EventForm(EventFormTemplate):
         self.user_input = dict()
         self.event_ai.visible = False
         self.cpanel_options.visible = False
-        self.details = anvil.server.call("get_event_details")
-        pass
+        # self.details = anvil.server.call("get_event_details")
+        # pass
 
     def btn_start_click(self, **event_args):
         """This method is called when the component is clicked."""
@@ -48,8 +48,6 @@ class EventForm(EventFormTemplate):
             "food_bev": True if self.switch_food.selected else False,
             "event_setting": self.rgp_setting.selected_value,
         }
-        event_details = anvil.server.call("get_event_details")
-        print(event_details)
         return self.user_input
 
     def btn_save_click(self, **event_args):
