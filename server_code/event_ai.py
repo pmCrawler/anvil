@@ -10,13 +10,20 @@ import requests
 from .models import EventDetails, EventPlan
 import asyncio
 from pydantic_ai import Agent, RunContext
+from pydantic_ai.models.openai import OpenAIChatModel
+from pydantic_ai.providers.openai import OpenAIProvider
 from .prompts import system_prompt, user_prompt
 
+
 openai_api_key = anvil.secrets.get_secret("openai_api_key")
+model = OpenAIChatModel(
+    "gpt-4o-mini",
+    provider=OpenAIProvider(api_key=openai_api_key),
+)
 
 # Create the agent
 event_agent = Agent(
-    model="openai:gpt-4o-mini",
+    model=model,
     deps_type=EventDetails,
     output_type=EventPlan,
     system_prompt=system_prompt,
