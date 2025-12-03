@@ -9,6 +9,7 @@ from anvil.tables import app_tables
 from ... import Events
 import anvil.http
 import json
+# import asyncio
 
 
 QUESTION_WF_URL = "http://localhost:5678/webhook/69aee61f-e514-417d-ad16-0615b6e1a9c9"
@@ -22,15 +23,14 @@ class EventForm(EventFormTemplate):
         self.user_input = dict()
         self.event_ai.visible = False
         self.cpanel_options.visible = False
-        # self.details = anvil.server.call("get_event_details")
-        # pass
 
     def btn_start_click(self, **event_args):
         """This method is called when the component is clicked."""
 
         self.user_input = self.get_user_input()
         # resp = anvil.http.request(EVENT_WF_URL, data=self.user_input, json=True)
-        self.resp = self.event_ai.load_sample_data()
+        # self.resp = self.event_ai.load_sample_data()
+        self.resp = anvil.server.call("run_ai", self.user_input)
 
         self.btn_start.visible = False
         self.event_ai.visible = True

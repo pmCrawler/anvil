@@ -148,6 +148,10 @@ runtime_options:
       pprint3x==3.10.4.6
   server_version: python3-sandbox
   version: 3
+secrets:
+  openai_api_key:
+    type: secret
+    value: {3RH6XGIV4HZUYLWV: Gclzfk2Ut9q7EwKU30c3rFAwR7QmN7pE7Y/gSTM+DTaDb0wz/R0D/wvrjxC7pGX7cBRE7caXi2Id12rVWSIky3s040QhaeIm9abuX5+1k0y6/p0CYrCUZUJg7Ll/J3o09JWcK9PKWknsUDPWeaDO4t2P8lWJ4bImZbFvAGXSdCK/+JzvxYp8sAg+b5IuC3RkPuNJhNbIuhM+PokpdqsOUtm5YlTdWj+flDdGq9V4f7rhngX9tMkhrWH/lGxyrldByJ+AvXUk8tEs096/+mkUQYNh0oUpsS7qoeLGVm+QCkW0M3BLSEYzC28Gft/5AFe2uHPhpfAW9zY3mbP72FuBP9wenw==}
 services:
 - client_config: {enable_v2: true}
   server_config: {auto_create_missing_columns: true}
