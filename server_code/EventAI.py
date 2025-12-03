@@ -51,7 +51,7 @@ async def add_dynamic_instructions(ctx: RunContext[EventDetails]) -> str:
 
 
 @anvil.server.callable
-async def run_ai(user_input):
+def run_ai(user_input):
     event = EventDetails(
         title=user_input["title"],
         description=user_input["description"],
