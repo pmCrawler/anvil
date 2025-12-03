@@ -10,13 +10,13 @@ import anvil.server
 from .models import EventDetails, EventPlan
 import asyncio
 from pydantic_ai import Agent, RunContext
-from pydantic_ai.models.openai import OpenAIChatModel
+from pydantic_ai.models.openai import OpenAIModel
 from pydantic_ai.providers.openai import OpenAIProvider
 from .prompts import system_prompt, user_prompt
 
 
 openai_api_key = anvil.secrets.get_secret("openai_api_key")
-model = OpenAIChatModel(
+model = OpenAIModel(
     "gpt-4o-mini",
     provider=OpenAIProvider(api_key=openai_api_key),
 )
@@ -51,7 +51,7 @@ async def add_dynamic_instructions(ctx: RunContext[EventDetails]) -> str:
 
 
 @anvil.server.callable
-def run_ai(user_input):
+async def run_ai(user_input):
     event = EventDetails(
         title=user_input["title"],
         description=user_input["description"],

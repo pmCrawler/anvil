@@ -31,7 +31,7 @@ class EventForm(EventFormTemplate):
         self.user_input = self.get_user_input()
         # resp = anvil.http.request(EVENT_WF_URL, data=self.user_input, json=True)
         # self.resp = self.event_ai.load_sample_data()
-        self.resp = anvil.server.call("")
+        self.resp = anvil.server.call("run_ai", self.user_input)
 
         self.btn_start.visible = False
         self.event_ai.visible = True
