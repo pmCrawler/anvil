@@ -7,11 +7,11 @@ import anvil.tables.query as q
 from anvil.tables import app_tables
 import anvil.server
 
-from .models import EventDetails, EventPlan
-import asyncio
 from pydantic_ai import Agent, RunContext
 from pydantic_ai.models.openai import OpenAIModel
 from pydantic_ai.providers.openai import OpenAIProvider
+
+from .models import EventDetails, EventPlan
 from .prompts import system_prompt, user_prompt
 
 
@@ -31,7 +31,7 @@ event_agent = Agent(
 
 
 @event_agent.system_prompt
-async def add_dynamic_instructions(ctx: RunContext[EventDetails]) -> str:
+def add_dynamic_instructions(ctx: RunContext[EventDetails]) -> str:
     """Add event-specific context to the system prompt"""
 
     budget_per_person = ctx.deps.total_budget / ctx.deps.guest_count
@@ -51,7 +51,7 @@ async def add_dynamic_instructions(ctx: RunContext[EventDetails]) -> str:
 
 
 @anvil.server.callable
-async def run_ai(user_input):
+def run_ai(user_input):
     event = EventDetails(
         title=user_input["title"],
         description=user_input["description"],
@@ -62,7 +62,7 @@ async def run_ai(user_input):
     )
 
     try:
-        result = await event_agent.run(
+        result = event_agent.run_sync(
             user_prompt=user_prompt,
             deps=event,
         )
