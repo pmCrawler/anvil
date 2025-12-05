@@ -24,11 +24,11 @@ class EventForm(EventFormTemplate):
         self.user_input = dict()
         self.event_ai.visible = False
         self.cpanel_options.visible = False
-        result = anvil.server.call("test_connection")
-        print(result)
 
     def btn_start_click(self, **event_args):
         """This method is called when the component is clicked."""
+        result = anvil.server.call("test_connection")
+        print(result)
 
         self.user_input = self.get_user_input()
         # resp = anvil.http.request(EVENT_WF_URL, data=self.user_input, json=True)
