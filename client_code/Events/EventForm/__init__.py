@@ -21,46 +21,41 @@ class EventForm(EventFormTemplate):
     def __init__(self, **properties):
         self.init_components(**properties)
         # self.event_ai.content_panel.visible = False
-        self.user_input = dict()
         self.event_ai.visible = False
         self.cpanel_options.visible = False
+        self.user_input = dict()
+        self._load_default_input()
+
+    def _load_default_input(self):
+        self.title.text = "Liverpool vs West Ham Football Match Viewing Party"
+        self.description.text = "A gathering to watch the Liverpool vs West Ham football match with friends and family"
+        self.datetime.date = "2025-11-30"
+        self.guest_count.text = 10
+        self.budget.text = 300
+        self.venue_type.text = "home"
+
+    def get_user_input(self):
+        self.user_input = {
+            "title": self.title.text,
+            "description": self.description.text,
+            "event_date": self.datetime.date,
+            "guest_count": self.guest_count.text,
+            "total_budget": self.budget.text,
+            "venue_type": self.venue_type.text,
+            "food_bev": True if self.switch_food.selected else False,
+            "event_setting": self.rgp_setting.selected_value,
+        }
+        # return self.user_input
 
     def btn_start_click(self, **event_args):
         """This method is called when the component is clicked."""
 
-        input = {
-            "title": "Liverpool vs West Ham Football Match Viewing Party",
-            "description": "A gathering to watch the Liverpool vs West Ham football match with friends and family",
-            "event_date": "2025-11-30",
-            "guest_count": 10,
-            "total_budget": 300,
-            "venue_type": "home",
-        }
-        result = anvil.server.call("run_event_ai", input)
-        print(result)
-
-        self.user_input = self.get_user_input()
-        # resp = anvil.http.request(EVENT_WF_URL, data=self.user_input, json=True)
-        # self.resp = self.event_ai.load_sample_data()
-        self.resp = anvil.server.call("run_ai", self.user_input)
-
         self.btn_start.visible = False
+        self.get_user_input()
+        self.resp = anvil.server.call("run_event_ai", self.user_input)
         self.event_ai.visible = True
         self.event_ai.process_json_response(self.resp)
         self.cpanel_options.visible = True
-
-    def get_user_input(self):
-        self.user_input = {
-            "title": self.input_title.text,
-            "description": self.input_description.text,
-            "event_datetime": self.input_datetime.date,
-            "guest_count": self.input_guest_count.text,
-            "budget": self.input_budget.text,
-            "venue_type": self.input_venue_type.text,
-            "food_bev": True if self.switch_food.selected else False,
-            "event_setting": self.rgp_setting.selected_value,
-        }
-        return self.user_input
 
     def btn_save_click(self, **event_args):
         """This method is called when the component is clicked."""

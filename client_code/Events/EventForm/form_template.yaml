@@ -13,17 +13,17 @@ components_by_slot:
         text: New Event
       type: form:dep_lin1x4oec0ytd:_Components.Text
     - layout_properties: {grid_position: 'DRCISH,SINRXR'}
-      name: input_title
+      name: title
       properties: {appearance: outlined, background_color: 'theme:Surface', border_color: 'theme:Outline', label: Title, label_bold: true, leading_icon: 'mi:event_upcoming', leading_icon_color: 'theme:Tertiary', placeholder: 'Julia''s baby shower '}
       type: form:dep_lin1x4oec0ytd:_Components.TextInput.TextBox
     - layout_properties: {grid_position: 'LZVRMW,JITNFM'}
-      name: input_description
+      name: description
       properties: {align: left, appearance: outlined, background_color: 'theme:Surface', border_color: 'theme:Outline', character_limit: 100, display_bold: false, display_font_size: null, height: 60, label: Describe your event, label_bold: true, label_color: '', label_font_size: null, placeholder: 'I''m planning my sister''s first baby shower. I want ideas for the menu, theme, etc.', subcontent_color: '#525252', subcontent_font_size: 9, supporting_text: ''}
       type: form:dep_lin1x4oec0ytd:_Components.TextInput.TextArea
     - components:
       - data_bindings: []
         layout_properties: {expand: false, width: 212.75}
-        name: input_datetime
+        name: datetime
         properties:
           align: left
           background: theme:Surface
@@ -39,7 +39,7 @@ components_by_slot:
           visible: true
         type: DatePicker
       - layout_properties: {expand: false, width: 204.73700000000002}
-        name: input_venue_type
+        name: venue_type
         properties:
           appearance: outlined
           background_color: '#F8FAF6'
@@ -66,7 +66,7 @@ components_by_slot:
     - components:
       - data_bindings: []
         layout_properties: {expand: false, width: 213.11200610351563}
-        name: input_guest_count
+        name: guest_count
         properties:
           appearance: outlined
           background_color: theme:Surface
@@ -85,7 +85,7 @@ components_by_slot:
           type: number
         type: form:dep_lin1x4oec0ytd:_Components.TextInput.TextBox
       - layout_properties: {width: 203.5249755859375}
-        name: input_budget
+        name: budget
         properties:
           appearance: outlined
           background_color: theme:Surface
