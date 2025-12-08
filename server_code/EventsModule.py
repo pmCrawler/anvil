@@ -5,6 +5,7 @@ import anvil.server
 
 # import anvil.tables
 from anvil.tables import app_tables, TableError, Transaction
+
 from datetime import datetime
 from anvil.tables import query as q
 from collections import OrderedDict, Counter, defaultdict
@@ -12,7 +13,8 @@ from collections import OrderedDict, Counter, defaultdict
 
 @anvil.server.callable
 def get_event(title):
-    return app_tables.event.search(title=title)
+    return app_tables.event.list_columns()
+    # return app_tables.event.search(title=title)
 
 
 @anvil.server.callable

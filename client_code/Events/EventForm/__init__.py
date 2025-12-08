@@ -24,6 +24,9 @@ class EventForm(EventFormTemplate):
         self.event_ai.visible = False
         self.cpanel_options.visible = False
         self.user_input = dict()
+
+        event_schema = anvil.server.call("get_event", "table")
+        print(event_schema)
         self._load_default_input()
 
     def _load_default_input(self):
