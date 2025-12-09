@@ -26,67 +26,44 @@ class EventForm(EventFormTemplate):
         self.user_input = dict()
 
         self._load_default_input()
-        # self.setup_address_autocomplete()
 
-        location = anvil.server.call("get_user_location_details")
-        ip_info = anvil.server.call("get_ip_info")
-        print(ip_info)
-        print(location)
+    def button_search_address_click(self, **event_args):
+        """Search for address using server-side geocoding"""
+        address_query = self.text_box_address.text
 
-    def setup_address_autocomplete(self):
-        """Setup Google Places autocomplete on address field"""
+        if not address_query:
+            alert("Please enter an address")
+            return
 
-        # Add Google Places script (add to native libraries in Anvil)
-        # Or use Anvil's GoogleMap component
+        # Show loading
+        with anvil.server.no_loading_indicator:
+            Notification("Searching for address...", timeout=2).show()
 
-        # JavaScript to setup autocomplete
-        js_code = """
-        // Initialize Google Places Autocomplete
-        var input = document.getElementById('address-input');
-        var autocomplete = new google.maps.places.Autocomplete(input, {
-            types: ['address'],  // Only addresses
-            fields: ['address_components', 'formatted_address', 'geometry']
-        });
-        
-        // When user selects an address
-        autocomplete.addListener('place_changed', function() {
-            var place = autocomplete.getPlace();
-            
-            // Extract address components
-            var addressData = {
-                formatted_address: place.formatted_address,
-                latitude: place.geometry.location.lat(),
-                longitude: place.geometry.location.lng(),
-                components: {}
-            };
-            
-            // Parse address components
-            place.address_components.forEach(function(component) {
-                var types = component.types;
-                if (types.includes('street_number')) {
-                    addressData.components.street_number = component.long_name;
-                } else if (types.includes('route')) {
-                    addressData.components.street = component.long_name;
-                } else if (types.includes('locality')) {
-                    addressData.components.city = component.long_name;
-                } else if (types.includes('administrative_area_level_1')) {
-                    addressData.components.region = component.long_name;
-                    addressData.components.region_code = component.short_name;
-                } else if (types.includes('postal_code')) {
-                    addressData.components.postal_code = component.long_name;
-                } else if (types.includes('country')) {
-                    addressData.components.country = component.long_name;
-                    addressData.components.country_code = component.short_name;
-                }
-            });
-            
-            // Send to Anvil Python
-            window.anvilComponent.call('address_selected', addressData);
-        });
-        """
+        # Call server
+        results = anvil.server.call("geocode_address", address_query)
 
-        # Execute JavaScript
-        anvil.js.call_js("eval", js_code)
+        if results["success"]:
+            # Show results in dropdown
+            self.show_address_results(results["addresses"])
+        else:
+            alert(f"Error: {results['error']}")
+
+    def show_address_results(self, addresses):
+        """Display address options to user"""
+        # Show results in repeating panel or dropdown
+        self.dropdown_address_results.items = [
+            addr["formatted_address"] for addr in addresses
+        ]
+        self.dropdown_address_results.visible = True
+
+    def dropdown_address_results_change(self, **event_args):
+        """User selected an address"""
+        selected = self.dropdown_address_results.selected_value
+
+        if selected:
+            self.location_data = selected
+            self.label_selected_address.text = selected["formatted_address"]
+            self.button_save.enabled = True
 
     def address_selected(self, address_data):
         """Called when user selects address from autocomplete"""
