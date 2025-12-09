@@ -33,7 +33,7 @@ class EventForm(EventFormTemplate):
         self.user_input = {
             "title": self.title.text,
             "description": self.description.text,
-            "event_date": self.datetime.date,
+            "event_datetime": self.datetime.date,
             "guest_count": self.guest_count.text,
             "total_budget": self.budget.text,
             "venue_type": self.venue_type.text,
@@ -44,9 +44,10 @@ class EventForm(EventFormTemplate):
     def btn_start_click(self, **event_args):
         """This method is called when the component is clicked."""
 
-        result = anvil.server.call("")
-        self.btn_start.visible = False
         self.get_user_input()
+        result = anvil.server.call("create_event", self.user_input)
+        print(result)
+        self.btn_start.visible = False
         self.resp = anvil.server.call("run_event_ai", self.user_input)
         self.event_ai.visible = True
         self.event_ai.process_json_response(self.resp)
