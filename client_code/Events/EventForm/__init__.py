@@ -45,7 +45,8 @@ class EventForm(EventFormTemplate):
         """This method is called when the component is clicked."""
 
         self.get_user_input()
-
+        resp = anvil.server.call("test_db_connection")
+        print(resp)
         result = anvil.server.call("create_event", **self.user_input)
         print(result)
         self.btn_start.visible = False
