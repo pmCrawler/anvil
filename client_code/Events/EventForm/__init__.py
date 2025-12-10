@@ -35,7 +35,7 @@ class EventForm(EventFormTemplate):
             "description": self.description.text,
             "event_datetime": self.datetime.date,
             "guest_count": self.guest_count.text,
-            "total_budget": self.budget.text,
+            "budget": self.budget.text,
             "venue_type": self.venue_type.text,
             "food_bev": True if self.switch_food.selected else False,
             "event_setting": self.rgp_setting.selected_value,
@@ -45,10 +45,10 @@ class EventForm(EventFormTemplate):
         """This method is called when the component is clicked."""
 
         self.get_user_input()
-        resp = anvil.server.call("test_db_connection")
-        print(resp)
+
         result = anvil.server.call("create_event", **self.user_input)
         print(result)
+
         self.btn_start.visible = False
         self.resp = anvil.server.call("run_event_ai", self.user_input)
         self.event_ai.visible = True
