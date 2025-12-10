@@ -56,7 +56,7 @@ class EventForm(EventFormTemplate):
         if result["success"]:
             self.btn_start.visible = False
             self.event_ai.visible = True
-            self.event_ai.process_json_response(self.resp)
+            self.event_ai.process_json_response(result["output"])
             self.cpanel_options.visible = True
         else:
             alert(f"Error: {result['error']}")
