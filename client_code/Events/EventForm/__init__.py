@@ -44,7 +44,7 @@ class EventForm(EventFormTemplate):
     def btn_start_click(self, **event_args):
         """This method is called when the component is clicked."""
 
-        details = anvil.server.call("get_user_events", 1)
+        details = anvil.server.call("run_event_ai", 1)
         print(details)
 
         self.get_user_input()
