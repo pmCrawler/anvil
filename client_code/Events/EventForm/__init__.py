@@ -9,6 +9,7 @@ from anvil.tables import app_tables
 from ... import Events
 import anvil.http
 import json
+from .. import ai_ui_builder
 
 
 class EventForm(EventFormTemplate):
@@ -44,7 +45,7 @@ class EventForm(EventFormTemplate):
     def btn_start_click(self, **event_args):
         """This method is called when the component is clicked."""
 
-        details = anvil.server.call("run_event_ai", 1)
+        details = anvil.server.call("create_event", 1)
         print(details)
 
         self.get_user_input()
@@ -59,8 +60,10 @@ class EventForm(EventFormTemplate):
         if result["success"]:
             self.btn_start.visible = False
             self.event_ai.visible = True
-            self.event_ai.process_json_response(result["output"])
+            ai_ui_builder.build_event_plan_ui(result["output"], self.event_ai)
             self.cpanel_options.visible = True
+            # self.event_ai.process_json_response(result["output"])
+
         else:
             alert(f"Error: {result['error']}")
 
@@ -70,14 +73,15 @@ class EventForm(EventFormTemplate):
         # FOR TESTING ONLY
         open_form("Events.EventView", event_id=4270964888)
 
-        # # selections = self.event_ai.get_selected_values()
-        # self.user_input.update({"ai_response": self.resp})
-        # result = anvil.server.call("upsert_event_data", self.user_input)
-        # if result["success"]:
-        #     Notification(
-        #         f"""Event and tasks saved! Task Count: {result["task_count"]}""",
-        #         timeout=5,
-        #     ).show()
-        #     open_form("Events.EventView", event_id=result["event_id"])
-        # else:
-        #     Notification(f"Error: {result['error']}", timeout=5, style="danger").show()
+
+# # selections = self.event_ai.get_selected_values()
+# self.user_input.update({"ai_response": self.resp})
+# result = anvil.server.call("upsert_event_data", self.user_input)
+# if result["success"]:
+#     Notification(
+#         f"""Event and tasks saved! Task Count: {result["task_count"]}""",
+#         timeout=5,
+#     ).show()
+#     open_form("Events.EventView", event_id=result["event_id"])
+# else:
+#     Notification(f"Error: {result['error']}", timeout=5, style="danger").show()
