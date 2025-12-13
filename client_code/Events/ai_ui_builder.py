@@ -120,7 +120,7 @@ def add_reasoning_section(container, reasoning):
 
     expander = create_expander("💭 AI Reasoning", initially_open=False)
 
-    expander.content.add_component(Label(text=reasoning, font_size=13, italic=True))
+    expander.add_component(Label(text=reasoning, font_size=13, italic=True))
 
     container.add_component(expander)
 
@@ -243,7 +243,8 @@ def add_themes_section(container, themes):
             atm_panel.add_component(Label(text=theme["atmosphere"], font_size=12))
             card.add_component(atm_panel)
 
-        expander.content.add_component(card)
+        # expander.add_component(card)
+        expander.add_component(card)
 
     container.add_component(expander)
 
@@ -255,17 +256,17 @@ def add_decorations_section(container, decorations):
 
     # Essential items
     if "essential_items" in decorations:
-        expander.content.add_component(
+        expander.add_component(
             Label(
                 text="Essential Items:", bold=True, font_size=14, foreground="#d32f2f"
             )
         )
         for item in decorations["essential_items"]:
-            expander.content.add_component(create_bullet_item(item, "🔴"))
+            expander.add_component(create_bullet_item(item, "🔴"))
 
     # Optional items
     if "optional_items" in decorations and decorations["optional_items"]:
-        expander.content.add_component(
+        expander.add_component(
             Label(
                 text="Optional Items:",
                 bold=True,
@@ -275,11 +276,11 @@ def add_decorations_section(container, decorations):
             )
         )
         for item in decorations["optional_items"]:
-            expander.content.add_component(create_bullet_item(item, "🔵"))
+            expander.add_component(create_bullet_item(item, "🔵"))
 
     # DIY opportunities
     if "diy_opportunities" in decorations and decorations["diy_opportunities"]:
-        expander.content.add_component(
+        expander.add_component(
             Label(
                 text="DIY Opportunities:",
                 bold=True,
@@ -289,7 +290,7 @@ def add_decorations_section(container, decorations):
             )
         )
         for item in decorations["diy_opportunities"]:
-            expander.content.add_component(create_bullet_item(item, "✂️"))
+            expander.add_component(create_bullet_item(item, "✂️"))
 
     # Setup tips
     if "setup_tips" in decorations:
@@ -298,7 +299,7 @@ def add_decorations_section(container, decorations):
         )
         tip_card.add_component(Label(text="💡 Setup Tips:", bold=True, font_size=13))
         tip_card.add_component(Label(text=decorations["setup_tips"], font_size=12))
-        expander.content.add_component(tip_card)
+        expander.add_component(tip_card)
 
     container.add_component(expander)
 
@@ -355,7 +356,7 @@ def add_menu_options_section(container, menu_options):
             for item in menu["beverage_pairings"]:
                 card.add_component(create_bullet_item(item, "🥤"))
 
-        expander.content.add_component(card)
+        expander.add_component(card)
 
     container.add_component(expander)
 
@@ -404,7 +405,7 @@ def add_activities_section(container, activities):
             for material in activity["materials_needed"]:
                 card.add_component(create_bullet_item(material, "📦"))
 
-        expander.content.add_component(card)
+        expander.add_component(card)
 
     container.add_component(expander)
 
@@ -450,7 +451,7 @@ def add_timeline_section(container, timeline):
             )
 
         timeline_card.add_component(activity_panel)
-        expander.content.add_component(timeline_card)
+        expander.add_component(timeline_card)
 
     container.add_component(expander)
 
@@ -541,7 +542,7 @@ def add_agenda_section(container, agenda):
                 row.add_component(Label(text=str(value), font_size=12))
                 agenda_card.add_component(row)
 
-        expander.content.add_component(agenda_card)
+        expander.add_component(agenda_card)
 
     container.add_component(expander)
 
@@ -622,7 +623,7 @@ def add_discussion_prompts_section(container, prompts):
 
         prompt_card.add_component(Label(text=f"{i}. {prompt}", font_size=13))
 
-        expander.content.add_component(prompt_card)
+        expander.add_component(prompt_card)
 
     container.add_component(expander)
 
@@ -657,7 +658,7 @@ def add_budget_breakdown_section(container, budget_items):
             foreground="#e65100",
         )
     )
-    expander.content.add_component(total_card)
+    expander.add_component(total_card)
 
     # Budget items
     for item in budget_items:
@@ -707,7 +708,7 @@ def add_budget_breakdown_section(container, budget_items):
                 )
             )
 
-        expander.content.add_component(budget_card)
+        expander.add_component(budget_card)
 
     container.add_component(expander)
 
@@ -754,12 +755,12 @@ def create_expander(title, badge=None, initially_open=False):
         content.visible = not content.visible
         title_label.text = f"▼ {title}" if content.visible else f"▶ {title}"
 
-    header.set_event_handler("click", toggle)
+    header.set_event_handler("x-click", toggle)
 
     # Assemble
     container.add_component(header)
     container.add_component(content)
-    container.content = content
+    # container.content = content
 
     return container
 
@@ -778,7 +779,7 @@ def add_simple_list_section(container, title, items, icon="fa:list", color="#607
     expander = create_expander(f"{title} ({len(items)} items)", initially_open=False)
 
     for item in items:
-        expander.content.add_component(create_bullet_item(item, "•"))
+        expander.add_component(create_bullet_item(item, "•"))
 
     container.add_component(expander)
 
