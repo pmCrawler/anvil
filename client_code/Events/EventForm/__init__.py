@@ -59,8 +59,9 @@ class EventForm(EventFormTemplate):
 
         if result["success"]:
             self.btn_start.visible = False
-            self.event_ai.visible = True
-            ai_ui_builder.build_event_plan_ui(result["output"], self.event_ai)
+            self.event_ai.visible = False  # True
+            # ai_ui_builder.build_event_plan_ui(result["output"], self.event_ai)
+            ai_ui_builder.build_event_plan_ui(result["output"], self.cpanel_options)
             self.cpanel_options.visible = True
             # self.event_ai.process_json_response(result["output"])
 

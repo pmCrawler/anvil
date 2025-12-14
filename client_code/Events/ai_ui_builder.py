@@ -13,10 +13,11 @@ import m3.components as m3
 # MAIN BUILDER
 # ============================================================================
 
+
 def build_event_plan_ui(event_plan_data, container):
     """
     Build complete UI for EventPlan response
-    
+
     Args:
         event_plan_data: Dict with EventPlan structure
         container: Anvil ColumnPanel to add components to
@@ -29,49 +30,56 @@ def build_event_plan_ui(event_plan_data, container):
     add_plan_header(container, event_plan_data)
 
     # Key Considerations (expanded by default)
-    if 'key_considerations' in event_plan_data:
-        add_key_considerations(container, event_plan_data['key_considerations'])
+    if "key_considerations" in event_plan_data:
+        add_key_considerations(container, event_plan_data["key_considerations"])
 
     # Main Plan Section (based on event type)
-    if 'plan' in event_plan_data:
-        add_plan_section(container, event_plan_data['plan'])
+    if "plan" in event_plan_data:
+        add_plan_section(container, event_plan_data["plan"])
 
     # Logistics
-    if 'logistics' in event_plan_data:
+    if "logistics" in event_plan_data:
         create_accordion_section(
-            container, 
-            'Logistics', 
-            event_plan_data['logistics'],
-            icon='mi:local_shipping',
-            color='#3f51b5',
-            initially_open=False
+            container,
+            "Logistics",
+            event_plan_data["logistics"],
+            icon="mi:local_shipping",
+            color="#3f51b5",
+            initially_open=False,
         )
 
     # Contingency Notes
-    if 'contingency_notes' in event_plan_data:
+    if "contingency_notes" in event_plan_data:
         create_accordion_section(
             container,
-            'Contingency Plans',
-            event_plan_data['contingency_notes'],
-            icon='mi:security',
-            color='#f44336',
-            initially_open=False
+            "Contingency Plans",
+            event_plan_data["contingency_notes"],
+            icon="mi:security",
+            color="#f44336",
+            initially_open=False,
         )
 
     # Reasoning
-    if 'reasoning' in event_plan_data:
-        add_reasoning_section(container, event_plan_data['reasoning'])
+    if "reasoning" in event_plan_data:
+        add_reasoning_section(container, event_plan_data["reasoning"])
 
 
 # ============================================================================
 # ACCORDION COMPONENT (Working Implementation from AIResponse)
 # ============================================================================
 
-def create_accordion_section(container, title, content, icon='mi:arrow_right', 
-                             color='#2196f3', initially_open=False):
+
+def create_accordion_section(
+    container,
+    title,
+    content,
+    icon="mi:arrow_right",
+    color="#2196f3",
+    initially_open=False,
+):
     """
     Create working accordion section using m3 components
-    
+
     Args:
         container: Parent container
         title: Section title
@@ -98,7 +106,9 @@ def create_accordion_section(container, title, content, icon='mi:arrow_right',
 
     # Header
     header_container = ColumnPanel(
-        background="theme:Surface Container" if not initially_open else "theme:Surface Variant",
+        background="theme:Surface Container"
+        if not initially_open
+        else "theme:Surface Variant",
         spacing_above="small",
         spacing_below="small",
     )
@@ -131,7 +141,9 @@ def create_accordion_section(container, title, content, icon='mi:arrow_right',
         card.visible = is_expanded["value"]
 
         # Update icon
-        header_btn.icon = "mi:arrow_drop_down" if is_expanded["value"] else "mi:arrow_right"
+        header_btn.icon = (
+            "mi:arrow_drop_down" if is_expanded["value"] else "mi:arrow_right"
+        )
 
         # Update background
         if is_expanded["value"]:
@@ -150,29 +162,31 @@ def create_accordion_section(container, title, content, icon='mi:arrow_right',
     card_content = m3.CardContentContainer(margin="16px")
     card_content.add_component(content_panel)
     card.add_component(card_content)
-    
+
     accordion.add_component(header_container, full_width_row=True)
     accordion.add_component(card)
-    
+
     container.add_component(accordion)
 
 
 def populate_content(content_panel, content):
     """Populate content panel based on content type"""
-    
+
     if isinstance(content, str):
         # Simple text
-        content_panel.add_component(Label(
-            text=content,
-            font_size=13,
-        ))
-    
+        content_panel.add_component(
+            Label(
+                text=content,
+                font_size=13,
+            )
+        )
+
     elif isinstance(content, list):
         # List of items
         for item in content:
             if isinstance(item, str):
                 # Simple bullet point
-                bullet_panel = LinearPanel(spacing='tiny')
+                bullet_panel = LinearPanel(spacing="tiny")
                 bullet_panel.add_component(Label(text="•", font_size=14))
                 bullet_panel.add_component(Label(text=item, font_size=13))
                 content_panel.add_component(bullet_panel)
@@ -180,7 +194,7 @@ def populate_content(content_panel, content):
                 # Complex item (dict)
                 item_card = create_item_card(item)
                 content_panel.add_component(item_card)
-    
+
     elif isinstance(content, dict):
         # Dictionary
         for key, value in content.items():
@@ -192,74 +206,68 @@ def populate_content(content_panel, content):
 # HEADER & KEY SECTIONS
 # ============================================================================
 
+
 def add_plan_header(container, plan_data):
     """Add header with event classification"""
-    
+
     header = ColumnPanel(
-        background='linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-        foreground='white',
-        spacing='medium',
+        background="linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+        foreground="white",
+        spacing="medium",
     )
-    
+
     # Event Classification
-    classification = plan_data.get('event_classification', 'Unknown Event Type')
-    
+    classification = plan_data.get("event_classification", "Unknown Event Type")
+
     title = Label(
         text=f"🎉 {classification}",
         font_size=24,
         bold=True,
-        foreground='white',
-        align='center'
+        foreground="white",
+        align="center",
     )
     header.add_component(title)
-    
+
     subtitle = Label(
         text="AI-Generated Event Plan",
         font_size=14,
-        foreground='white',
+        foreground="white",
         italic=True,
-        align='center'
+        align="center",
     )
     header.add_component(subtitle)
-    
+
     container.add_component(header)
 
 
 def add_key_considerations(container, considerations):
     """Add key considerations section (expanded by default)"""
-    
+
     section = m3.Card(
         appearance="outlined",
-        spacing_above='small',
+        spacing_above="small",
     )
-    
+
     card_content = m3.CardContentContainer(margin="16px")
-    
+
     # Header
     header_label = Label(
-        text="🎯 Key Considerations",
-        font_size=18,
-        bold=True,
-        foreground='#2e7d32'
+        text="🎯 Key Considerations", font_size=18, bold=True, foreground="#2e7d32"
     )
     card_content.add_component(header_label)
-    
+
     # List items
-    items_panel = ColumnPanel(spacing='small', spacing_above='small')
+    items_panel = ColumnPanel(spacing="small", spacing_above="small")
     for item in considerations:
-        item_panel = LinearPanel(spacing='small')
-        item_panel.add_component(Label(
-            text="✓",
-            foreground='#4caf50',
-            font_size=16,
-            bold=True
-        ))
-        item_panel.add_component(Label(
-            text=item,
-            font_size=14
-        ))
+        # item_panel = LinearPanel(spacing='small')
+        # [H.E. 12/14] Use FlowPanel for icon and text on same line
+        item_panel = FlowPanel(spacing="small")
+        item_panel.add_component(
+            Label(text="✓", foreground="#4caf50", font_size=16, bold=True)
+        )
+        item_panel.add_component(Label(text=item, font_size=14))
         items_panel.add_component(item_panel)
-    
+
     card_content.add_component(items_panel)
     section.add_component(card_content)
     container.add_component(section)
@@ -267,14 +275,14 @@ def add_key_considerations(container, considerations):
 
 def add_reasoning_section(container, reasoning):
     """Add AI reasoning section"""
-    
+
     create_accordion_section(
         container,
         "💭 AI Reasoning",
         reasoning,
-        icon='mi:psychology',
-        color='#9c27b0',
-        initially_open=False
+        icon="mi:psychology",
+        color="#9c27b0",
+        initially_open=False,
     )
 
 
@@ -282,24 +290,25 @@ def add_reasoning_section(container, reasoning):
 # MAIN PLAN SECTION (Handles Discriminated Union)
 # ============================================================================
 
+
 def add_plan_section(container, plan_data):
     """
     Add main plan section based on event_type
     Handles: social_celebration, professional_gathering, intellectual_gathering
     """
-    
-    event_type = plan_data.get('event_type')
-    
-    if event_type == 'social_celebration':
+
+    event_type = plan_data.get("event_type")
+
+    if event_type == "social_celebration":
         add_social_celebration_plan(container, plan_data)
-    elif event_type == 'professional_gathering':
+    elif event_type == "professional_gathering":
         add_professional_gathering_plan(container, plan_data)
-    elif event_type == 'intellectual_gathering':
+    elif event_type == "intellectual_gathering":
         add_intellectual_gathering_plan(container, plan_data)
     else:
         # Fallback - generic rendering
         for key, value in plan_data.items():
-            if key != 'event_type':
+            if key != "event_type":
                 create_accordion_section(container, key, value)
 
 
@@ -307,62 +316,63 @@ def add_plan_section(container, plan_data):
 # SOCIAL CELEBRATION PLAN
 # ============================================================================
 
+
 def add_social_celebration_plan(container, plan):
     """Render social celebration plan"""
-    
+
     # Themes
-    if 'themes' in plan:
-        add_themes_section(container, plan['themes'])
-    
+    if "themes" in plan:
+        add_themes_section(container, plan["themes"])
+
     # Decorations
-    if 'decorations' in plan:
-        add_decorations_section(container, plan['decorations'])
-    
+    if "decorations" in plan:
+        add_decorations_section(container, plan["decorations"])
+
     # Menu Options
-    if 'menu_options' in plan:
-        add_menu_options_section(container, plan['menu_options'])
-    
+    if "menu_options" in plan:
+        add_menu_options_section(container, plan["menu_options"])
+
     # Activities
-    if 'activities' in plan:
-        add_activities_section(container, plan['activities'])
-    
+    if "activities" in plan:
+        add_activities_section(container, plan["activities"])
+
     # Timeline
-    if 'timeline' in plan:
-        add_timeline_section(container, plan['timeline'])
-    
+    if "timeline" in plan:
+        add_timeline_section(container, plan["timeline"])
+
     # Budget Breakdown
-    if 'budget_breakdown' in plan:
-        add_budget_breakdown_section(container, plan['budget_breakdown'])
-    
+    if "budget_breakdown" in plan:
+        add_budget_breakdown_section(container, plan["budget_breakdown"])
+
     # Special Touches
-    if 'special_touches' in plan:
+    if "special_touches" in plan:
         create_accordion_section(
             container,
-            '✨ Special Touches',
-            plan['special_touches'],
-            icon='mi:star',
-            color='#ffd700',
-            initially_open=False
+            "✨ Special Touches",
+            plan["special_touches"],
+            icon="mi:star",
+            color="#ffd700",
+            initially_open=False,
         )
 
 
 def add_themes_section(container, themes):
     """Render theme options with cards"""
-    
+
     # Create accordion
     accordion = ColumnPanel(spacing_above="none", spacing_below="none")
-    
+
     # Card and content
     card = m3.Card(appearance="outlined", visible=False)
     content_panel = ColumnPanel(visible=False, spacing_above="none")
-    
+
     # Header
     header_container = ColumnPanel(
         background="theme:Surface Container",
         spacing_above="small",
         spacing_below="small",
     )
-    
+
     header_btn = m3.Link(
         text=f"🎨 Theme Options ({len(themes)} options)",
         align="left",
@@ -372,115 +382,118 @@ def add_themes_section(container, themes):
         underline=False,
         bold=True,
         spacing="16px",
-        foreground='#673ab7',
+        foreground="#673ab7",
     )
     header_container.add_component(header_btn)
-    
+
     # Toggle
     is_expanded = {"value": False}
-    
+
     def toggle(**event_args):
         is_expanded["value"] = not is_expanded["value"]
         content_panel.visible = is_expanded["value"]
         card.visible = is_expanded["value"]
-        header_btn.icon = "mi:arrow_drop_down" if is_expanded["value"] else "mi:arrow_right"
-        
+        header_btn.icon = (
+            "mi:arrow_drop_down" if is_expanded["value"] else "mi:arrow_right"
+        )
+
         if is_expanded["value"]:
             header_btn.background = "theme:Surface Variant"
             header_btn.role = "filled-button"
         else:
             header_btn.background = ""
             header_btn.role = None
-    
+
     header_btn.set_event_handler("click", toggle)
-    
+
     # Add theme cards
     for i, theme in enumerate(themes, 1):
         theme_card = create_theme_card(theme, i)
         content_panel.add_component(theme_card)
-    
+
     # Assemble
     card_content = m3.CardContentContainer(margin="16px")
     card_content.add_component(content_panel)
     card.add_component(card_content)
-    
+
     accordion.add_component(header_container, full_width_row=True)
     accordion.add_component(card)
-    
+
     container.add_component(accordion)
 
 
 def create_theme_card(theme, index):
     """Create a single theme card"""
-    
+
     card = m3.Card(
         appearance="outlined",
-        spacing_above='small',
+        spacing_above="small",
     )
-    
+
     card_content = m3.CardContentContainer(margin="16px")
-    
+
     # Header
     header = Label(
-        text=f"#{index}: {theme['name']}",
-        font_size=16,
-        bold=True,
-        foreground='#673ab7'
+        text=f"#{index}: {theme['name']}", font_size=16, bold=True, foreground="#673ab7"
     )
     card_content.add_component(header)
-    
+
     # Description
-    card_content.add_component(Label(
-        text=theme['description'],
-        font_size=13,
-        spacing_above='small'
-    ))
-    
+    card_content.add_component(
+        Label(text=theme["description"], font_size=13, spacing_above="small")
+    )
+
     # Color palette
-    if 'color_palette' in theme:
-        colors_panel = FlowPanel(spacing='small', spacing_above='small')
+    if "color_palette" in theme:
+        colors_panel = FlowPanel(spacing="small", spacing_above="small")
         colors_panel.add_component(Label(text="Colors:", bold=True, font_size=12))
-        
-        for color in theme['color_palette']:
+
+        for color in theme["color_palette"]:
             # Color swatch
-            color_value = color if color.startswith('#') else f"#{color}" if len(color) == 6 else color
+            color_value = (
+                color
+                if color.startswith("#")
+                else f"#{color}"
+                if len(color) == 6
+                else color
+            )
             color_box = Label(
                 text="    ",
                 background=color_value,
-                border='1px solid #ccc',
+                border="1px solid #ccc",
             )
             colors_panel.add_component(color_box)
             colors_panel.add_component(Label(text=color, font_size=11))
-        
+
         card_content.add_component(colors_panel)
-    
+
     # Atmosphere
-    if 'atmosphere' in theme:
-        atm_panel = FlowPanel(spacing='tiny', spacing_above='small')
+    if "atmosphere" in theme:
+        atm_panel = FlowPanel(spacing="tiny", spacing_above="small")
         atm_panel.add_component(Label(text="Atmosphere:", bold=True, font_size=12))
-        atm_panel.add_component(Label(text=theme['atmosphere'], font_size=12))
+        atm_panel.add_component(Label(text=theme["atmosphere"], font_size=12))
         card_content.add_component(atm_panel)
-    
+
     card.add_component(card_content)
     return card
 
 
 def add_decorations_section(container, decorations):
     """Render decorations plan"""
-    
+
     # Create accordion
     accordion = ColumnPanel(spacing_above="none", spacing_below="none")
-    
+
     card = m3.Card(appearance="outlined", visible=True)  # Open by default
     content_panel = ColumnPanel(visible=True, spacing_above="none")
-    
+
     # Header
     header_container = ColumnPanel(
         background="theme:Surface Variant",
         spacing_above="small",
         spacing_below="small",
     )
-    
+
     header_btn = m3.Link(
         text="🎈 Decorations",
         align="left",
@@ -490,111 +503,124 @@ def add_decorations_section(container, decorations):
         underline=False,
         bold=True,
         spacing="16px",
-        foreground='#e91e63',
+        foreground="#e91e63",
         background="theme:Surface Variant",
-        role="filled-button"
+        role="filled-button",
     )
     header_container.add_component(header_btn)
-    
+
     # Toggle
     is_expanded = {"value": True}
-    
+
     def toggle(**event_args):
         is_expanded["value"] = not is_expanded["value"]
         content_panel.visible = is_expanded["value"]
         card.visible = is_expanded["value"]
-        header_btn.icon = "mi:arrow_drop_down" if is_expanded["value"] else "mi:arrow_right"
-        
+        header_btn.icon = (
+            "mi:arrow_drop_down" if is_expanded["value"] else "mi:arrow_right"
+        )
+
         if is_expanded["value"]:
             header_btn.background = "theme:Surface Variant"
             header_btn.role = "filled-button"
         else:
             header_btn.background = ""
             header_btn.role = None
-    
+
     header_btn.set_event_handler("click", toggle)
-    
+
     # Essential items
-    if 'essential_items' in decorations:
-        content_panel.add_component(Label(
-            text="🔴 Essential Items:",
-            bold=True,
-            font_size=14,
-            foreground='#d32f2f',
-            spacing_above='small'
-        ))
-        for item in decorations['essential_items']:
-            bullet = LinearPanel(spacing='tiny')
-            bullet.add_component(Label(text="•", font_size=14, foreground='#d32f2f'))
+    if "essential_items" in decorations:
+        content_panel.add_component(
+            Label(
+                text="🔴 Essential Items:",
+                bold=True,
+                font_size=14,
+                foreground="#d32f2f",
+                spacing_above="small",
+            )
+        )
+        for item in decorations["essential_items"]:
+            # bullet = LinearPanel(spacing="tiny")
+            bullet = FlowPanel(spacing="tiny", )
+            bullet.add_component(Label(text="•", font_size=14, foreground="#d32f2f"))
             bullet.add_component(Label(text=item, font_size=13))
             content_panel.add_component(bullet)
-    
+
     # Optional items
-    if 'optional_items' in decorations and decorations['optional_items']:
-        content_panel.add_component(Label(
-            text="🔵 Optional Items:",
-            bold=True,
-            font_size=14,
-            foreground='#1976d2',
-            spacing_above='small'
-        ))
-        for item in decorations['optional_items']:
-            bullet = LinearPanel(spacing='tiny')
-            bullet.add_component(Label(text="•", font_size=14, foreground='#1976d2'))
+    if "optional_items" in decorations and decorations["optional_items"]:
+        content_panel.add_component(
+            Label(
+                text="🔵 Optional Items:",
+                bold=True,
+                font_size=14,
+                foreground="#1976d2",
+                spacing_above="small",
+            )
+        )
+        for item in decorations["optional_items"]:
+            # bullet = LinearPanel(spacing="tiny")
+            bullet = FlowPanel(spacing="tiny")
+            bullet.add_component(Label(text="•", font_size=14, foreground="#1976d2"))
             bullet.add_component(Label(text=item, font_size=13))
             content_panel.add_component(bullet)
-    
+
     # DIY opportunities
-    if 'diy_opportunities' in decorations and decorations['diy_opportunities']:
-        content_panel.add_component(Label(
-            text="✂️ DIY Opportunities:",
-            bold=True,
-            font_size=14,
-            foreground='#388e3c',
-            spacing_above='small'
-        ))
-        for item in decorations['diy_opportunities']:
-            bullet = LinearPanel(spacing='tiny')
-            bullet.add_component(Label(text="•", font_size=14, foreground='#388e3c'))
+    if "diy_opportunities" in decorations and decorations["diy_opportunities"]:
+        content_panel.add_component(
+            Label(
+                text="✂️ DIY Opportunities:",
+                bold=True,
+                font_size=14,
+                foreground="#388e3c",
+                spacing_above="small",
+            )
+        )
+        for item in decorations["diy_opportunities"]:
+            # bullet = LinearPanel(spacing="tiny")
+            bullet = FlowPanel(spacing="tiny")
+            bullet.add_component(Label(text="•", font_size=14, foreground="#388e3c"))
             bullet.add_component(Label(text=item, font_size=13))
             content_panel.add_component(bullet)
-    
+
     # Setup tips
-    if 'setup_tips' in decorations:
-        tip_card = m3.Card(appearance="filled", spacing_above='small')
+    if "setup_tips" in decorations:
+        tip_card = m3.Card(appearance="filled", spacing_above="small")
         tip_content = m3.CardContentContainer(margin="12px")
         tip_content.add_component(Label(text="💡 Setup Tips:", bold=True, font_size=13))
-        tip_content.add_component(Label(text=decorations['setup_tips'], font_size=12, spacing_above='tiny'))
+        tip_content.add_component(
+            Label(text=decorations["setup_tips"], font_size=12, spacing_above="tiny")
+        )
         tip_card.add_component(tip_content)
         content_panel.add_component(tip_card)
-    
+
     # Assemble
     card_content = m3.CardContentContainer(margin="16px")
     card_content.add_component(content_panel)
     card.add_component(card_content)
-    
+
     accordion.add_component(header_container, full_width_row=True)
     accordion.add_component(card)
-    
+
     container.add_component(accordion)
 
 
 def add_menu_options_section(container, menu_options):
     """Render menu options"""
-    
+
     # Create accordion
     accordion = ColumnPanel(spacing_above="none", spacing_below="none")
-    
+
     card = m3.Card(appearance="outlined", visible=True)
     content_panel = ColumnPanel(visible=True, spacing_above="none")
-    
+
     # Header
     header_container = ColumnPanel(
         background="theme:Surface Variant",
         spacing_above="small",
         spacing_below="small",
     )
-    
+
     header_btn = m3.Link(
         text=f"🍽️ Menu Options ({len(menu_options)} options)",
         align="left",
@@ -604,182 +630,172 @@ def add_menu_options_section(container, menu_options):
         underline=False,
         bold=True,
         spacing="16px",
-        foreground='#ff6f00',
+        foreground="#ff6f00",
         background="theme:Surface Variant",
-        role="filled-button"
+        role="filled-button",
     )
     header_container.add_component(header_btn)
-    
+
     # Toggle
     is_expanded = {"value": True}
-    
+
     def toggle(**event_args):
         is_expanded["value"] = not is_expanded["value"]
         content_panel.visible = is_expanded["value"]
         card.visible = is_expanded["value"]
-        header_btn.icon = "mi:arrow_drop_down" if is_expanded["value"] else "mi:arrow_right"
-        
+        header_btn.icon = (
+            "mi:arrow_drop_down" if is_expanded["value"] else "mi:arrow_right"
+        )
+
         if is_expanded["value"]:
             header_btn.background = "theme:Surface Variant"
             header_btn.role = "filled-button"
         else:
             header_btn.background = ""
             header_btn.role = None
-    
+
     header_btn.set_event_handler("click", toggle)
-    
+
     # Menu cards
     for i, menu in enumerate(menu_options, 1):
         menu_card = create_menu_card(menu, i)
         content_panel.add_component(menu_card)
-    
+
     # Assemble
     card_content = m3.CardContentContainer(margin="16px")
     card_content.add_component(content_panel)
     card.add_component(card_content)
-    
+
     accordion.add_component(header_container, full_width_row=True)
     accordion.add_component(card)
-    
+
     container.add_component(accordion)
 
 
 def create_menu_card(menu, index):
     """Create menu option card"""
-    
-    card = m3.Card(appearance="outlined", spacing_above='small')
+
+    card = m3.Card(appearance="outlined", spacing_above="small")
     card_content = m3.CardContentContainer(margin="16px")
-    
+
     # Header
-    card_content.add_component(Label(
-        text=f"Option {index}: {menu['style']}",
-        font_size=15,
-        bold=True,
-        foreground='#ff6f00'
-    ))
-    
+    card_content.add_component(
+        Label(
+            text=f"Option {index}: {menu['style']}",
+            font_size=15,
+            bold=True,
+            foreground="#ff6f00",
+        )
+    )
+
     # Items
-    if 'items' in menu:
-        card_content.add_component(Label(
-            text="Menu Items:",
-            bold=True,
-            font_size=12,
-            spacing_above='small'
-        ))
-        for item in menu['items']:
-            bullet = LinearPanel(spacing='tiny')
+    if "items" in menu:
+        card_content.add_component(
+            Label(text="Menu Items:", bold=True, font_size=12, spacing_above="small")
+        )
+        for item in menu["items"]:
+            bullet = LinearPanel(spacing="tiny")
             bullet.add_component(Label(text="•", font_size=12))
             bullet.add_component(Label(text=item, font_size=12))
             card_content.add_component(bullet)
-    
+
     # Dietary
-    if 'dietary_accommodations' in menu and menu['dietary_accommodations']:
-        card_content.add_component(Label(
-            text="🌱 Dietary:",
-            bold=True,
-            font_size=12,
-            spacing_above='small'
-        ))
-        for item in menu['dietary_accommodations']:
-            bullet = LinearPanel(spacing='tiny')
+    if "dietary_accommodations" in menu and menu["dietary_accommodations"]:
+        card_content.add_component(
+            Label(text="🌱 Dietary:", bold=True, font_size=12, spacing_above="small")
+        )
+        for item in menu["dietary_accommodations"]:
+            bullet = LinearPanel(spacing="tiny")
             bullet.add_component(Label(text="•", font_size=12))
             bullet.add_component(Label(text=item, font_size=12))
             card_content.add_component(bullet)
-    
+
     # Beverages
-    if 'beverage_pairings' in menu:
-        card_content.add_component(Label(
-            text="🥤 Beverages:",
-            bold=True,
-            font_size=12,
-            spacing_above='small'
-        ))
-        for item in menu['beverage_pairings']:
-            bullet = LinearPanel(spacing='tiny')
+    if "beverage_pairings" in menu:
+        card_content.add_component(
+            Label(text="🥤 Beverages:", bold=True, font_size=12, spacing_above="small")
+        )
+        for item in menu["beverage_pairings"]:
+            bullet = LinearPanel(spacing="tiny")
             bullet.add_component(Label(text="•", font_size=12))
             bullet.add_component(Label(text=item, font_size=12))
             card_content.add_component(bullet)
-    
+
     card.add_component(card_content)
     return card
 
 
 def add_activities_section(container, activities):
     """Render activities"""
-    
+
     create_accordion_with_cards(
         container,
         f"🎮 Activities ({len(activities)} activities)",
         activities,
         create_activity_card,
-        '#9c27b0',
-        initially_open=True
+        "#9c27b0",
+        initially_open=True,
     )
 
 
 def create_activity_card(activity, index):
     """Create activity card"""
-    
-    card = m3.Card(appearance="outlined", spacing_above='small')
+
+    card = m3.Card(appearance="outlined", spacing_above="small")
     card_content = m3.CardContentContainer(margin="16px")
-    
+
     # Header
-    header = FlowPanel(spacing='small')
-    header.add_component(Label(
-        text=f"{index}. {activity['name']}",
-        font_size=15,
-        bold=True
-    ))
-    header.add_component(Label(
-        text=f"⏱️ {activity['duration']}",
-        font_size=12,
-        foreground='#666'
-    ))
+    header = FlowPanel(spacing="small")
+    header.add_component(
+        Label(text=f"{index}. {activity['name']}", font_size=15, bold=True)
+    )
+    header.add_component(
+        Label(text=f"⏱️ {activity['duration']}", font_size=12, foreground="#666")
+    )
     card_content.add_component(header)
-    
+
     # Instructions
-    if 'instructions' in activity:
-        card_content.add_component(Label(
-            text=activity['instructions'],
-            font_size=12,
-            italic=True,
-            spacing_above='small'
-        ))
-    
+    if "instructions" in activity:
+        card_content.add_component(
+            Label(
+                text=activity["instructions"],
+                font_size=12,
+                italic=True,
+                spacing_above="small",
+            )
+        )
+
     # Materials
-    if 'materials_needed' in activity and activity['materials_needed']:
-        card_content.add_component(Label(
-            text="📦 Materials:",
-            bold=True,
-            font_size=12,
-            spacing_above='small'
-        ))
-        for material in activity['materials_needed']:
-            bullet = LinearPanel(spacing='tiny')
+    if "materials_needed" in activity and activity["materials_needed"]:
+        card_content.add_component(
+            Label(text="📦 Materials:", bold=True, font_size=12, spacing_above="small")
+        )
+        for material in activity["materials_needed"]:
+            bullet = LinearPanel(spacing="tiny")
             bullet.add_component(Label(text="•", font_size=12))
             bullet.add_component(Label(text=material, font_size=12))
             card_content.add_component(bullet)
-    
+
     card.add_component(card_content)
     return card
 
 
 def add_timeline_section(container, timeline):
     """Render timeline"""
-    
+
     # Create accordion
     accordion = ColumnPanel(spacing_above="none", spacing_below="none")
-    
+
     card = m3.Card(appearance="outlined", visible=True)
     content_panel = ColumnPanel(visible=True, spacing_above="none")
-    
+
     # Header
     header_container = ColumnPanel(
         background="theme:Surface Variant",
         spacing_above="small",
         spacing_below="small",
     )
-    
+
     header_btn = m3.Link(
         text=f"⏰ Event Timeline ({len(timeline)} items)",
         align="left",
@@ -789,73 +805,70 @@ def add_timeline_section(container, timeline):
         underline=False,
         bold=True,
         spacing="16px",
-        foreground='#1976d2',
+        foreground="#1976d2",
         background="theme:Surface Variant",
-        role="filled-button"
+        role="filled-button",
     )
     header_container.add_component(header_btn)
-    
+
     # Toggle
     is_expanded = {"value": True}
-    
+
     def toggle(**event_args):
         is_expanded["value"] = not is_expanded["value"]
         content_panel.visible = is_expanded["value"]
         card.visible = is_expanded["value"]
-        header_btn.icon = "mi:arrow_drop_down" if is_expanded["value"] else "mi:arrow_right"
-        
+        header_btn.icon = (
+            "mi:arrow_drop_down" if is_expanded["value"] else "mi:arrow_right"
+        )
+
         if is_expanded["value"]:
             header_btn.background = "theme:Surface Variant"
             header_btn.role = "filled-button"
         else:
             header_btn.background = ""
             header_btn.role = None
-    
+
     header_btn.set_event_handler("click", toggle)
-    
+
     # Timeline items
     for i, item in enumerate(timeline):
         timeline_card = m3.Card(
-            appearance="filled" if i % 2 == 0 else "outlined",
-            spacing_above='small'
+            appearance="filled" if i % 2 == 0 else "outlined", spacing_above="small"
         )
         timeline_content = m3.CardContentContainer(margin="12px")
-        
+
         # Time and activity
-        time_panel = FlowPanel(spacing='small')
-        time_panel.add_component(Label(
-            text=item['time'],
-            font_size=14,
-            bold=True,
-            foreground='#1976d2'
-        ))
-        time_panel.add_component(Label(
-            text=item['activity'],
-            font_size=13
-        ))
+        time_panel = FlowPanel(spacing="small")
+        time_panel.add_component(
+            Label(text=item["time"], font_size=14, bold=True, foreground="#1976d2")
+        )
+        time_panel.add_component(Label(text=item["activity"], font_size=13))
         timeline_content.add_component(time_panel)
-        
+
         # Responsible party
-        if 'responsible_party' in item and item['responsible_party']:
-            timeline_content.add_component(Label(
-                text=f"👤 {item['responsible_party']}",
-                font_size=11,
-                foreground='#666',
-                italic=True,
-                spacing_above='tiny'
-            ))
-        
+        if "responsible_party" in item and item["responsible_party"]:
+            timeline_content.add_component(
+                Label(
+                    text=f"👤 {item['responsible_party']}",
+                    font_size=11,
+                    foreground="#666",
+                    italic=True,
+                    spacing_above="tiny",
+                )
+            )
+
         timeline_card.add_component(timeline_content)
         content_panel.add_component(timeline_card)
-    
+
     # Assemble
     card_content = m3.CardContentContainer(margin="16px")
     card_content.add_component(content_panel)
     card.add_component(card_content)
-    
+
     accordion.add_component(header_container, full_width_row=True)
     accordion.add_component(card)
-    
+
     container.add_component(accordion)
 
 
@@ -863,52 +876,45 @@ def add_timeline_section(container, timeline):
 # PROFESSIONAL & INTELLECTUAL GATHERING (Simplified)
 # ============================================================================
 
+
 def add_professional_gathering_plan(container, plan):
     """Render professional gathering"""
-    
+
     # Use generic accordion for all sections
     section_configs = [
-        ('agenda', '📋 Agenda', '#1976d2', True),
-        ('networking_approach', '🤝 Networking', '#388e3c', False),
-        ('room_setup', '🏢 Room Setup', '#ff9800', False),
-        ('tech_needs', '💻 Tech Requirements', '#f44336', False),
-        ('refreshments', '☕ Refreshments', '#795548', False),
-        ('materials', '📄 Materials', '#607d8b', False),
-        ('budget_breakdown', '💰 Budget', '#4caf50', True),
+        ("agenda", "📋 Agenda", "#1976d2", True),
+        ("networking_approach", "🤝 Networking", "#388e3c", False),
+        ("room_setup", "🏢 Room Setup", "#ff9800", False),
+        ("tech_needs", "💻 Tech Requirements", "#f44336", False),
+        ("refreshments", "☕ Refreshments", "#795548", False),
+        ("materials", "📄 Materials", "#607d8b", False),
+        ("budget_breakdown", "💰 Budget", "#4caf50", True),
     ]
-    
+
     for key, title, color, open_default in section_configs:
         if key in plan:
             create_accordion_section(
-                container,
-                title,
-                plan[key],
-                color=color,
-                initially_open=open_default
+                container, title, plan[key], color=color, initially_open=open_default
             )
 
 
 def add_intellectual_gathering_plan(container, plan):
     """Render intellectual gathering"""
-    
+
     section_configs = [
-        ('discussion_format', '💬 Discussion Format', '#7b1fa2', True),
-        ('preparation_guidelines', '📚 Preparation', '#5e35b1', False),
-        ('discussion_prompts', '💡 Discussion Prompts', '#7b1fa2', True),
-        ('seating_arrangement', '🪑 Seating', '#388e3c', False),
-        ('refreshments', '☕ Refreshments', '#795548', False),
-        ('materials_needed', '📖 Materials', '#e64a19', False),
-        ('budget_breakdown', '💰 Budget', '#4caf50', True),
+        ("discussion_format", "💬 Discussion Format", "#7b1fa2", True),
+        ("preparation_guidelines", "📚 Preparation", "#5e35b1", False),
+        ("discussion_prompts", "💡 Discussion Prompts", "#7b1fa2", True),
+        ("seating_arrangement", "🪑 Seating", "#388e3c", False),
+        ("refreshments", "☕ Refreshments", "#795548", False),
+        ("materials_needed", "📖 Materials", "#e64a19", False),
+        ("budget_breakdown", "💰 Budget", "#4caf50", True),
     ]
-    
+
     for key, title, color, open_default in section_configs:
         if key in plan:
             create_accordion_section(
-                container,
-                title,
-                plan[key],
-                color=color,
-                initially_open=open_default
+                container, title, plan[key], color=color, initially_open=open_default
             )
 
 
@@ -916,22 +922,23 @@ def add_intellectual_gathering_plan(container, plan):
 # BUDGET SECTION
 # ============================================================================
 
+
 def add_budget_breakdown_section(container, budget_items):
     """Render budget with visual bars"""
-    
+
     # Create accordion
     accordion = ColumnPanel(spacing_above="none", spacing_below="none")
-    
+
     card = m3.Card(appearance="outlined", visible=True)
     content_panel = ColumnPanel(visible=True, spacing_above="none")
-    
+
     # Header
     header_container = ColumnPanel(
         background="theme:Surface Variant",
         spacing_above="small",
         spacing_below="small",
     )
-    
+
     header_btn = m3.Link(
         text=f"💰 Budget Breakdown ({len(budget_items)} categories)",
         align="left",
@@ -941,113 +948,119 @@ def add_budget_breakdown_section(container, budget_items):
         underline=False,
         bold=True,
         spacing="16px",
-        foreground='#4caf50',
+        foreground="#4caf50",
         background="theme:Surface Variant",
-        role="filled-button"
+        role="filled-button",
     )
     header_container.add_component(header_btn)
-    
+
     # Toggle
     is_expanded = {"value": True}
-    
+
     def toggle(**event_args):
         is_expanded["value"] = not is_expanded["value"]
         content_panel.visible = is_expanded["value"]
         card.visible = is_expanded["value"]
-        header_btn.icon = "mi:arrow_drop_down" if is_expanded["value"] else "mi:arrow_right"
-        
+        header_btn.icon = (
+            "mi:arrow_drop_down" if is_expanded["value"] else "mi:arrow_right"
+        )
+
         if is_expanded["value"]:
             header_btn.background = "theme:Surface Variant"
             header_btn.role = "filled-button"
         else:
             header_btn.background = ""
             header_btn.role = None
-    
+
     header_btn.set_event_handler("click", toggle)
-    
+
     # Total
-    total = sum(item['amount'] for item in budget_items)
-    total_card = m3.Card(appearance="filled", spacing_above='small')
+    total = sum(item["amount"] for item in budget_items)
+    total_card = m3.Card(appearance="filled", spacing_above="small")
     total_content = m3.CardContentContainer(margin="12px")
-    total_content.add_component(Label(
-        text=f"Total Budget: ${total:,.2f}",
-        font_size=18,
-        bold=True,
-        foreground='#2e7d32'
-    ))
+    total_content.add_component(
+        Label(
+            text=f"Total Budget: ${total:,.2f}",
+            font_size=18,
+            bold=True,
+            foreground="#2e7d32",
+        )
+    )
     total_card.add_component(total_content)
     content_panel.add_component(total_card)
-    
+
     # Budget items
     for item in budget_items:
         budget_card = create_budget_card(item)
         content_panel.add_component(budget_card)
-    
+
     # Assemble
     card_content = m3.CardContentContainer(margin="16px")
     card_content.add_component(content_panel)
     card.add_component(card_content)
-    
+
     accordion.add_component(header_container, full_width_row=True)
     accordion.add_component(card)
-    
+
     container.add_component(accordion)
 
 
 def create_budget_card(item):
     """Create budget item card with progress bar"""
-    
-    card = m3.Card(appearance="outlined", spacing_above='small')
+
+    card = m3.Card(appearance="outlined", spacing_above="small")
     card_content = m3.CardContentContainer(margin="12px")
-    
+
     # Header
-    header = FlowPanel(spacing='small')
-    header.add_component(Label(
-        text=item['category'],
-        font_size=14,
-        bold=True
-    ))
-    header.add_component(Label(
-        text=f"${item['amount']:,.2f}",
-        font_size=14,
-        bold=True,
-        foreground='#4caf50'
-    ))
+    header = FlowPanel(spacing="small")
+    header.add_component(Label(text=item["category"], font_size=14, bold=True))
+    header.add_component(
+        Label(
+            text=f"${item['amount']:,.2f}",
+            font_size=14,
+            bold=True,
+            foreground="#4caf50",
+        )
+    )
     card_content.add_component(header)
-    
+
     # Percentage
-    percentage = item['percentage']
-    card_content.add_component(Label(
-        text=f"{percentage:.1f}% of total budget",
-        font_size=12,
-        foreground='#666',
-        spacing_above='tiny'
-    ))
-    
+    percentage = item["percentage"]
+    card_content.add_component(
+        Label(
+            text=f"{percentage:.1f}% of total budget",
+            font_size=12,
+            foreground="#666",
+            spacing_above="tiny",
+        )
+    )
+
     # Progress bar (visual representation)
     bar_container = ColumnPanel(
-        background='#e0e0e0',
-        spacing_above='small',
+        background="#e0e0e0",
+        spacing_above="small",
     )
     bar_fill = Label(
         text="  ",
-        background='#4caf50',
+        background="#4caf50",
     )
     # Width based on percentage (capped at 100%)
     bar_width = min(int(percentage), 100)
     bar_container.add_component(bar_fill)
     card_content.add_component(bar_container)
-    
+
     # Notes
-    if 'notes' in item and item['notes']:
-        card_content.add_component(Label(
-            text=f"💡 {item['notes']}",
-            font_size=11,
-            italic=True,
-            foreground='#666',
-            spacing_above='small'
-        ))
-    
+    if "notes" in item and item["notes"]:
+        card_content.add_component(
+            Label(
+                text=f"💡 {item['notes']}",
+                font_size=11,
+                italic=True,
+                foreground="#666",
+                spacing_above="small",
+            )
+        )
+
     card.add_component(card_content)
     return card
 
@@ -1056,22 +1069,26 @@ def create_budget_card(item):
 # HELPER FUNCTIONS
 # ============================================================================
 
-def create_accordion_with_cards(container, title, items, card_creator, 
-                                color='#2196f3', initially_open=False):
+
+def create_accordion_with_cards(
+    container, title, items, card_creator, color="#2196f3", initially_open=False
+):
     """Generic accordion with item cards"""
-    
+
     accordion = ColumnPanel(spacing_above="none", spacing_below="none")
-    
+
     card = m3.Card(appearance="outlined", visible=initially_open)
     content_panel = ColumnPanel(visible=initially_open, spacing_above="none")
-    
+
     # Header
     header_container = ColumnPanel(
-        background="theme:Surface Variant" if initially_open else "theme:Surface Container",
+        background="theme:Surface Variant"
+        if initially_open
+        else "theme:Surface Container",
         spacing_above="small",
         spacing_below="small",
     )
-    
+
     header_btn = m3.Link(
         text=title,
         align="left",
@@ -1083,89 +1100,82 @@ def create_accordion_with_cards(container, title, items, card_creator,
         spacing="16px",
         foreground=color,
     )
-    
+
     if initially_open:
         header_btn.background = "theme:Surface Variant"
         header_btn.role = "filled-button"
-    
+
     header_container.add_component(header_btn)
-    
+
     # Toggle
     is_expanded = {"value": initially_open}
-    
+
     def toggle(**event_args):
         is_expanded["value"] = not is_expanded["value"]
         content_panel.visible = is_expanded["value"]
         card.visible = is_expanded["value"]
-        header_btn.icon = "mi:arrow_drop_down" if is_expanded["value"] else "mi:arrow_right"
-        
+        header_btn.icon = (
+            "mi:arrow_drop_down" if is_expanded["value"] else "mi:arrow_right"
+        )
+
         if is_expanded["value"]:
             header_btn.background = "theme:Surface Variant"
             header_btn.role = "filled-button"
         else:
             header_btn.background = ""
             header_btn.role = None
-    
+
     header_btn.set_event_handler("click", toggle)
-    
+
     # Add items
     for i, item in enumerate(items, 1):
         item_card = card_creator(item, i)
         content_panel.add_component(item_card)
-    
+
     # Assemble
     card_content = m3.CardContentContainer(margin="16px")
     card_content.add_component(content_panel)
     card.add_component(card_content)
-    
+
     accordion.add_component(header_container, full_width_row=True)
     accordion.add_component(card)
-    
+
     container.add_component(accordion)
 
 
 def create_item_card(item):
     """Generic item card from dict"""
-    
-    card = m3.Card(appearance="outlined", spacing_above='small')
+
+    card = m3.Card(appearance="outlined", spacing_above="small")
     card_content = m3.CardContentContainer(margin="12px")
-    
+
     for key, value in item.items():
         if isinstance(value, list):
-            card_content.add_component(Label(
-                text=f"{format_title(key)}:",
-                bold=True,
-                font_size=12
-            ))
+            card_content.add_component(
+                Label(text=f"{format_title(key)}:", bold=True, font_size=12)
+            )
             for v in value:
-                bullet = LinearPanel(spacing='tiny')
+                bullet = LinearPanel(spacing="tiny")
                 bullet.add_component(Label(text="•", font_size=12))
                 bullet.add_component(Label(text=str(v), font_size=12))
                 card_content.add_component(bullet)
         else:
             row = create_key_value_row(key, value)
             card_content.add_component(row)
-    
+
     card.add_component(card_content)
     return card
 
 
 def create_key_value_row(key, value):
     """Create key-value row"""
-    
-    row = FlowPanel(spacing='tiny', spacing_above='tiny')
-    row.add_component(Label(
-        text=f"{format_title(key)}:",
-        bold=True,
-        font_size=12
-    ))
-    row.add_component(Label(
-        text=str(value),
-        font_size=12
-    ))
+
+    row = FlowPanel(spacing="tiny", spacing_above="tiny")
+    row.add_component(Label(text=f"{format_title(key)}:", bold=True, font_size=12))
+    row.add_component(Label(text=str(value), font_size=12))
     return row
 
 
 def format_title(text):
     """Format key to title"""
-    return text.replace('_', ' ').title()
+    return text.replace("_", " ").title()
