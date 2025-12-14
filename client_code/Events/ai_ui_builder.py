@@ -24,7 +24,7 @@ def build_event_plan_ui(event_plan_data, container):
     """
 
     # Clear container
-    container.clear()
+    # container.clear()
 
     # Add header
     add_plan_header(container, event_plan_data)
@@ -186,8 +186,8 @@ def populate_content(content_panel, content):
         for item in content:
             if isinstance(item, str):
                 # Simple bullet point
-                bullet_panel = LinearPanel(spacing="tiny")
-                bullet_panel.add_component(Label(text="•", font_size=14))
+                bullet_panel = FlowPanel(spacing="tiny")
+                bullet_panel.add_component(Label(text="   •", font_size=14))
                 bullet_panel.add_component(Label(text=item, font_size=13))
                 content_panel.add_component(bullet_panel)
             else:
@@ -259,7 +259,7 @@ def add_key_considerations(container, considerations):
     # List items
     items_panel = ColumnPanel(spacing="small", spacing_above="small")
     for item in considerations:
-        # item_panel = LinearPanel(spacing='small')
+        # item_panel = FlowPanel(spacing='small')
         # [H.E. 12/14] Use FlowPanel for icon and text on same line
         item_panel = FlowPanel(spacing="small")
         item_panel.add_component(
@@ -541,9 +541,11 @@ def add_decorations_section(container, decorations):
             )
         )
         for item in decorations["essential_items"]:
-            # bullet = LinearPanel(spacing="tiny")
-            bullet = FlowPanel(spacing="tiny", )
-            bullet.add_component(Label(text="•", font_size=14, foreground="#d32f2f"))
+            # bullet = FlowPanel(spacing="tiny")
+            bullet = FlowPanel(
+                spacing="tiny",
+            )
+            bullet.add_component(Label(text="  •", font_size=14, foreground="#d32f2f"))
             bullet.add_component(Label(text=item, font_size=13))
             content_panel.add_component(bullet)
 
@@ -559,9 +561,9 @@ def add_decorations_section(container, decorations):
             )
         )
         for item in decorations["optional_items"]:
-            # bullet = LinearPanel(spacing="tiny")
+            # bullet = FlowPanel(spacing="tiny")
             bullet = FlowPanel(spacing="tiny")
-            bullet.add_component(Label(text="•", font_size=14, foreground="#1976d2"))
+            bullet.add_component(Label(text="  •", font_size=14, foreground="#1976d2"))
             bullet.add_component(Label(text=item, font_size=13))
             content_panel.add_component(bullet)
 
@@ -577,9 +579,9 @@ def add_decorations_section(container, decorations):
             )
         )
         for item in decorations["diy_opportunities"]:
-            # bullet = LinearPanel(spacing="tiny")
+            # bullet = FlowPanel(spacing="tiny")
             bullet = FlowPanel(spacing="tiny")
-            bullet.add_component(Label(text="•", font_size=14, foreground="#388e3c"))
+            bullet.add_component(Label(text="  •", font_size=14, foreground="#388e3c"))
             bullet.add_component(Label(text=item, font_size=13))
             content_panel.add_component(bullet)
 
@@ -694,8 +696,8 @@ def create_menu_card(menu, index):
             Label(text="Menu Items:", bold=True, font_size=12, spacing_above="small")
         )
         for item in menu["items"]:
-            bullet = LinearPanel(spacing="tiny")
-            bullet.add_component(Label(text="•", font_size=12))
+            bullet = FlowPanel(spacing="tiny")
+            bullet.add_component(Label(text="  •", font_size=12))
             bullet.add_component(Label(text=item, font_size=12))
             card_content.add_component(bullet)
 
@@ -705,8 +707,8 @@ def create_menu_card(menu, index):
             Label(text="🌱 Dietary:", bold=True, font_size=12, spacing_above="small")
         )
         for item in menu["dietary_accommodations"]:
-            bullet = LinearPanel(spacing="tiny")
-            bullet.add_component(Label(text="•", font_size=12))
+            bullet = FlowPanel(spacing="tiny")
+            bullet.add_component(Label(text="  •", font_size=12))
             bullet.add_component(Label(text=item, font_size=12))
             card_content.add_component(bullet)
 
@@ -716,8 +718,8 @@ def create_menu_card(menu, index):
             Label(text="🥤 Beverages:", bold=True, font_size=12, spacing_above="small")
         )
         for item in menu["beverage_pairings"]:
-            bullet = LinearPanel(spacing="tiny")
-            bullet.add_component(Label(text="•", font_size=12))
+            bullet = FlowPanel(spacing="tiny")
+            bullet.add_component(Label(text="  •", font_size=12))
             bullet.add_component(Label(text=item, font_size=12))
             card_content.add_component(bullet)
 
@@ -771,8 +773,8 @@ def create_activity_card(activity, index):
             Label(text="📦 Materials:", bold=True, font_size=12, spacing_above="small")
         )
         for material in activity["materials_needed"]:
-            bullet = LinearPanel(spacing="tiny")
-            bullet.add_component(Label(text="•", font_size=12))
+            bullet = FlowPanel(spacing="tiny")
+            bullet.add_component(Label(text="  •", font_size=12))
             bullet.add_component(Label(text=material, font_size=12))
             card_content.add_component(bullet)
 
@@ -792,8 +794,8 @@ def add_timeline_section(container, timeline):
     # Header
     header_container = ColumnPanel(
         background="theme:Surface Variant",
-        spacing_above="small",
-        spacing_below="small",
+        spacing_above="none",
+        spacing_below="none",
     )
 
     header_btn = m3.Link(
@@ -935,8 +937,8 @@ def add_budget_breakdown_section(container, budget_items):
     # Header
     header_container = ColumnPanel(
         background="theme:Surface Variant",
-        spacing_above="small",
-        spacing_below="small",
+        spacing_above="none",
+        spacing_below="none",
     )
 
     header_btn = m3.Link(
@@ -1085,8 +1087,8 @@ def create_accordion_with_cards(
         background="theme:Surface Variant"
         if initially_open
         else "theme:Surface Container",
-        spacing_above="small",
-        spacing_below="small",
+        spacing_above="none",
+        spacing_below="none",
     )
 
     header_btn = m3.Link(
@@ -1155,8 +1157,8 @@ def create_item_card(item):
                 Label(text=f"{format_title(key)}:", bold=True, font_size=12)
             )
             for v in value:
-                bullet = LinearPanel(spacing="tiny")
-                bullet.add_component(Label(text="•", font_size=12))
+                bullet = FlowPanel(spacing="tiny")
+                bullet.add_component(Label(text="    •", font_size=12))
                 bullet.add_component(Label(text=str(v), font_size=12))
                 card_content.add_component(bullet)
         else:
