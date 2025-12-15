@@ -212,32 +212,30 @@ def add_plan_header(container, plan_data):
 
     header = ColumnPanel(
         background="linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-        foreground="white",
-        spacing="medium",
+        foreground="black",
+        spacing="small",
     )
 
     # Event Classification
-    classification = plan_data.get("event_classification", "Unknown Event Type")
+    # classification = plan_data.get("event_classification", "Unknown Event Type")
 
     title = Label(
-        text=f"🎉 {classification}",
-        font_size=24,
+        text="🎉 Event Options",
+        font_size=20,
         bold=True,
-        foreground="white",
-        align="center",
+        foreground="black",
+        align="left",
     )
     header.add_component(title)
-
-    subtitle = Label(
-        text="AI-Generated Event Plan",
-        font_size=14,
-        foreground="white",
-        italic=True,
-        align="center",
-    )
-    header.add_component(subtitle)
-
     container.add_component(header)
+    # subtitle = Label(
+    #     text="Event Options",
+    #     font_size=14,
+    #     foreground="black",
+    #     italic=True,
+    #     align="left",
+    # )
+    # header.add_component(subtitle)
 
 
 def add_key_considerations(container, considerations):
@@ -257,13 +255,27 @@ def add_key_considerations(container, considerations):
     card_content.add_component(header_label)
 
     # List items
-    items_panel = ColumnPanel(spacing="small", spacing_above="small")
+    items_panel = ColumnPanel(
+        spacing="small",
+        spacing_above="none",
+        spacing_below="none",
+    )
     for item in considerations:
         # item_panel = FlowPanel(spacing='small')
         # [H.E. 12/14] Use FlowPanel for icon and text on same line
-        item_panel = FlowPanel(spacing="small")
+        item_panel = FlowPanel(
+            spacing_above="none",
+            spacing_below="none",
+        )
         item_panel.add_component(
-            Label(text="✓", foreground="#4caf50", font_size=16, bold=True)
+            Label(
+                text="   ✓",
+                foreground="#4caf50",
+                font_size=16,
+                bold=True,
+                spacing_above="none",
+                spacing_below="none",
+            )
         )
         item_panel.add_component(Label(text=item, font_size=14))
         items_panel.add_component(item_panel)
@@ -362,15 +374,17 @@ def add_themes_section(container, themes):
     # Create accordion
     accordion = ColumnPanel(spacing_above="none", spacing_below="none")
 
-    # Card and content
-    card = m3.Card(appearance="outlined", visible=False)
-    content_panel = ColumnPanel(visible=False, spacing_above="none")
+    content_panel = ColumnPanel(
+        visible=False,
+        spacing_above="none",
+        spacing_below="none",
+    )
 
     # Header
     header_container = ColumnPanel(
         background="theme:Surface Container",
-        spacing_above="small",
-        spacing_below="small",
+        spacing_above="none",
+        spacing_below="none",
     )
 
     header_btn = m3.Link(
@@ -381,7 +395,6 @@ def add_themes_section(container, themes):
         icon_align="left",
         underline=False,
         bold=True,
-        spacing="16px",
         foreground="#673ab7",
     )
     header_container.add_component(header_btn)
@@ -392,7 +405,6 @@ def add_themes_section(container, themes):
     def toggle(**event_args):
         is_expanded["value"] = not is_expanded["value"]
         content_panel.visible = is_expanded["value"]
-        card.visible = is_expanded["value"]
         header_btn.icon = (
             "mi:arrow_drop_down" if is_expanded["value"] else "mi:arrow_right"
         )
@@ -412,12 +424,11 @@ def add_themes_section(container, themes):
         content_panel.add_component(theme_card)
 
     # Assemble
-    card_content = m3.CardContentContainer(margin="16px")
+    card_content = m3.CardContentContainer(margin="8px")
     card_content.add_component(content_panel)
-    card.add_component(card_content)
 
     accordion.add_component(header_container, full_width_row=True)
-    accordion.add_component(card)
+    accordion.add_component(card_content)
 
     container.add_component(accordion)
 
@@ -427,14 +438,18 @@ def create_theme_card(theme, index):
 
     card = m3.Card(
         appearance="outlined",
-        spacing_above="small",
+        spacing_above="none",
+        spacing_below="none",
     )
 
     card_content = m3.CardContentContainer(margin="16px")
 
     # Header
     header = Label(
-        text=f"#{index}: {theme['name']}", font_size=16, bold=True, foreground="#673ab7"
+        text=f"#{index}: {theme['name']}",
+        font_size=16,
+        bold=True,
+        foreground="#673ab7",
     )
     card_content.add_component(header)
 
@@ -446,7 +461,13 @@ def create_theme_card(theme, index):
     # Color palette
     if "color_palette" in theme:
         colors_panel = FlowPanel(spacing="small", spacing_above="small")
-        colors_panel.add_component(Label(text="Colors:", bold=True, font_size=12))
+        colors_panel.add_component(
+            Label(
+                text="Colors:",
+                bold=True,
+                font_size=12,
+            )
+        )
 
         for color in theme["color_palette"]:
             # Color swatch
@@ -469,7 +490,11 @@ def create_theme_card(theme, index):
 
     # Atmosphere
     if "atmosphere" in theme:
-        atm_panel = FlowPanel(spacing="tiny", spacing_above="small")
+        atm_panel = FlowPanel(
+            spacing="tiny",
+            spacing_above="none",
+            spacing_below="none",
+        )
         atm_panel.add_component(Label(text="Atmosphere:", bold=True, font_size=12))
         atm_panel.add_component(Label(text=theme["atmosphere"], font_size=12))
         card_content.add_component(atm_panel)

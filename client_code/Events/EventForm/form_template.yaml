@@ -214,23 +214,7 @@ components_by_slot:
         margin: [null, '16', '16', null]
         padding: [null, null, '8', null]
     type: ColumnPanel
-  - components:
-    - layout_properties: {full_width_row: true, grid_position: 'BDSIKI,COQVIE'}
-      name: event_ai
-      properties: {}
-      type: form:Events.AIResponse
-    - event_bindings: {click: btn_save_click}
-      layout_properties: {grid_position: 'ZAKKSR,BZWRMO'}
-      name: btn_save
-      properties:
-        align: center
-        appearance: filled
-        border: ''
-        spacing:
-          margin: ['16', '16', '16', '16']
-          padding: ['0', '24', '0', '24']
-        text: Save
-      type: form:dep_lin1x4oec0ytd:_Components.Button
+  - components: []
     layout_properties: {}
     name: cpanel_options
     properties:
@@ -238,5 +222,17 @@ components_by_slot:
         margin: [null, '16', '16', null]
         padding: ['8', '0', '16', null]
     type: ColumnPanel
+  - event_bindings: {click: btn_save_click}
+    layout_properties: {}
+    name: btn_save
+    properties:
+      align: center
+      appearance: filled
+      border: ''
+      spacing:
+        margin: ['16', '16', '16', '16']
+        padding: ['0', '24', '0', '24']
+      text: Save
+    type: form:dep_lin1x4oec0ytd:_Components.Button
 is_package: true
 layout: {type: 'form:Frame'}

@@ -16,8 +16,8 @@ class EventForm(EventFormTemplate):
     def __init__(self, **properties):
         self.init_components(**properties)
         # self.event_ai.content_panel.visible = False
-        self.event_ai.visible = False
         self.cpanel_options.visible = False
+        self.btn_save.visible = False
         self.user_input = dict()
 
         self._load_default_input()
@@ -45,32 +45,31 @@ class EventForm(EventFormTemplate):
     def btn_start_click(self, **event_args):
         """This method is called when the component is clicked."""
 
-        # details = anvil.server.call("create_event", 1)
-        # print(details)
-
+        self.btn_start.visible = False
+        self.btn_save.visible = True
         self.get_user_input()
         with anvil.server.no_loading_indicator:
-            Notification("Running AI for your event...", timeout=5).show()
+            Notification(
+                message="Running AI for your event...",
+                title="Event plan",
+                timeout=5,
+            ).show()
 
         try:
-            # result = anvil.server.call("create_event", **self.user_input)
-
             # DEBUG - remove this line in PROD
+            # result = anvil.server.call("create_event", **self.user_input)
             result = anvil.server.call("get_event_with_ai_plan", 24)
         except Exception as e:
             print(f"Something went wrong: {e}")
 
         if result["success"]:
             self.btn_start.visible = False
-            self.event_ai.visible = False  # True
-            # ai_ui_builder.build_event_plan_ui(result["output"], self.event_ai)
-            # ai_ui_builder.build_event_plan_ui(result["output"], self.cpanel_options)
 
             # DEBUG - remove this line in PROD
             ai_ui_builder.build_event_plan_ui(result["ai_plan"], self.cpanel_options)
+            # ai_ui_builder.build_event_plan_ui(result["output"], self.cpanel_options)
             self.cpanel_options.visible = True
             # self.event_ai.process_json_response(result["output"])
-
         else:
             alert(f"Error: {result['error']}")
 
