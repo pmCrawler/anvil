@@ -46,7 +46,7 @@ class EventForm(EventFormTemplate):
         """This method is called when the component is clicked."""
 
         self.btn_start.visible = False
-        self.btn_save.visible = True
+
         self.get_user_input()
         with anvil.server.no_loading_indicator:
             Notification(
@@ -70,6 +70,7 @@ class EventForm(EventFormTemplate):
             # ai_ui_builder.build_event_plan_ui(result["output"], self.cpanel_options)
             self.cpanel_options.visible = True
             # self.event_ai.process_json_response(result["output"])
+            self.btn_save.visible = True
         else:
             alert(f"Error: {result['error']}")
 

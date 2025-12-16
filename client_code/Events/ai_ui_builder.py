@@ -256,7 +256,7 @@ def add_key_considerations(container, considerations):
 
     # List items
     items_panel = ColumnPanel(
-        spacing="small",
+        # spacing="small",
         spacing_above="none",
         spacing_below="none",
     )
@@ -527,7 +527,7 @@ def add_decorations_section(container, decorations):
         icon_align="left",
         underline=False,
         bold=True,
-        spacing="16px",
+        # spacing="16px",
         foreground="#e91e63",
         background="theme:Surface Variant",
         role="filled-button",
@@ -638,14 +638,18 @@ def add_menu_options_section(container, menu_options):
     # Create accordion
     accordion = ColumnPanel(spacing_above="none", spacing_below="none")
 
-    card = m3.Card(appearance="outlined", visible=True)
-    content_panel = ColumnPanel(visible=True, spacing_above="none")
+    # card = m3.Card(appearance="outlined", visible=True)
+    content_panel = ColumnPanel(
+        visible=True,
+        spacing_above="none",
+        spacing_below="none",
+    )
 
     # Header
     header_container = ColumnPanel(
         background="theme:Surface Variant",
-        spacing_above="small",
-        spacing_below="small",
+        spacing_above="none",
+        spacing_below="none",
     )
 
     header_btn = m3.Link(
@@ -656,7 +660,7 @@ def add_menu_options_section(container, menu_options):
         icon_align="left",
         underline=False,
         bold=True,
-        spacing="16px",
+        # spacing="16px",
         foreground="#ff6f00",
         background="theme:Surface Variant",
         role="filled-button",
@@ -664,12 +668,12 @@ def add_menu_options_section(container, menu_options):
     header_container.add_component(header_btn)
 
     # Toggle
-    is_expanded = {"value": True}
+    is_expanded = {"value": False}
 
     def toggle(**event_args):
         is_expanded["value"] = not is_expanded["value"]
         content_panel.visible = is_expanded["value"]
-        card.visible = is_expanded["value"]
+        # card.visible = is_expanded["value"]
         header_btn.icon = (
             "mi:arrow_drop_down" if is_expanded["value"] else "mi:arrow_right"
         )
@@ -689,12 +693,13 @@ def add_menu_options_section(container, menu_options):
         content_panel.add_component(menu_card)
 
     # Assemble
-    card_content = m3.CardContentContainer(margin="16px")
+    card_content = m3.CardContentContainer(margin="16px", spacing_below="none")
     card_content.add_component(content_panel)
-    card.add_component(card_content)
+    # card.add_component(card_content)
 
     accordion.add_component(header_container, full_width_row=True)
-    accordion.add_component(card)
+    # accordion.add_component(card)
+    accordion.add_component(card_content)
 
     container.add_component(accordion)
 
@@ -718,7 +723,13 @@ def create_menu_card(menu, index):
     # Items
     if "items" in menu:
         card_content.add_component(
-            Label(text="Menu Items:", bold=True, font_size=12, spacing_above="small")
+            Label(
+                text="Menu Items:",
+                bold=True,
+                font_size=12,
+                spacing_above="none",
+                spacing_below="none",
+            )
         )
         for item in menu["items"]:
             bullet = FlowPanel(spacing="tiny")
@@ -740,10 +751,16 @@ def create_menu_card(menu, index):
     # Beverages
     if "beverage_pairings" in menu:
         card_content.add_component(
-            Label(text="🥤 Beverages:", bold=True, font_size=12, spacing_above="small")
+            Label(
+                text="🥤 Beverages:",
+                bold=True,
+                font_size=12,
+                spacing_above="none",
+                spacing_below="none",
+            )
         )
         for item in menu["beverage_pairings"]:
-            bullet = FlowPanel(spacing="tiny")
+            bullet = FlowPanel(spacing="none")
             bullet.add_component(Label(text="  •", font_size=12))
             bullet.add_component(Label(text=item, font_size=12))
             card_content.add_component(bullet)
@@ -768,7 +785,7 @@ def add_activities_section(container, activities):
 def create_activity_card(activity, index):
     """Create activity card"""
 
-    card = m3.Card(appearance="outlined", spacing_above="small")
+    card = m3.Card(appearance="outlined", spacing_above="small", border="none")
     card_content = m3.CardContentContainer(margin="16px")
 
     # Header
@@ -1098,7 +1115,7 @@ def create_budget_card(item):
 
 
 def create_accordion_with_cards(
-    container, title, items, card_creator, color="#2196f3", initially_open=False
+    container, title, items, card_creator, color="#2196f3", initially_open=True
 ):
     """Generic accordion with item cards"""
 

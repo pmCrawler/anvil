@@ -202,7 +202,7 @@ components_by_slot:
         icon_align: right
         icon_size: null
         spacing:
-          margin: ['16', '16', '16', '16']
+          margin: ['0', '16', '0', '16']
           padding: ['0', '24', '0', '24']
         text: Start
       type: form:dep_lin1x4oec0ytd:_Components.Button
@@ -211,7 +211,7 @@ components_by_slot:
     properties:
       col_widths: '{}'
       spacing:
-        margin: [null, '16', '16', null]
+        margin: [null, '16', '0', null]
         padding: [null, null, '8', null]
     type: ColumnPanel
   - components: []
@@ -219,8 +219,8 @@ components_by_slot:
     name: cpanel_options
     properties:
       spacing:
-        margin: [null, '16', '16', null]
-        padding: ['8', '0', '16', null]
+        margin: ['0', '16', '0', null]
+        padding: ['4', '0', '4', null]
     type: ColumnPanel
   - event_bindings: {click: btn_save_click}
     layout_properties: {}
@@ -230,8 +230,8 @@ components_by_slot:
       appearance: filled
       border: ''
       spacing:
-        margin: ['16', '16', '16', '16']
-        padding: ['0', '24', '0', '24']
+        margin: ['5', '16', '5', '16']
+        padding: ['5', '24', '5', '24']
       text: Save
     type: form:dep_lin1x4oec0ytd:_Components.Button
 is_package: true
