@@ -9,16 +9,19 @@ from anvil.tables import app_tables
 from ... import Events
 import anvil.http
 import json
+
 from .. import ai_ui_builder
 
 
+# EventForm.py
 class EventForm(EventFormTemplate):
     def __init__(self, **properties):
         self.init_components(**properties)
-        # self.event_ai.content_panel.visible = False
-        self.cpanel_options.visible = False
+
         self.btn_save.visible = False
+        self.cpanel_options.visible = False
         self.user_input = dict()
+        self.event_id = None  # Store event ID
 
         self._load_default_input()
 
@@ -43,52 +46,62 @@ class EventForm(EventFormTemplate):
         }
 
     def btn_start_click(self, **event_args):
-        """This method is called when the component is clicked."""
+        """Generate AI event plan"""
 
-        self.btn_start.visible = False
-
+        self.btn_start.enabled = False
         self.get_user_input()
+
         with anvil.server.no_loading_indicator:
             Notification(
-                message="Running AI for your event...",
-                title="Event plan",
+                "🤖 AI is creating your event plan...",
                 timeout=5,
+                style="info",
             ).show()
 
+        self.btn_start.text = "⏳ Creating Plan..."
+
         try:
-            # DEBUG - remove this line in PROD
             # result = anvil.server.call("create_event", **self.user_input)
             result = anvil.server.call("get_event_with_ai_plan", 24)
+
+            if result["success"]:
+                # Store event ID
+                self.event_id = result["event"]["id"]
+
+                # Add event_id to output for save function
+                ai_plan_data = result["ai_plan"]
+                ai_plan_data["event_id"] = self.event_id
+
+                # Hide form, show AI results
+                self.btn_start.visible = False
+
+                ai_ui_builder.build_event_plan_ui(ai_plan_data, self.cpanel_options)
+                self.cpanel_options.visible = True
+                self.btn_save.visible = True
+
+                # Success notification
+                Notification(
+                    f"✅ Event plan created! Event ID: {self.event_id}",
+                    timeout=3,
+                    style="success",
+                ).show()
+            else:
+                alert(f"Error:\n{result['error']}", title="Error")
+                self.btn_start.enabled = True
+                self.btn_start.text = "🎉 Start Planning"
+
         except Exception as e:
-            print(f"Something went wrong: {e}")
+            print(f"Exception: {e}")
+            import traceback
 
-        if result["success"]:
-            self.btn_start.visible = False
+            traceback.print_exc()
 
-            # DEBUG - remove this line in PROD
-            ai_ui_builder.build_event_plan_ui(result["ai_plan"], self.cpanel_options)
-            # ai_ui_builder.build_event_plan_ui(result["output"], self.cpanel_options)
-            self.cpanel_options.visible = True
-            # self.event_ai.process_json_response(result["output"])
-            self.btn_save.visible = True
-        else:
-            alert(f"Error: {result['error']}")
+            alert(f"An error occurred:\n{str(e)}", title="Error")
+            self.btn_start.enabled = True
+            self.btn_start.text = "🎉 Start Planning"
 
     def btn_save_click(self, **event_args):
         """This method is called when the component is clicked."""
 
         # FOR TESTING ONLY
         open_form("Events.EventView", event_id=4270964888)
-
-
-# # selections = self.event_ai.get_selected_values()
-# self.user_input.update({"ai_response": self.resp})
-# result = anvil.server.call("upsert_event_data", self.user_input)
-# if result["success"]:
-#     Notification(
-#         f"""Event and tasks saved! Task Count: {result["task_count"]}""",
-#         timeout=5,
-#     ).show()
-#     open_form("Events.EventView", event_id=result["event_id"])
-# else:
-#     Notification(f"Error: {result['error']}", timeout=5, style="danger").show()

@@ -562,8 +562,11 @@ def create_selectable_card(
 def add_save_button(container, event_plan_data):
     """Add save button at the bottom"""
 
-    button_panel = FlowPanel(
-        spacing="medium", spacing_above="large", spacing_below="medium", align="center"
+    button_panel = LinearPanel(
+        spacing="medium",
+        spacing_above="large",
+        spacing_below="medium",
+        align="center",
     )
 
     # Selection summary
