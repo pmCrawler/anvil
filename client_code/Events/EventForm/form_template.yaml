@@ -202,7 +202,7 @@ components_by_slot:
         icon_align: right
         icon_size: null
         spacing:
-          margin: ['12', '16', '0', '16']
+          margin: ['5', '16', '0', '16']
           padding: ['0', '24', '0', '24']
         text: Start
       type: form:dep_lin1x4oec0ytd:_Components.Button
