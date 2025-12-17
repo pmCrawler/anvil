@@ -10,7 +10,7 @@ from ... import Events
 import anvil.http
 import json
 
-from .. import ai_ui_builder
+from .. import ui_builder
 
 
 # EventForm.py
@@ -74,7 +74,7 @@ class EventForm(EventFormTemplate):
                 # Hide form, show AI results
                 self.btn_start.visible = False
 
-                ai_ui_builder.build_event_plan_ui(ai_plan_data, self.cpanel_options)
+                ui_builder.build_event_plan_ui(ai_plan_data, self.cpanel_options)
                 self.cpanel_options.visible = True
 
                 # Success notification

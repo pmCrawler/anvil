@@ -1,5 +1,3 @@
-# ClientModules/ai_ui_builder.py
-
 """
 Generic Dynamic UI Builder for AI Responses
 Configuration-driven, reusable, and loosely coupled
@@ -8,320 +6,13 @@ Configuration-driven, reusable, and loosely coupled
 from anvil import *
 import anvil.server
 import m3.components as m3
+from . import ui_config
 
-# ============================================================================
-# CONFIGURATION - Define rendering rules for different content types
-
-# How to Add New Sections
-# Example: Add "Venue Suggestions" section
-
-# # Just add to SECTION_CONFIG:
-# SECTION_CONFIG['venue_suggestions'] = {
-#     'title': '🏛️ Venue Suggestions',
-#     'color': '#1976d2',
-#     'icon': 'mi:location_city',
-#     'initially_open': True,
-#     'renderer': 'card_list',
-#     'card_type': 'venue'
-# }
-
-# # Add card type config:
-# CARD_TYPES['venue'] = {
-#     'title_key': 'name',
-#     'fields': [
-#         {'key': 'address', 'type': 'text'},
-#         {'key': 'capacity', 'type': 'inline', 'prefix': '👥'},
-#         {'key': 'amenities', 'type': 'bullet_list', 'label': 'Amenities:'},
-#         {'key': 'price_range', 'type': 'key_value'}
-#     ]
-# }
-
-# # That's it! No code changes needed.
-
-# ============================================================================
-
-# Section configurations: defines how each section should be rendered
-# ============================================================================
-# CONFIGURATION with RANKING
-# ============================================================================
-
-SECTION_CONFIG = {
-    # Special sections (rendered separately)
-    "event_classification": {
-        "rank": 0,  # Header - rendered first
-        "renderer": "header",
-        "skip_in_plan": True,
-    },
-    "key_considerations": {
-        "rank": 1,
-        "title": "🎯 Key Considerations",
-        "color": "#2e7d32",
-        "renderer": "key_considerations",
-        "skip_in_plan": True,  # Handled separately
-    },
-    # Social Celebration sections
-    "themes": {
-        "rank": 2,
-        "title": "🎨 Theme Options",
-        "color": "#673ab7",
-        "icon": "mi:palette",
-        "initially_open": False,
-        "renderer": "card_list",
-        "card_type": "theme",
-        "selectable": True,
-        "selection_label": "Theme",
-    },
-    "decorations": {
-        "rank": 3,
-        "title": "🎈 Decorations",
-        "color": "#e91e63",
-        "icon": "mi:celebration",
-        "initially_open": True,
-        "renderer": "structured_list",
-        "subsections": {
-            "essential_items": {"label": "🔴 Essential Items:", "color": "#d32f2f"},
-            "optional_items": {"label": "🔵 Optional Items:", "color": "#1976d2"},
-            "diy_opportunities": {"label": "✂️ DIY Opportunities:", "color": "#388e3c"},
-            "setup_tips": {"label": "💡 Setup Tips:", "style": "info_card"},
-        },
-        "selectable": False,
-    },
-    "menu_options": {
-        "rank": 4,
-        "title": "🍽️ Menu Options",
-        "color": "#ff6f00",
-        "icon": "mi:restaurant",
-        "initially_open": False,
-        "renderer": "card_list",
-        "card_type": "menu",
-        "selectable": True,
-        "selection_label": "Menu",
-    },
-    "activities": {
-        "rank": 5,
-        "title": "🎮 Activities",
-        "color": "#9c27b0",
-        "icon": "mi:sports_esports",
-        "initially_open": True,
-        "renderer": "card_list",
-        "card_type": "activity",
-        "selectable": True,
-        "selection_label": "Activity",
-        "multi_select": True,
-    },
-    "timeline": {
-        "rank": 6,
-        "title": "⏰ Event Timeline",
-        "color": "#1976d2",
-        "icon": "mi:schedule",
-        "initially_open": True,
-        "renderer": "timeline",
-        "selectable": False,
-        "save_to_table": True,
-    },
-    "budget_breakdown": {
-        "rank": 7,
-        "title": "💰 Budget Breakdown",
-        "color": "#4caf50",
-        "icon": "mi:account_balance_wallet",
-        "initially_open": True,
-        "renderer": "budget",
-        "selectable": False,
-        "save_to_table": True,
-    },
-    "special_touches": {
-        "rank": 8,
-        "title": "✨ Special Touches",
-        "color": "#ffd700",
-        "icon": "mi:star",
-        "initially_open": False,
-        "renderer": "simple_list",
-        "selectable": True,
-        "selection_label": "Special Touch",
-        "multi_select": True,
-    },
-    # Professional Gathering sections
-    "agenda": {
-        "rank": 3,
-        "title": "📋 Agenda",
-        "color": "#1976d2",
-        "icon": "mi:list_alt",
-        "initially_open": True,
-        "renderer": "card_list",
-        "card_type": "generic",
-    },
-    "networking_approach": {
-        "rank": 4,
-        "title": "🤝 Networking",
-        "color": "#388e3c",
-        "icon": "mi:groups",
-        "initially_open": False,
-        "renderer": "text",
-    },
-    "room_setup": {
-        "rank": 5,
-        "title": "🏢 Room Setup",
-        "color": "#ff9800",
-        "icon": "mi:meeting_room",
-        "initially_open": False,
-        "renderer": "text",
-    },
-    "tech_needs": {
-        "rank": 6,
-        "title": "💻 Tech Requirements",
-        "color": "#f44336",
-        "icon": "mi:computer",
-        "initially_open": False,
-        "renderer": "simple_list",
-    },
-    "refreshments": {
-        "rank": 7,
-        "title": "☕ Refreshments",
-        "color": "#795548",
-        "icon": "mi:local_cafe",
-        "initially_open": False,
-        "renderer": "simple_list",
-    },
-    "materials": {
-        "rank": 8,
-        "title": "📄 Materials",
-        "color": "#607d8b",
-        "icon": "mi:description",
-        "initially_open": False,
-        "renderer": "simple_list",
-    },
-    # Intellectual Gathering sections
-    "discussion_format": {
-        "rank": 3,
-        "title": "💬 Discussion Format",
-        "color": "#7b1fa2",
-        "icon": "mi:forum",
-        "initially_open": True,
-        "renderer": "text",
-    },
-    "preparation_guidelines": {
-        "rank": 4,
-        "title": "📚 Preparation",
-        "color": "#5e35b1",
-        "icon": "mi:school",
-        "initially_open": False,
-        "renderer": "simple_list",
-    },
-    "discussion_prompts": {
-        "rank": 5,
-        "title": "💡 Discussion Prompts",
-        "color": "#7b1fa2",
-        "icon": "mi:lightbulb",
-        "initially_open": True,
-        "renderer": "numbered_list",
-    },
-    "seating_arrangement": {
-        "rank": 6,
-        "title": "🪑 Seating",
-        "color": "#388e3c",
-        "icon": "mi:event_seat",
-        "initially_open": False,
-        "renderer": "text",
-    },
-    "materials_needed": {
-        "rank": 7,
-        "title": "📖 Materials",
-        "color": "#e64a19",
-        "icon": "mi:book",
-        "initially_open": False,
-        "renderer": "simple_list",
-    },
-    # Common sections (appear at end)
-    "logistics": {
-        "rank": 98,
-        "title": "Logistics",
-        "color": "#3f51b5",
-        "icon": "mi:local_shipping",
-        "initially_open": False,
-        "renderer": "simple_list",
-    },
-    "contingency_notes": {
-        "rank": 99,
-        "title": "Contingency Plans",
-        "color": "#f44336",
-        "icon": "mi:security",
-        "initially_open": False,
-        "renderer": "simple_list",
-    },
-    "reasoning": {
-        "rank": 100,  # Last
-        "title": "💭 AI Reasoning",
-        "color": "#9c27b0",
-        "icon": "mi:psychology",
-        "initially_open": False,
-        "renderer": "text",
-    },
-}
-
-# Card type configurations (unchanged)
-CARD_TYPES = {
-    "theme": {
-        "title_key": "name",
-        "fields": [
-            {"key": "description", "type": "text"},
-            {"key": "color_palette", "type": "color_palette"},
-            {"key": "atmosphere", "type": "key_value"},
-        ],
-    },
-    "menu": {
-        "title_key": "style",
-        "fields": [
-            {"key": "items", "type": "bullet_list", "label": "Menu Items:"},
-            {
-                "key": "dietary_accommodations",
-                "type": "bullet_list",
-                "label": "🌱 Dietary:",
-                "skip_if_empty": True,
-            },
-            {
-                "key": "beverage_pairings",
-                "type": "bullet_list",
-                "label": "🥤 Beverages:",
-            },
-        ],
-    },
-    "activity": {
-        "title_key": "name",
-        "fields": [
-            {"key": "duration", "type": "inline", "prefix": "⏱️"},
-            {"key": "instructions", "type": "text", "italic": True},
-            {
-                "key": "materials_needed",
-                "type": "bullet_list",
-                "label": "📦 Materials:",
-                "skip_if_empty": True,
-            },
-        ],
-    },
-    "generic": {"fields": [{"key": "*", "type": "auto"}]},
-}
-
-# ============================================================================
-# SELECTION STATE
-# ============================================================================
-
+SECTION_CONFIG = ui_config.SECTION_CONFIG
+CARD_TYPES = ui_config.CARD_TYPES
 _selected_options = {}
 
-
-def get_selected_options():
-    """Get all selected options"""
-    return _selected_options.copy()
-
-
-def clear_selections():
-    """Clear all selections"""
-    global _selected_options
-    _selected_options = {}
-
-
-# ============================================================================
 # MAIN BUILDER (Updated with Sorting)
-# ============================================================================
 
 
 def build_event_plan_ui(event_plan_data, container):
@@ -365,6 +56,79 @@ def build_event_plan_ui(event_plan_data, container):
     add_save_button(container, event_plan_data)
 
 
+# SPECIAL SECTIONS (Not Configuration-Driven)
+
+
+def add_plan_header(container, plan_data):
+    """Add header with event classification"""
+    header = ColumnPanel(
+        background="linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+        foreground="black",
+        spacing="small",
+    )
+
+    title = Label(
+        text="🎉 Event Options",
+        font_size=18,
+        bold=True,
+        foreground="black",
+        align="left",
+    )
+    header.add_component(title)
+    container.add_component(header)
+
+
+def add_key_considerations(container, considerations):
+    """Add key considerations section (always expanded)"""
+    section = m3.Card(appearance="outlined", spacing_above="small")
+    card_content = m3.CardContentContainer(margin="16px")
+
+    # Header
+    card_content.add_component(
+        Label(
+            text="🎯 Key Considerations",
+            font_size=16,
+            bold=True,
+            foreground="#2e7d32",
+        )
+    )
+
+    # Items
+    items_panel = ColumnPanel(spacing_above="none", spacing_below="none")
+    for item in considerations:
+        item_panel = FlowPanel(spacing_above="none", spacing_below="none")
+        item_panel.add_component(
+            Label(text="   ✓", foreground="#4caf50", font_size=16, bold=True)
+        )
+        item_panel.add_component(Label(text=item, font_size=14))
+        items_panel.add_component(item_panel)
+
+    card_content.add_component(items_panel)
+    section.add_component(card_content)
+    container.add_component(section)
+
+
+# ================
+# SELECTION STATE
+# ================
+
+
+def get_selected_options():
+    """Get all selected options"""
+    return _selected_options.copy()
+
+
+def clear_selections():
+    """Clear all selections"""
+    global _selected_options
+    _selected_options = {}
+
+
+# =============================
+# SELECTION-ENABLED RENDERERS
+# =============================
+
+
 def render_plan_sections_sorted(container, plan_data):
     """
     Render all sections in the plan based on configuration and rank order
@@ -393,11 +157,6 @@ def render_plan_sections_sorted(container, plan_data):
     # Render in sorted order
     for rank, key, value in sections_with_rank:
         render_section(container, key, value)
-
-
-# ============================================================================
-# Rest of the code remains exactly the same
-# ============================================================================
 
 
 def render_section(container, section_key, content):
@@ -430,11 +189,6 @@ def render_section(container, section_key, content):
         render_structured_list_section(container, section_key, content, config)
     else:
         render_generic_section(container, section_key, content)
-
-
-# ============================================================================
-# SELECTION-ENABLED RENDERERS
-# ============================================================================
 
 
 def render_card_list_section(container, section_key, items, config):
@@ -596,131 +350,9 @@ def create_selectable_card(
     return card_container
 
 
-# ============================================================================
-# SAVE FUNCTIONALITY
-# ============================================================================
-
-
-def add_save_button(container, event_plan_data):
-    """Add save button at the bottom"""
-
-    button_panel = ColumnPanel(
-        spacing="medium",
-        spacing_above="tiny",
-        spacing_below="medium",
-    )
-
-    # Selection summary
-    summary_label = m3.Text(
-        text="Select your preferred options above, then click Save",
-        font_size=13,
-        italic=True,
-        foreground="#666",
-        align="center",
-    )
-    button_panel.add_component(summary_label)
-
-    # Save button
-    save_btn = m3.Button(
-        text="Save Selections",
-        align="center",
-        icon="mi:save",
-        appearance="filled",
-        size="large",
-    )
-    save_btn.tag.event_plan_data = event_plan_data  # Store full plan data
-
-    def on_save_click(**event_args):
-        save_selections(save_btn, event_plan_data)
-
-    save_btn.set_event_handler("click", on_save_click)
-    button_panel.add_component(save_btn)
-
-    container.add_component(button_panel)
-
-
-def save_selections(save_btn, event_plan_data):
-    """Save selected options and all data to database"""
-
-    # Get selections
-    selections = get_selected_options()
-
-    # Validate - check if user made selections
-    selectable_sections = [
-        key for key, config in SECTION_CONFIG.items() if config.get("selectable", False)
-    ]
-
-    # Check if at least one selection was made
-    if not selections:
-        alert("Please select at least one option before saving", title="No Selections")
-        return
-
-    # Show missing selections warning
-    missing = [
-        format_title(key)
-        for key in selectable_sections
-        if key not in selections and not SECTION_CONFIG[key].get("multi_select")
-    ]
-
-    if missing:
-        confirm_msg = (
-            f"You haven't selected: {', '.join(missing)}.\n\nDo you want to continue?"
-        )
-        if not confirm(confirm_msg, title="Incomplete Selection"):
-            return
-
-    # Prepare data for server
-    save_data = {
-        "selected_options": selections,
-        "timeline": event_plan_data.get("plan", {}).get("timeline", []),
-        "budget_breakdown": event_plan_data.get("plan", {}).get("budget_breakdown", []),
-        "full_plan": event_plan_data,  # Include full plan for reference
-    }
-
-    # Disable button and show loading
-    save_btn.enabled = False
-    save_btn.text = "⏳ Saving..."
-
-    try:
-        # Call server function
-        result = anvil.server.call("save_event_selections", save_data)
-
-        if result["success"]:
-            # Success notification
-            Notification(
-                f"✅ Saved! {result.get('tasks_saved', 0)} tasks, {result.get('budget_items_saved', 0)} budget items",
-                timeout=5,
-                style="success",
-            ).show()
-
-            # Navigate to event view
-            event_id = result.get("event_id")
-            if event_id:
-                from ... import Events
-
-                open_form("Events.EventView", event_id=event_id)
-        else:
-            alert(
-                f"Error saving selections:\n{result.get('error')}", title="Save Failed"
-            )
-            save_btn.enabled = True
-            save_btn.text = "💾 Save Selections"
-
-    except Exception as e:
-        print(f"Error saving selections: {e}")
-        alert(f"An error occurred:\n{str(e)}", title="Save Failed")
-        save_btn.enabled = True
-        save_btn.text = "💾 Save Selections"
-
-
-# ============================================================================
-# HELPER FUNCTIONS
-# ============================================================================
-
-
-def format_title(text):
-    """Format key to title"""
-    return text.replace("_", " ").title()
+# ==================
+# SECTION RENDERERS
+# ==================
 
 
 def render_plan_sections(container, plan_data):
@@ -743,11 +375,6 @@ def render_plan_sections(container, plan_data):
         else:
             # Fallback: auto-detect rendering
             render_generic_section(container, key, value)
-
-
-# ============================================================================
-# SECTION RENDERERS
-# ============================================================================
 
 
 def render_simple_list_section(container, section_key, items, config):
@@ -979,9 +606,9 @@ def render_generic_section(container, section_key, content):
         render_text_section(container, section_key, content, default_config)
 
 
-# ============================================================================
+# ====================
 # REUSABLE COMPONENTS
-# ============================================================================
+# ====================
 
 
 def create_accordion_container(config, item_count=None):
@@ -1252,52 +879,128 @@ def create_budget_card(item):
     return card
 
 
-# ============================================================================
-# SPECIAL SECTIONS (Not Configuration-Driven)
-# ============================================================================
+# ===================
+# SAVE FUNCTIONALITY
+# ===================
 
 
-def add_plan_header(container, plan_data):
-    """Add header with event classification"""
-    header = ColumnPanel(
-        background="linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-        foreground="black",
-        spacing="small",
+def add_save_button(container, event_plan_data):
+    """Add save button at the bottom"""
+
+    button_panel = ColumnPanel(
+        spacing="medium",
+        spacing_above="tiny",
+        spacing_below="medium",
     )
 
-    title = Label(
-        text="🎉 Event Options",
-        font_size=20,
-        bold=True,
-        foreground="black",
-        align="left",
+    # Selection summary
+    summary_label = m3.Text(
+        text="Select your preferred options above, then click Save",
+        font_size=13,
+        italic=True,
+        foreground="#666",
+        align="center",
     )
-    header.add_component(title)
-    container.add_component(header)
+    button_panel.add_component(summary_label)
+
+    # Save button
+    save_btn = m3.Button(
+        text="Save Selections",
+        align="center",
+        icon="mi:save",
+        appearance="filled",
+        size="large",
+    )
+    save_btn.tag.event_plan_data = event_plan_data  # Store full plan data
+
+    def on_save_click(**event_args):
+        save_selections(save_btn, event_plan_data)
+
+    save_btn.set_event_handler("click", on_save_click)
+    button_panel.add_component(save_btn)
+
+    container.add_component(button_panel)
 
 
-def add_key_considerations(container, considerations):
-    """Add key considerations section (always expanded)"""
-    section = m3.Card(appearance="outlined", spacing_above="small")
-    card_content = m3.CardContentContainer(margin="16px")
+def save_selections(save_btn, event_plan_data):
+    """Save selected options and all data to database"""
 
-    # Header
-    card_content.add_component(
-        Label(
-            text="🎯 Key Considerations", font_size=18, bold=True, foreground="#2e7d32"
+    # Get selections
+    selections = get_selected_options()
+
+    # Validate - check if user made selections
+    selectable_sections = [
+        key for key, config in SECTION_CONFIG.items() if config.get("selectable", False)
+    ]
+
+    # Check if at least one selection was made
+    if not selections:
+        alert("Please select at least one option before saving", title="No Selections")
+        return
+
+    # Show missing selections warning
+    missing = [
+        format_title(key)
+        for key in selectable_sections
+        if key not in selections and not SECTION_CONFIG[key].get("multi_select")
+    ]
+
+    if missing:
+        confirm_msg = (
+            f"You haven't selected: {', '.join(missing)}.\n\nDo you want to continue?"
         )
-    )
+        if not confirm(confirm_msg, title="Incomplete Selection"):
+            return
 
-    # Items
-    items_panel = ColumnPanel(spacing_above="none", spacing_below="none")
-    for item in considerations:
-        item_panel = FlowPanel(spacing_above="none", spacing_below="none")
-        item_panel.add_component(
-            Label(text="   ✓", foreground="#4caf50", font_size=16, bold=True)
-        )
-        item_panel.add_component(Label(text=item, font_size=14))
-        items_panel.add_component(item_panel)
+    # Prepare data for server
+    save_data = {
+        "selected_options": selections,
+        "timeline": event_plan_data.get("plan", {}).get("timeline", []),
+        "budget_breakdown": event_plan_data.get("plan", {}).get("budget_breakdown", []),
+        "full_plan": event_plan_data,  # Include full plan for reference
+    }
 
-    card_content.add_component(items_panel)
-    section.add_component(card_content)
-    container.add_component(section)
+    # Disable button and show loading
+    save_btn.enabled = False
+    save_btn.text = "⏳ Saving..."
+
+    try:
+        # Call server function
+        result = anvil.server.call("save_event_selections", save_data)
+
+        if result["success"]:
+            # Success notification
+            Notification(
+                f"✅ Saved! {result.get('tasks_saved', 0)} tasks, {result.get('budget_items_saved', 0)} budget items",
+                timeout=5,
+                style="success",
+            ).show()
+
+            # Navigate to event view
+            event_id = result.get("event_id")
+            if event_id:
+                from ... import Events
+
+                open_form("Events.EventView", event_id=event_id)
+        else:
+            alert(
+                f"Error saving selections:\n{result.get('error')}", title="Save Failed"
+            )
+            save_btn.enabled = True
+            save_btn.text = "💾 Save Selections"
+
+    except Exception as e:
+        print(f"Error saving selections: {e}")
+        alert(f"An error occurred:\n{str(e)}", title="Save Failed")
+        save_btn.enabled = True
+        save_btn.text = "💾 Save Selections"
+
+
+# =================
+# HELPER FUNCTIONS
+# =================
+
+
+def format_title(text):
+    """Format key to title"""
+    return text.replace("_", " ").title()
