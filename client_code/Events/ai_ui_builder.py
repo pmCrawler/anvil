@@ -41,17 +41,38 @@ import m3.components as m3
 # ============================================================================
 
 # Section configurations: defines how each section should be rendered
+# ============================================================================
+# CONFIGURATION with RANKING
+# ============================================================================
+
 SECTION_CONFIG = {
+    # Special sections (rendered separately)
+    "event_classification": {
+        "rank": 0,  # Header - rendered first
+        "renderer": "header",
+        "skip_in_plan": True,
+    },
+    "key_considerations": {
+        "rank": 1,
+        "title": "🎯 Key Considerations",
+        "color": "#2e7d32",
+        "renderer": "key_considerations",
+        "skip_in_plan": True,  # Handled separately
+    },
     # Social Celebration sections
     "themes": {
+        "rank": 2,
         "title": "🎨 Theme Options",
         "color": "#673ab7",
         "icon": "mi:palette",
         "initially_open": False,
         "renderer": "card_list",
         "card_type": "theme",
+        "selectable": True,
+        "selection_label": "Theme",
     },
     "decorations": {
+        "rank": 3,
         "title": "🎈 Decorations",
         "color": "#e91e63",
         "icon": "mi:celebration",
@@ -63,46 +84,65 @@ SECTION_CONFIG = {
             "diy_opportunities": {"label": "✂️ DIY Opportunities:", "color": "#388e3c"},
             "setup_tips": {"label": "💡 Setup Tips:", "style": "info_card"},
         },
+        "selectable": False,
     },
     "menu_options": {
+        "rank": 4,
         "title": "🍽️ Menu Options",
         "color": "#ff6f00",
         "icon": "mi:restaurant",
         "initially_open": False,
         "renderer": "card_list",
         "card_type": "menu",
+        "selectable": True,
+        "selection_label": "Menu",
     },
     "activities": {
+        "rank": 5,
         "title": "🎮 Activities",
         "color": "#9c27b0",
         "icon": "mi:sports_esports",
         "initially_open": True,
         "renderer": "card_list",
         "card_type": "activity",
+        "selectable": True,
+        "selection_label": "Activity",
+        "multi_select": True,
     },
     "timeline": {
+        "rank": 6,
         "title": "⏰ Event Timeline",
         "color": "#1976d2",
         "icon": "mi:schedule",
         "initially_open": True,
         "renderer": "timeline",
+        "selectable": False,
+        "save_to_table": True,
     },
     "budget_breakdown": {
+        "rank": 7,
         "title": "💰 Budget Breakdown",
         "color": "#4caf50",
         "icon": "mi:account_balance_wallet",
         "initially_open": True,
         "renderer": "budget",
+        "selectable": False,
+        "save_to_table": True,
     },
     "special_touches": {
+        "rank": 8,
         "title": "✨ Special Touches",
         "color": "#ffd700",
         "icon": "mi:star",
         "initially_open": False,
         "renderer": "simple_list",
+        "selectable": True,
+        "selection_label": "Special Touch",
+        "multi_select": True,
     },
     # Professional Gathering sections
     "agenda": {
+        "rank": 3,
         "title": "📋 Agenda",
         "color": "#1976d2",
         "icon": "mi:list_alt",
@@ -111,6 +151,7 @@ SECTION_CONFIG = {
         "card_type": "generic",
     },
     "networking_approach": {
+        "rank": 4,
         "title": "🤝 Networking",
         "color": "#388e3c",
         "icon": "mi:groups",
@@ -118,6 +159,7 @@ SECTION_CONFIG = {
         "renderer": "text",
     },
     "room_setup": {
+        "rank": 5,
         "title": "🏢 Room Setup",
         "color": "#ff9800",
         "icon": "mi:meeting_room",
@@ -125,6 +167,7 @@ SECTION_CONFIG = {
         "renderer": "text",
     },
     "tech_needs": {
+        "rank": 6,
         "title": "💻 Tech Requirements",
         "color": "#f44336",
         "icon": "mi:computer",
@@ -132,6 +175,7 @@ SECTION_CONFIG = {
         "renderer": "simple_list",
     },
     "refreshments": {
+        "rank": 7,
         "title": "☕ Refreshments",
         "color": "#795548",
         "icon": "mi:local_cafe",
@@ -139,6 +183,7 @@ SECTION_CONFIG = {
         "renderer": "simple_list",
     },
     "materials": {
+        "rank": 8,
         "title": "📄 Materials",
         "color": "#607d8b",
         "icon": "mi:description",
@@ -147,6 +192,7 @@ SECTION_CONFIG = {
     },
     # Intellectual Gathering sections
     "discussion_format": {
+        "rank": 3,
         "title": "💬 Discussion Format",
         "color": "#7b1fa2",
         "icon": "mi:forum",
@@ -154,6 +200,7 @@ SECTION_CONFIG = {
         "renderer": "text",
     },
     "preparation_guidelines": {
+        "rank": 4,
         "title": "📚 Preparation",
         "color": "#5e35b1",
         "icon": "mi:school",
@@ -161,6 +208,7 @@ SECTION_CONFIG = {
         "renderer": "simple_list",
     },
     "discussion_prompts": {
+        "rank": 5,
         "title": "💡 Discussion Prompts",
         "color": "#7b1fa2",
         "icon": "mi:lightbulb",
@@ -168,6 +216,7 @@ SECTION_CONFIG = {
         "renderer": "numbered_list",
     },
     "seating_arrangement": {
+        "rank": 6,
         "title": "🪑 Seating",
         "color": "#388e3c",
         "icon": "mi:event_seat",
@@ -175,14 +224,16 @@ SECTION_CONFIG = {
         "renderer": "text",
     },
     "materials_needed": {
+        "rank": 7,
         "title": "📖 Materials",
         "color": "#e64a19",
         "icon": "mi:book",
         "initially_open": False,
         "renderer": "simple_list",
     },
-    # Common sections
+    # Common sections (appear at end)
     "logistics": {
+        "rank": 98,
         "title": "Logistics",
         "color": "#3f51b5",
         "icon": "mi:local_shipping",
@@ -190,6 +241,7 @@ SECTION_CONFIG = {
         "renderer": "simple_list",
     },
     "contingency_notes": {
+        "rank": 99,
         "title": "Contingency Plans",
         "color": "#f44336",
         "icon": "mi:security",
@@ -197,6 +249,7 @@ SECTION_CONFIG = {
         "renderer": "simple_list",
     },
     "reasoning": {
+        "rank": 100,  # Last
         "title": "💭 AI Reasoning",
         "color": "#9c27b0",
         "icon": "mi:psychology",
@@ -205,7 +258,7 @@ SECTION_CONFIG = {
     },
 }
 
-# Card type configurations
+# Card type configurations (unchanged)
 CARD_TYPES = {
     "theme": {
         "title_key": "name",
@@ -245,23 +298,13 @@ CARD_TYPES = {
             },
         ],
     },
-    "generic": {
-        "fields": [
-            {"key": "*", "type": "auto"}  # Auto-detect all fields
-        ]
-    },
+    "generic": {"fields": [{"key": "*", "type": "auto"}]},
 }
-
-# ============================================================================
-# MAIN BUILDER
-# ============================================================================
-
 
 # ============================================================================
 # SELECTION STATE
 # ============================================================================
 
-# Global selection state (scoped to this module)
 _selected_options = {}
 
 
@@ -277,117 +320,116 @@ def clear_selections():
 
 
 # ============================================================================
-# CONFIGURATION
-# ============================================================================
-
-SECTION_CONFIG = {
-    "themes": {
-        "title": "🎨 Theme Options",
-        "color": "#673ab7",
-        "icon": "mi:palette",
-        "initially_open": False,
-        "renderer": "card_list",
-        "card_type": "theme",
-        "selectable": True,  # NEW: Enable selection
-        "selection_label": "Theme",
-    },
-    "decorations": {
-        "title": "🎈 Decorations",
-        "color": "#e91e63",
-        "icon": "mi:celebration",
-        "initially_open": True,
-        "renderer": "structured_list",
-        "subsections": {
-            "essential_items": {"label": "🔴 Essential Items:", "color": "#d32f2f"},
-            "optional_items": {"label": "🔵 Optional Items:", "color": "#1976d2"},
-            "diy_opportunities": {"label": "✂️ DIY Opportunities:", "color": "#388e3c"},
-            "setup_tips": {"label": "💡 Setup Tips:", "style": "info_card"},
-        },
-        "selectable": False,  # Not selectable - just informational
-    },
-    "menu_options": {
-        "title": "🍽️ Menu Options",
-        "color": "#ff6f00",
-        "icon": "mi:restaurant",
-        "initially_open": False,
-        "renderer": "card_list",
-        "card_type": "menu",
-        "selectable": True,  # NEW: Enable selection
-        "selection_label": "Menu",
-    },
-    "activities": {
-        "title": "🎮 Activities",
-        "color": "#9c27b0",
-        "icon": "mi:sports_esports",
-        "initially_open": True,
-        "renderer": "card_list",
-        "card_type": "activity",
-        "selectable": True,  # NEW: Enable multi-selection
-        "selection_label": "Activity",
-        "multi_select": True,  # Allow selecting multiple activities
-    },
-    "timeline": {
-        "title": "⏰ Event Timeline",
-        "color": "#1976d2",
-        "icon": "mi:schedule",
-        "initially_open": True,
-        "renderer": "timeline",
-        "selectable": False,  # Timeline is saved automatically
-        "save_to_table": True,  # Will be saved to tasks table
-    },
-    "budget_breakdown": {
-        "title": "💰 Budget Breakdown",
-        "color": "#4caf50",
-        "icon": "mi:account_balance_wallet",
-        "initially_open": True,
-        "renderer": "budget",
-        "selectable": False,  # Budget is saved automatically
-        "save_to_table": True,  # Will be saved to budget_items table
-    },
-    "special_touches": {
-        "title": "✨ Special Touches",
-        "color": "#ffd700",
-        "icon": "mi:star",
-        "initially_open": False,
-        "renderer": "simple_list",
-        "selectable": True,
-        "selection_label": "Special Touch",
-        "multi_select": True,
-    },
-    # ... rest of config stays the same
-}
-
-# ============================================================================
-# MAIN BUILDER
+# MAIN BUILDER (Updated with Sorting)
 # ============================================================================
 
 
 def build_event_plan_ui(event_plan_data, container):
     """
-    Build complete UI for EventPlan response with selection support
+    Build complete UI for EventPlan response with ordered sections
+
+    Sections are rendered in rank order (lowest rank first)
     """
 
     # Clear previous selections
     clear_selections()
 
-    # Add header
+    # Add header (rank 0)
     add_plan_header(container, event_plan_data)
 
-    # Key Considerations
+    # Key Considerations (rank 1)
     if "key_considerations" in event_plan_data:
         add_key_considerations(container, event_plan_data["key_considerations"])
 
-    # Process main plan section
+    # Process main plan section with sorting
     if "plan" in event_plan_data:
-        render_plan_sections(container, event_plan_data["plan"])
+        render_plan_sections_sorted(container, event_plan_data["plan"])
 
-    # Process root-level sections
-    for key in ["logistics", "contingency_notes", "reasoning"]:
-        if key in event_plan_data:
-            render_section(container, key, event_plan_data[key])
+    # Process root-level sections with sorting
+    root_sections = ["logistics", "contingency_notes", "reasoning"]
+    root_items = [
+        (key, event_plan_data[key]) for key in root_sections if key in event_plan_data
+    ]
+
+    # Sort by rank
+    root_items_sorted = sorted(
+        root_items,
+        key=lambda x: SECTION_CONFIG.get(x[0], {}).get("rank", 999),
+    )
+
+    # Render in order
+    for key, value in root_items_sorted:
+        render_section(container, key, value)
 
     # Add save button at the bottom
     add_save_button(container, event_plan_data)
+
+
+def render_plan_sections_sorted(container, plan_data):
+    """
+    Render all sections in the plan based on configuration and rank order
+
+    Args:
+        container: Parent container
+        plan_data: Plan dict (contains event_type and sections)
+    """
+
+    # Collect all sections with their rank
+    sections_with_rank = []
+
+    for key, value in plan_data.items():
+        if key == "event_type":
+            continue  # Skip event_type discriminator
+
+        # Get rank from config (default to 999 for unknown sections)
+        config = SECTION_CONFIG.get(key, {})
+        rank = config.get("rank", 999)
+
+        sections_with_rank.append((rank, key, value))
+
+    # Sort by rank (ascending)
+    sections_with_rank.sort(key=lambda x: x[0])
+
+    # Render in sorted order
+    for rank, key, value in sections_with_rank:
+        render_section(container, key, value)
+
+
+# ============================================================================
+# Rest of the code remains exactly the same
+# ============================================================================
+
+
+def render_section(container, section_key, content):
+    """
+    Render a section based on its configuration
+    """
+
+    config = SECTION_CONFIG.get(section_key)
+    if not config:
+        render_generic_section(container, section_key, content)
+        return
+
+    # Get renderer type
+    renderer = config.get("renderer", "auto")
+
+    # Route to appropriate renderer
+    if renderer == "card_list":
+        render_card_list_section(container, section_key, content, config)
+    elif renderer == "simple_list":
+        render_simple_list_section(container, section_key, content, config)
+    elif renderer == "numbered_list":
+        render_numbered_list_section(container, section_key, content, config)
+    elif renderer == "text":
+        render_text_section(container, section_key, content, config)
+    elif renderer == "timeline":
+        render_timeline_section(container, section_key, content, config)
+    elif renderer == "budget":
+        render_budget_section(container, section_key, content, config)
+    elif renderer == "structured_list":
+        render_structured_list_section(container, section_key, content, config)
+    else:
+        render_generic_section(container, section_key, content)
 
 
 # ============================================================================
@@ -681,9 +723,6 @@ def format_title(text):
     return text.replace("_", " ").title()
 
 
-# ... rest of the code remains the same (all the renderer functions, etc.)
-
-
 def render_plan_sections(container, plan_data):
     """
     Render all sections in the plan based on configuration
@@ -704,45 +743,6 @@ def render_plan_sections(container, plan_data):
         else:
             # Fallback: auto-detect rendering
             render_generic_section(container, key, value)
-
-
-def render_section(container, section_key, content):
-    """
-    Render a section based on its configuration
-
-    Args:
-        container: Parent container
-        section_key: Key in SECTION_CONFIG
-        content: Content to render
-    """
-
-    config = SECTION_CONFIG.get(section_key)
-    if not config:
-        # No config - use generic rendering
-        render_generic_section(container, section_key, content)
-        return
-
-    # Get renderer type
-    renderer = config.get("renderer", "auto")
-
-    # Route to appropriate renderer
-    if renderer == "card_list":
-        render_card_list_section(container, section_key, content, config)
-    elif renderer == "simple_list":
-        render_simple_list_section(container, section_key, content, config)
-    elif renderer == "numbered_list":
-        render_numbered_list_section(container, section_key, content, config)
-    elif renderer == "text":
-        render_text_section(container, section_key, content, config)
-    elif renderer == "timeline":
-        render_timeline_section(container, section_key, content, config)
-    elif renderer == "budget":
-        render_budget_section(container, section_key, content, config)
-    elif renderer == "structured_list":
-        render_structured_list_section(container, section_key, content, config)
-    else:
-        # Auto-detect
-        render_generic_section(container, section_key, content)
 
 
 # ============================================================================
@@ -1301,8 +1301,3 @@ def add_key_considerations(container, considerations):
     card_content.add_component(items_panel)
     section.add_component(card_content)
     container.add_component(section)
-
-
-def format_title(text):
-    """Format key to title"""
-    return text.replace("_", " ").title()
