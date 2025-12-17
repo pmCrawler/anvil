@@ -1,3 +1,5 @@
+# ClientModules/ai_ui_builder.py
+
 """
 Generic Dynamic UI Builder for AI Responses
 Configuration-driven, reusable, and loosely coupled
@@ -12,13 +14,14 @@ SECTION_CONFIG = ui_config.SECTION_CONFIG
 CARD_TYPES = ui_config.CARD_TYPES
 _selected_options = {}
 
+# ============================================================================
 # MAIN BUILDER (Updated with Sorting)
-
+# ============================================================================
 
 def build_event_plan_ui(event_plan_data, container):
     """
     Build complete UI for EventPlan response with ordered sections
-
+    
     Sections are rendered in rank order (lowest rank first)
     """
 
@@ -56,8 +59,9 @@ def build_event_plan_ui(event_plan_data, container):
     add_save_button(container, event_plan_data)
 
 
+# ============================================================================
 # SPECIAL SECTIONS (Not Configuration-Driven)
-
+# ============================================================================
 
 def add_plan_header(container, plan_data):
     """Add header with event classification"""
@@ -102,16 +106,15 @@ def add_key_considerations(container, considerations):
         )
         item_panel.add_component(Label(text=item, font_size=14))
         items_panel.add_component(item_panel)
-
+    
     card_content.add_component(items_panel)
     section.add_component(card_content)
     container.add_component(section)
 
 
-# ================
+# ============================================================================
 # SELECTION STATE
-# ================
-
+# ============================================================================
 
 def get_selected_options():
     """Get all selected options"""
@@ -124,36 +127,35 @@ def clear_selections():
     _selected_options = {}
 
 
-# =============================
-# SELECTION-ENABLED RENDERERS
-# =============================
-
+# ============================================================================
+# SECTION RENDERING WITH SORTING
+# ============================================================================
 
 def render_plan_sections_sorted(container, plan_data):
     """
     Render all sections in the plan based on configuration and rank order
-
+    
     Args:
         container: Parent container
         plan_data: Plan dict (contains event_type and sections)
     """
-
+    
     # Collect all sections with their rank
     sections_with_rank = []
-
+    
     for key, value in plan_data.items():
         if key == "event_type":
             continue  # Skip event_type discriminator
-
+        
         # Get rank from config (default to 999 for unknown sections)
         config = SECTION_CONFIG.get(key, {})
         rank = config.get("rank", 999)
-
+        
         sections_with_rank.append((rank, key, value))
-
+    
     # Sort by rank (ascending)
     sections_with_rank.sort(key=lambda x: x[0])
-
+    
     # Render in sorted order
     for rank, key, value in sections_with_rank:
         render_section(container, key, value)
@@ -162,16 +164,21 @@ def render_plan_sections_sorted(container, plan_data):
 def render_section(container, section_key, content):
     """
     Render a section based on its configuration
+    
+    Args:
+        container: Parent container
+        section_key: Key in SECTION_CONFIG
+        content: Content to render
     """
-
+    
     config = SECTION_CONFIG.get(section_key)
     if not config:
         render_generic_section(container, section_key, content)
         return
-
+    
     # Get renderer type
     renderer = config.get("renderer", "auto")
-
+    
     # Route to appropriate renderer
     if renderer == "card_list":
         render_card_list_section(container, section_key, content, config)
@@ -191,25 +198,29 @@ def render_section(container, section_key, content):
         render_generic_section(container, section_key, content)
 
 
+# ============================================================================
+# SELECTION-ENABLED RENDERERS
+# ============================================================================
+
 def render_card_list_section(container, section_key, items, config):
     """Render section with list of cards - now with selection support"""
-
+    
     if not isinstance(items, list):
         items = [items]
-
+    
     # Get card type config
     card_type = config.get("card_type", "generic")
     card_config = CARD_TYPES.get(card_type, CARD_TYPES["generic"])
-
+    
     # Check if selectable
     is_selectable = config.get("selectable", False)
     is_multi_select = config.get("multi_select", False)
     selection_label = config.get("selection_label", "Option")
-
+    
     # Create accordion
     accordion = create_accordion_container(config, len(items))
     header_container, header_btn, content_panel = accordion
-
+    
     # Add selection instruction if selectable
     if is_selectable:
         instruction_text = f"Select {'one or more' if is_multi_select else 'one'} {selection_label.lower()}:"
@@ -223,7 +234,7 @@ def render_card_list_section(container, section_key, items, config):
                 spacing_below="small",
             )
         )
-
+    
     # Create cards with selection
     for i, item in enumerate(items, 1):
         if is_selectable:
@@ -232,13 +243,13 @@ def render_card_list_section(container, section_key, items, config):
             )
         else:
             card = create_configured_card(item, i, card_config)
-
+        
         content_panel.add_component(card)
-
+    
     # Assemble
     card_content = m3.CardContentContainer(margin="16px")
     card_content.add_component(content_panel)
-
+    
     container.add_component(header_container, full_width_row=True)
     container.add_component(card_content)
 
@@ -246,35 +257,43 @@ def render_card_list_section(container, section_key, items, config):
 def create_selectable_card(
     item, index, card_config, section_key, selection_label, is_multi_select
 ):
-    """Create a card with selection capability"""
-
+    """
+    Create a card with selection capability
+    
+    FIXED: Each section now has its own unique radio button group
+    """
+    
     # Outer container for selection state
     card_container = ColumnPanel(spacing_above="small", spacing_below="none")
-
+    
     # Card itself
     card = m3.Card(appearance="outlined")
     card_content = m3.CardContentContainer(margin="16px")
-
+    
     # Selection control (Radio or Checkbox)
     selection_control = None
-
+    
     if is_multi_select:
         # Checkbox for multi-select
         selection_control = CheckBox(
-            text=f"{selection_label} #{index}", bold=True, font_size=14, checked=False
+            text=f"{selection_label} #{index}", 
+            bold=True, 
+            font_size=14, 
+            checked=False
         )
     else:
         # Radio button for single select
+        # FIX: Use section_key as group_name to ensure each section has its own group
         selection_control = m3.RadioButton(
             text=f"{selection_label} #{index}",
-            group_name=section_key,
+            group_name=f"radio_group_{section_key}",  # UNIQUE per section
             value=f"{section_key}_{index}",
             bold=True,
             font_size=14,
         )
-
+    
     card_content.add_component(selection_control)
-
+    
     # Card title (if configured)
     title_key = card_config.get("title_key")
     if title_key and title_key in item:
@@ -287,29 +306,29 @@ def create_selectable_card(
                 spacing_above="small",
             )
         )
-
+    
     # Card fields
     fields = card_config.get("fields", [])
     for field in fields:
         key = field["key"]
-
+        
         if key == "*":
             for k, v in item.items():
                 if k != title_key:
                     render_field(card_content, k, v, {"type": "auto"})
             continue
-
+        
         if key not in item:
             continue
-
+        
         if field.get("skip_if_empty") and not item[key]:
             continue
-
+        
         render_field(card_content, key, item[key], field)
-
+    
     card.add_component(card_content)
     card_container.add_component(card)
-
+    
     # Selection handler
     def on_selection_changed(**event_args):
         if is_multi_select:
@@ -333,58 +352,36 @@ def create_selectable_card(
                 _selected_options[section_key] = item
                 # Highlight selected card
                 card.appearance = "filled"
-
-                # Unhighlight others (find siblings)
+                
+                # Unhighlight other cards in this section only
                 parent = card_container.parent
-                for sibling in parent.get_components():
-                    if sibling != card_container:
-                        for child in sibling.get_components():
-                            if isinstance(child, m3.Card):
-                                child.appearance = "outlined"
-
+                if parent:
+                    for sibling in parent.get_components():
+                        if sibling != card_container:
+                            for child in sibling.get_components():
+                                if isinstance(child, m3.Card):
+                                    child.appearance = "outlined"
+    
     if is_multi_select:
         selection_control.set_event_handler("change", on_selection_changed)
     else:
         selection_control.set_event_handler("x-change", on_selection_changed)
-
+    
     return card_container
 
 
-# ==================
+# ============================================================================
 # SECTION RENDERERS
-# ==================
-
-
-def render_plan_sections(container, plan_data):
-    """
-    Render all sections in the plan based on configuration
-
-    Args:
-        container: Parent container
-        plan_data: Plan dict (contains event_type and sections)
-    """
-
-    # Iterate through all keys in plan_data
-    for key, value in plan_data.items():
-        if key == "event_type":
-            continue  # Skip event_type discriminator
-
-        # Render section if it has a configuration
-        if key in SECTION_CONFIG:
-            render_section(container, key, value)
-        else:
-            # Fallback: auto-detect rendering
-            render_generic_section(container, key, value)
-
+# ============================================================================
 
 def render_simple_list_section(container, section_key, items, config):
     """Render simple bullet list"""
-
+    
     accordion = create_accordion_container(
         config, len(items) if isinstance(items, list) else None
     )
     header_container, header_btn, content_panel = accordion
-
+    
     # Handle different content types
     if isinstance(items, list):
         for item in items:
@@ -392,23 +389,23 @@ def render_simple_list_section(container, section_key, items, config):
             content_panel.add_component(bullet)
     else:
         content_panel.add_component(Label(text=str(items), font_size=13))
-
+    
     # Assemble
     card_content = m3.CardContentContainer(margin="16px")
     card_content.add_component(content_panel)
-
+    
     container.add_component(header_container, full_width_row=True)
     container.add_component(card_content)
 
 
 def render_numbered_list_section(container, section_key, items, config):
     """Render numbered list in cards"""
-
+    
     accordion = create_accordion_container(
         config, len(items) if isinstance(items, list) else None
     )
     header_container, header_btn, content_panel = accordion
-
+    
     if isinstance(items, list):
         for i, item in enumerate(items, 1):
             card = m3.Card(appearance="outlined", spacing_above="small")
@@ -416,43 +413,43 @@ def render_numbered_list_section(container, section_key, items, config):
             card_content.add_component(Label(text=f"{i}. {item}", font_size=13))
             card.add_component(card_content)
             content_panel.add_component(card)
-
+    
     # Assemble
     card_content = m3.CardContentContainer(margin="16px")
     card_content.add_component(content_panel)
-
+    
     container.add_component(header_container, full_width_row=True)
     container.add_component(card_content)
 
 
 def render_text_section(container, section_key, text, config):
     """Render simple text content"""
-
+    
     accordion = create_accordion_container(config)
     header_container, header_btn, content_panel = accordion
-
+    
     content_panel.add_component(Label(text=str(text), font_size=13))
-
+    
     # Assemble
     card_content = m3.CardContentContainer(margin="16px")
     card_content.add_component(content_panel)
-
+    
     container.add_component(header_container, full_width_row=True)
     container.add_component(card_content)
 
 
 def render_timeline_section(container, section_key, timeline_items, config):
     """Render timeline with alternating cards"""
-
+    
     accordion = create_accordion_container(config, len(timeline_items))
     header_container, header_btn, content_panel = accordion
-
+    
     for i, item in enumerate(timeline_items):
         timeline_card = m3.Card(
             appearance="filled" if i % 2 == 0 else "outlined", spacing_above="small"
         )
         timeline_content = m3.CardContentContainer(margin="12px")
-
+        
         # Time and activity
         time_panel = FlowPanel(spacing="small")
         time_panel.add_component(
@@ -465,7 +462,7 @@ def render_timeline_section(container, section_key, timeline_items, config):
         )
         time_panel.add_component(Label(text=item.get("activity", ""), font_size=13))
         timeline_content.add_component(time_panel)
-
+        
         # Responsible party (if present)
         if "responsible_party" in item and item["responsible_party"]:
             timeline_content.add_component(
@@ -477,24 +474,24 @@ def render_timeline_section(container, section_key, timeline_items, config):
                     spacing_above="tiny",
                 )
             )
-
+        
         timeline_card.add_component(timeline_content)
         content_panel.add_component(timeline_card)
-
+    
     # Assemble
     card_content = m3.CardContentContainer(margin="16px")
     card_content.add_component(content_panel)
-
+    
     container.add_component(header_container, full_width_row=True)
     container.add_component(card_content)
 
 
 def render_budget_section(container, section_key, budget_items, config):
     """Render budget with progress bars"""
-
+    
     accordion = create_accordion_container(config, len(budget_items))
     header_container, header_btn, content_panel = accordion
-
+    
     # Total card
     total = sum(item["amount"] for item in budget_items)
     total_card = m3.Card(appearance="filled", spacing_above="small")
@@ -509,35 +506,35 @@ def render_budget_section(container, section_key, budget_items, config):
     )
     total_card.add_component(total_content)
     content_panel.add_component(total_card)
-
+    
     # Budget item cards
     for item in budget_items:
         budget_card = create_budget_card(item)
         content_panel.add_component(budget_card)
-
+    
     # Assemble
     card_content = m3.CardContentContainer(margin="16px")
     card_content.add_component(content_panel)
-
+    
     container.add_component(header_container, full_width_row=True)
     container.add_component(card_content)
 
 
 def render_structured_list_section(container, section_key, content_dict, config):
     """Render structured content with subsections (e.g., decorations)"""
-
+    
     accordion = create_accordion_container(config)
     header_container, header_btn, content_panel = accordion
-
+    
     subsections = config.get("subsections", {})
-
+    
     for key, value in content_dict.items():
         if key not in subsections:
             continue
-
+        
         subsection_config = subsections[key]
         label_text = subsection_config.get("label", format_title(key))
-
+        
         # Subsection header
         content_panel.add_component(
             Label(
@@ -548,7 +545,7 @@ def render_structured_list_section(container, section_key, content_dict, config)
                 spacing_above="small",
             )
         )
-
+        
         # Subsection content
         if subsection_config.get("style") == "info_card":
             # Special info card
@@ -565,25 +562,25 @@ def render_structured_list_section(container, section_key, content_dict, config)
         else:
             # Plain text
             content_panel.add_component(Label(text=str(value), font_size=13))
-
+    
     # Assemble
     card_content = m3.CardContentContainer(margin="16px")
     card_content.add_component(content_panel)
-
+    
     container.add_component(header_container, full_width_row=True)
     container.add_component(card_content)
 
 
 def render_generic_section(container, section_key, content):
     """Fallback generic renderer - auto-detect content type"""
-
+    
     # Create default config
     default_config = {
         "title": format_title(section_key),
         "color": "#2196f3",
         "initially_open": False,
     }
-
+    
     # Auto-detect and render
     if isinstance(content, list):
         render_simple_list_section(container, section_key, content, default_config)
@@ -591,14 +588,14 @@ def render_generic_section(container, section_key, content):
         # Render as key-value pairs
         accordion = create_accordion_container(default_config)
         header_container, header_btn, content_panel = accordion
-
+        
         for key, value in content.items():
             row = create_key_value_row(key, value)
             content_panel.add_component(row)
-
+        
         card_content = m3.CardContentContainer(margin="16px")
         card_content.add_component(content_panel)
-
+        
         container.add_component(header_container, full_width_row=True)
         container.add_component(card_content)
     else:
@@ -606,25 +603,24 @@ def render_generic_section(container, section_key, content):
         render_text_section(container, section_key, content, default_config)
 
 
-# ====================
+# ============================================================================
 # REUSABLE COMPONENTS
-# ====================
-
+# ============================================================================
 
 def create_accordion_container(config, item_count=None):
     """
     Create accordion header and content panel with toggle
     Returns: (header_container, header_btn, content_panel)
     """
-
+    
     title = config.get("title", "Section")
     color = config.get("color", "#2196f3")
     initially_open = config.get("initially_open", False)
-
+    
     # Add count to title if provided
     if item_count is not None:
         title = f"{title} ({item_count} items)"
-
+    
     # Header container
     header_container = ColumnPanel(
         background="theme:Surface Variant"
@@ -633,7 +629,7 @@ def create_accordion_container(config, item_count=None):
         spacing_above="none",
         spacing_below="none",
     )
-
+    
     # Header button
     header_btn = m3.Link(
         text=title,
@@ -645,53 +641,53 @@ def create_accordion_container(config, item_count=None):
         bold=True,
         foreground=color,
     )
-
+    
     if initially_open:
         header_btn.background = "theme:Surface Variant"
         header_btn.role = "filled-button"
-
+    
     header_container.add_component(header_btn)
-
+    
     # Content panel
     content_panel = ColumnPanel(
         visible=initially_open, spacing_above="none", spacing_below="none"
     )
-
+    
     # Toggle functionality
     is_expanded = {"value": initially_open}
-
+    
     def toggle(**event_args):
         is_expanded["value"] = not is_expanded["value"]
         content_panel.visible = is_expanded["value"]
         header_btn.icon = (
             "mi:arrow_drop_down" if is_expanded["value"] else "mi:arrow_right"
         )
-
+        
         if is_expanded["value"]:
             header_btn.background = "theme:Surface Variant"
             header_btn.role = "filled-button"
         else:
             header_btn.background = ""
             header_btn.role = None
-
+    
     header_btn.set_event_handler("click", toggle)
-
+    
     return (header_container, header_btn, content_panel)
 
 
 def create_configured_card(item, index, card_config):
     """
     Create card based on card configuration
-
+    
     Args:
         item: Dict with item data
         index: Item number
         card_config: Card type configuration
     """
-
+    
     card = m3.Card(appearance="outlined", spacing_above="small")
     card_content = m3.CardContentContainer(margin="16px")
-
+    
     # Card title (if configured)
     title_key = card_config.get("title_key")
     if title_key and title_key in item:
@@ -703,55 +699,55 @@ def create_configured_card(item, index, card_config):
                 foreground="#673ab7",
             )
         )
-
+    
     # Card fields
     fields = card_config.get("fields", [])
-
+    
     for field in fields:
         key = field["key"]
         field_type = field["type"]
-
+        
         # Handle wildcard (all fields)
         if key == "*":
             for k, v in item.items():
                 if k != title_key:  # Skip title key
                     render_field(card_content, k, v, {"type": "auto"})
             continue
-
+        
         # Skip if field not in item
         if key not in item:
             continue
-
+        
         # Skip if empty and skip_if_empty flag set
         if field.get("skip_if_empty") and not item[key]:
             continue
-
+        
         # Render field
         render_field(card_content, key, item[key], field)
-
+    
     card.add_component(card_content)
     return card
 
 
 def render_field(container, key, value, field_config):
     """Render a single field based on its type"""
-
+    
     field_type = field_config.get("type", "auto")
-
+    
     # Auto-detect type
     if field_type == "auto":
         if isinstance(value, list):
             field_type = "bullet_list"
         else:
             field_type = "text"
-
+    
     # Render based on type
     if field_type == "text":
         label = Label(text=str(value), font_size=13, spacing_above="small")
         if field_config.get("italic"):
             label.italic = True
         container.add_component(label)
-
+    
     elif field_type == "inline":
         # Inline with prefix (e.g., "⏱️ 30 minutes")
         prefix = field_config.get("prefix", "")
@@ -763,13 +759,13 @@ def render_field(container, key, value, field_config):
                 spacing_above="small",
             )
         )
-
+    
     elif field_type == "key_value":
         row = FlowPanel(spacing="tiny", spacing_above="small")
         row.add_component(Label(text=f"{format_title(key)}:", bold=True, font_size=12))
         row.add_component(Label(text=str(value), font_size=12))
         container.add_component(row)
-
+    
     elif field_type == "bullet_list":
         # List label
         if "label" in field_config:
@@ -781,17 +777,17 @@ def render_field(container, key, value, field_config):
                     spacing_above="small",
                 )
             )
-
+        
         # List items
         for item in value:
             bullet = create_bullet_item(item)
             container.add_component(bullet)
-
+    
     elif field_type == "color_palette":
         # Special color palette rendering
         colors_panel = FlowPanel(spacing="small", spacing_above="small")
         colors_panel.add_component(Label(text="Colors:", bold=True, font_size=12))
-
+        
         for color in value:
             color_value = (
                 color
@@ -807,7 +803,7 @@ def render_field(container, key, value, field_config):
             )
             colors_panel.add_component(color_box)
             colors_panel.add_component(Label(text=color, font_size=11))
-
+        
         container.add_component(colors_panel)
 
 
@@ -834,7 +830,7 @@ def create_budget_card(item):
     """Create budget item card with progress bar"""
     card = m3.Card(appearance="outlined", spacing_above="small")
     card_content = m3.CardContentContainer(margin="12px")
-
+    
     # Header
     header = FlowPanel(spacing="small")
     header.add_component(Label(text=item["category"], font_size=14, bold=True))
@@ -847,7 +843,7 @@ def create_budget_card(item):
         )
     )
     card_content.add_component(header)
-
+    
     # Percentage
     percentage = item["percentage"]
     card_content.add_component(
@@ -858,13 +854,13 @@ def create_budget_card(item):
             spacing_above="tiny",
         )
     )
-
+    
     # Progress bar
     bar_container = ColumnPanel(background="#e0e0e0", spacing_above="small")
     bar_fill = Label(text="  ", background="#4caf50")
     bar_container.add_component(bar_fill)
     card_content.add_component(bar_container)
-
+    
     # Notes
     if "notes" in item and item["notes"]:
         card_content.add_component(
@@ -876,27 +872,26 @@ def create_budget_card(item):
                 spacing_above="small",
             )
         )
-
+    
     card.add_component(card_content)
     return card
 
 
-# ===================
+# ============================================================================
 # SAVE FUNCTIONALITY
-# ===================
-
+# ============================================================================
 
 def add_save_button(container, event_plan_data):
     """Add save button at the bottom"""
-
+    
     button_panel = ColumnPanel(
         spacing="medium",
-        spacing_above="tiny",
+        spacing_above="large",
         spacing_below="medium",
     )
-
+    
     # Selection summary
-    summary_label = m3.Text(
+    summary_label = Label(
         text="Select your preferred options above, then click Save",
         font_size=13,
         italic=True,
@@ -904,72 +899,79 @@ def add_save_button(container, event_plan_data):
         align="center",
     )
     button_panel.add_component(summary_label)
-
+    
     # Save button
     save_btn = m3.Button(
-        text="Save Selections",
+        text="💾 Save Selections",
         align="center",
         icon="mi:save",
         appearance="filled",
         size="large",
     )
     save_btn.tag.event_plan_data = event_plan_data  # Store full plan data
-
+    
     def on_save_click(**event_args):
         save_selections(save_btn, event_plan_data)
-
+    
     save_btn.set_event_handler("click", on_save_click)
     button_panel.add_component(save_btn)
-
+    
     container.add_component(button_panel)
 
 
 def save_selections(save_btn, event_plan_data):
     """Save selected options and all data to database"""
-
+    
     # Get selections
     selections = get_selected_options()
-
+    
     # Validate - check if user made selections
     selectable_sections = [
         key for key, config in SECTION_CONFIG.items() if config.get("selectable", False)
     ]
-
+    
     # Check if at least one selection was made
     if not selections:
         alert("Please select at least one option before saving", title="No Selections")
         return
-
+    
     # Show missing selections warning
     missing = [
         format_title(key)
         for key in selectable_sections
         if key not in selections and not SECTION_CONFIG[key].get("multi_select")
     ]
-
+    
     if missing:
         confirm_msg = (
             f"You haven't selected: {', '.join(missing)}.\n\nDo you want to continue?"
         )
         if not confirm(confirm_msg, title="Incomplete Selection"):
             return
-
+    
+    # Get event_id from plan data
+    event_id = event_plan_data.get('event_id')
+    
+    if not event_id:
+        alert("Error: Event ID not found. Please try again.", title="Save Failed")
+        return
+    
     # Prepare data for server
     save_data = {
-        "selected_options": selections,
-        "timeline": event_plan_data.get("plan", {}).get("timeline", []),
-        "budget_breakdown": event_plan_data.get("plan", {}).get("budget_breakdown", []),
-        "full_plan": event_plan_data,  # Include full plan for reference
+        'event_id': event_id,
+        'selected_options': selections,
+        'timeline': event_plan_data.get('plan', {}).get('timeline', []),
+        'budget_breakdown': event_plan_data.get('plan', {}).get('budget_breakdown', []),
     }
-
+    
     # Disable button and show loading
     save_btn.enabled = False
     save_btn.text = "⏳ Saving..."
-
+    
     try:
         # Call server function
         result = anvil.server.call("save_event_selections", save_data)
-
+        
         if result["success"]:
             # Success notification
             Notification(
@@ -977,20 +979,17 @@ def save_selections(save_btn, event_plan_data):
                 timeout=5,
                 style="success",
             ).show()
-
+            
             # Navigate to event view
-            event_id = result.get("event_id")
-            if event_id:
-                from ... import Events
-
-                open_form("Events.EventView", event_id=event_id)
+            from ... import Events
+            open_form("Events.EventView", event_id=event_id)
         else:
             alert(
                 f"Error saving selections:\n{result.get('error')}", title="Save Failed"
             )
             save_btn.enabled = True
             save_btn.text = "💾 Save Selections"
-
+    
     except Exception as e:
         print(f"Error saving selections: {e}")
         alert(f"An error occurred:\n{str(e)}", title="Save Failed")
@@ -998,10 +997,9 @@ def save_selections(save_btn, event_plan_data):
         save_btn.text = "💾 Save Selections"
 
 
-# =================
+# ============================================================================
 # HELPER FUNCTIONS
-# =================
-
+# ============================================================================
 
 def format_title(text):
     """Format key to title"""
