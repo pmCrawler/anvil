@@ -566,7 +566,6 @@ def add_save_button(container, event_plan_data):
         spacing="medium",
         spacing_above="large",
         spacing_below="medium",
-        align="center",
     )
 
     # Selection summary
