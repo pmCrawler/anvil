@@ -798,10 +798,12 @@ def render_field(container, key, value, field_config):
                 if color.startswith("#")
                 else f"#{color}"
                 if len(color) == 6
-                else color
+                else color.replace(" ", "")
             )
             color_box = Label(
-                text="    ", background=color_value, border="1px solid #ccc"
+                text="    ",
+                background=color_value.replace(" ", ""),
+                border="1px solid #ccc",
             )
             colors_panel.add_component(color_box)
             colors_panel.add_component(Label(text=color, font_size=11))
