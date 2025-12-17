@@ -18,7 +18,6 @@ class EventForm(EventFormTemplate):
     def __init__(self, **properties):
         self.init_components(**properties)
 
-        self.btn_save.visible = False
         self.cpanel_options.visible = False
         self.user_input = dict()
         self.event_id = None  # Store event ID
@@ -54,7 +53,7 @@ class EventForm(EventFormTemplate):
         with anvil.server.no_loading_indicator:
             Notification(
                 "🤖 AI is creating your event plan...",
-                timeout=5,
+                timeout=3,
                 style="info",
             ).show()
 
@@ -77,7 +76,6 @@ class EventForm(EventFormTemplate):
 
                 ai_ui_builder.build_event_plan_ui(ai_plan_data, self.cpanel_options)
                 self.cpanel_options.visible = True
-                self.btn_save.visible = True
 
                 # Success notification
                 Notification(
@@ -100,8 +98,8 @@ class EventForm(EventFormTemplate):
             self.btn_start.enabled = True
             self.btn_start.text = "🎉 Start Planning"
 
-    def btn_save_click(self, **event_args):
-        """This method is called when the component is clicked."""
+    # def btn_save_click(self, **event_args):
+    #     """This method is called when the component is clicked."""
 
-        # FOR TESTING ONLY
-        open_form("Events.EventView", event_id=4270964888)
+    #     # FOR TESTING ONLY
+    #     open_form("Events.EventView", event_id=4270964888)

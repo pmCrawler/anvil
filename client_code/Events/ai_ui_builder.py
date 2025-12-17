@@ -562,24 +562,29 @@ def create_selectable_card(
 def add_save_button(container, event_plan_data):
     """Add save button at the bottom"""
 
-    button_panel = LinearPanel(
+    button_panel = ColumnPanel(
         spacing="medium",
-        spacing_above="large",
+        spacing_above="tiny",
         spacing_below="medium",
     )
 
     # Selection summary
-    summary_label = Label(
+    summary_label = m3.Text(
         text="Select your preferred options above, then click Save",
         font_size=13,
         italic=True,
         foreground="#666",
+        align="center",
     )
     button_panel.add_component(summary_label)
 
     # Save button
     save_btn = m3.Button(
-        text="💾 Save Selections", icon="mi:save", appearance="filled", size="large"
+        text="Save Selections",
+        align="center",
+        icon="mi:save",
+        appearance="filled",
+        size="large",
     )
     save_btn.tag.event_plan_data = event_plan_data  # Store full plan data
 
