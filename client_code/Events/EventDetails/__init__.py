@@ -110,7 +110,7 @@ class EventDetails(EventDetailsTemplate):
                 text=self.event_data["title"],
                 font_size=28,
                 bold=True,
-                foreground="white",
+                # foreground="white"
             )
         )
 
@@ -128,7 +128,7 @@ class EventDetails(EventDetailsTemplate):
             font_size=12,
             bold=True,
             background=status_colors.get(status, "#757575"),
-            foreground="white",
+            # foreground="white"
             spacing="small",
         )
         title_row.add_component(status_badge)
@@ -141,7 +141,7 @@ class EventDetails(EventDetailsTemplate):
                 Label(
                     text=self.event_data["description"],
                     font_size=15,
-                    foreground="white",
+                    # foreground="white"
                     italic=True,
                 )
             )
@@ -160,7 +160,7 @@ class EventDetails(EventDetailsTemplate):
                     if hasattr(event_date, "strftime")
                     else str(event_date),
                     font_size=14,
-                    foreground="white",
+                    # foreground="white"
                     bold=True,
                 )
             )
@@ -189,7 +189,11 @@ class EventDetails(EventDetailsTemplate):
     def add_quick_stats(self):
         """Add quick stats cards"""
 
-        stats_panel = FlowPanel(spacing="medium", align="left", spacing_above="medium")
+        stats_panel = FlowPanel(
+            spacing="medium",
+            align="left",
+            spacing_above="medium",
+        )
 
         # Guest Count
         stats_panel.add_component(
@@ -249,7 +253,10 @@ class EventDetails(EventDetailsTemplate):
 
             stats_panel.add_component(
                 self.create_stat_card(
-                    icon="📆", value=days_text, label="Until Event", color=color
+                    icon="📆",
+                    value=days_text,
+                    label="Until Event",
+                    color=color,
                 )
             )
 
@@ -258,7 +265,7 @@ class EventDetails(EventDetailsTemplate):
     def create_stat_card(self, icon, value, label, color):
         """Create a stat card"""
 
-        card = m3.Card(appearance="outlined")
+        card = m3.Card(appearance="elevated")
         card_content = m3.CardContentContainer(margin="16px")
 
         # Icon
@@ -753,7 +760,7 @@ class EventDetails(EventDetailsTemplate):
                     font_size=10,
                     bold=True,
                     background="#4caf50",
-                    foreground="white",
+                    # foreground="white"
                 )
             )
 
@@ -872,7 +879,7 @@ class EventDetails(EventDetailsTemplate):
 
         # Back button
         back_btn = m3.Button(
-            text="← Back to Events", icon="mi:arrow_back", appearance="outlined"
+            text=" Back to Events", icon="mi:arrow_back", appearance="outlined"
         )
         back_btn.set_event_handler("click", lambda **e: open_form("Events"))
         button_panel.add_component(back_btn)
