@@ -24,20 +24,22 @@ class EventsList(EventsListTemplate):
     def load_events(self):
         """Load user's events from server"""
 
-        with Notification("Loading events...", timeout=None):
-            try:
-                result = anvil.server.call(
-                    "get_user_events", self.filter_status, self.sort_by
-                )
+        # with Notification("Loading events...", timeout=None):
+        try:
+            result = anvil.server.call(
+                "get_user_events",
+                self.filter_status,
+                self.sort_by,
+            )
 
-                if result["success"]:
-                    self.events = result["events"]
-                    self.render_event_list()
-                else:
-                    alert(f"Error loading events: {result.get('error')}", title="Error")
-            except Exception as e:
-                print(f"Error loading events: {e}")
-                alert(f"Failed to load events: {str(e)}", title="Error")
+            if result["success"]:
+                self.events = result["events"]
+                self.render_event_list()
+            else:
+                alert(f"Error loading events: {result.get('error')}", title="Error")
+        except Exception as e:
+            print(f"Error loading events: {e}")
+            alert(f"Failed to load events: {str(e)}", title="Error")
 
     def render_event_list(self):
         """Render the event list with filters and cards"""
@@ -368,32 +370,39 @@ class EventsList(EventsListTemplate):
         card_content.add_component(Spacer(height=8))
 
         # Action Buttons
-        actions_row = FlowPanel(spacing="small", spacing_above="small")
+        actions_row = FlowPanel(
+            spacing="small",
+            spacing_above="small",
+        )
 
         # View Details button
         view_btn = m3.Button(
-            text="View Details", icon="mi:visibility", appearance="filled", size="small"
+            text="Details",
+            icon="mi:visibility",
+            appearance="filled",
+            size="tiny",
+            align="center",
         )
         view_btn.tag.event_id = event["id"]
         view_btn.set_event_handler("click", self.view_event_details)
-        actions_row.add_component(view_btn)
+        actions_row.add_component(view_btn, width="100%")
 
-        # Edit button
-        edit_btn = m3.Button(
-            text="Edit", icon="mi:edit", appearance="outlined", size="small"
-        )
-        edit_btn.tag.event_id = event["id"]
-        edit_btn.set_event_handler("click", self.edit_event)
-        actions_row.add_component(edit_btn)
+        # # Edit button
+        # edit_btn = m3.Button(
+        #     text="Edit", icon="mi:edit", appearance="outlined", size="small"
+        # )
+        # edit_btn.tag.event_id = event["id"]
+        # edit_btn.set_event_handler("click", self.edit_event)
+        # actions_row.add_component(edit_btn)
 
-        # Delete button
-        delete_btn = m3.Button(
-            text="", icon="mi:delete", appearance="outlined", size="small"
-        )
-        delete_btn.foreground = "#f44336"
-        delete_btn.tag.event_id = event["id"]
-        delete_btn.set_event_handler("click", self.delete_event)
-        actions_row.add_component(delete_btn)
+        # # Delete button
+        # delete_btn = m3.Button(
+        #     text="", icon="mi:delete", appearance="outlined", size="small"
+        # )
+        # delete_btn.foreground = "#f44336"
+        # delete_btn.tag.event_id = event["id"]
+        # delete_btn.set_event_handler("click", self.delete_event)
+        # actions_row.add_component(delete_btn)
 
         card_content.add_component(actions_row)
 
@@ -422,7 +431,11 @@ class EventsList(EventsListTemplate):
             status, {"text": status.upper(), "bg": "#757575", "icon": "•"}
         )
 
-        badge_panel = FlowPanel(spacing="tiny", align="right", spacing_below="small")
+        badge_panel = FlowPanel(
+            spacing="tiny",
+            align="right",
+            spacing_below="small",
+        )
         badge = Label(
             text=f"{config['icon']} {config['text']}",
             font_size=10,
@@ -670,7 +683,7 @@ class EventsList(EventsListTemplate):
         if event_id is None:
             event_id = event_args["sender"].tag.event_id
 
-        open_form("Events.EventView", event_id=event_id)
+        open_form("Events.EventDetails", event_id=event_id)
 
     def edit_event(self, **event_args):
         """Edit event"""

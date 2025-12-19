@@ -884,7 +884,7 @@ class EventDetails(EventDetailsTemplate):
         back_btn = m3.Button(
             text=" Back to Events", icon="mi:arrow_back", appearance="outlined"
         )
-        back_btn.set_event_handler("click", lambda **e: open_form("Events"))
+        back_btn.set_event_handler("click", lambda **e: open_form("Events.EventsList"))
         button_panel.add_component(back_btn)
 
         # Edit button

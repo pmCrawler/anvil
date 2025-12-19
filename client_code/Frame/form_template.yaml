@@ -6,7 +6,7 @@ components_by_slot:
       event_bindings: {}
       layout_properties: {full_width_row: false, grid_position: 'FXGWZZ,JICMPZ'}
       name: nav_link_events
-      properties: {badge: false, bold: true, font_size: '12', icon: 'mi:event_upcoming', icon_color: 'theme:Primary', navigate_to: Events.EventList, selected: false, text: Events, text_color: 'theme:Tertiary'}
+      properties: {badge: false, bold: true, font_size: '12', icon: 'mi:event_upcoming', icon_color: 'theme:Primary', navigate_to: Events.EventsList, selected: false, text: Events, text_color: 'theme:Tertiary'}
       type: form:dep_lin1x4oec0ytd:_Components.NavigationLink
     - event_bindings: {}
       layout_properties: {grid_position: 'LWOOZU,IMLOCE'}
