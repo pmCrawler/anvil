@@ -304,7 +304,10 @@ class EventDetails(EventDetailsTemplate):
 
         # Edit button
         edit_btn = m3.Button(
-            text="Edit", icon="mi:edit", appearance="outlined", size="small"
+            text="Edit",
+            icon="mi:edit",
+            appearance="outlined",
+            size="small",
         )
         edit_btn.set_event_handler("click", self.edit_event_details)
         header.add_component(edit_btn)
@@ -871,8 +874,8 @@ class EventDetails(EventDetailsTemplate):
         """Add action buttons at bottom"""
 
         button_panel = FlowPanel(
-            spacing="medium",
-            align="center",
+            spacing="small",
+            align="left",
             spacing_above="large",
             spacing_below="medium",
         )

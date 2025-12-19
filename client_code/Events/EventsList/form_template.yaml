@@ -1,9 +1,8 @@
 components_by_slot:
   content:
-  - data_bindings: []
-    layout_properties: {}
+  - layout_properties: {}
     name: column_panel_main
-    properties: {col_spacing: none}
+    properties: {}
     type: ColumnPanel
 is_package: true
 layout: {type: 'form:Frame'}
