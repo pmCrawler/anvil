@@ -12,7 +12,7 @@ from datetime import datetime, timezone
 
 
 class EventDetails2(EventDetails2Template):
-    def __init__(self, event_id=None, **properties):
+    def __init__(self, event_id=24, **properties):
         self.init_components(**properties)
 
         self.event_id = event_id
@@ -271,42 +271,59 @@ class EventDetails2(EventDetails2Template):
         )
 
     def create_collapsible_section(self, title, content, expanded=False):
-        """Generic collapsible section container"""
+        """Generic collapsible section container - EXPLICIT VERSION"""
 
-        section = ColumnPanel(role="collapsible-section")
+        section = ColumnPanel(role="collapsible-section", spacing="none")
 
-        # Header (clickable)
-        header = FlowPanel(spacing="small", role="section-header")
-        header.tag.content_panel = content  # Store reference
-        header.tag.expanded = expanded
+        # Header container - ColumnPanel for better click handling
+        header_container = ColumnPanel(role="section-header", spacing="none")
 
-        # Title
-        header.add_component(
-            Label(text=title, font_size=16, bold=True, role="section-title")
-        )
-
-        # Spacer
-        header.add_component(Spacer())
+        # Header content row
+        header_row = FlowPanel(spacing="small", align="left")
 
         # Chevron icon
         chevron = Label(
-            text="▼" if expanded else "▶", font_size=14, role="section-chevron"
+            text="▼" if expanded else "▶", font_size=18, bold=True, foreground="#1976d2"
         )
-        chevron.tag.header = header
-        header.add_component(chevron)
+        header_row.add_component(chevron)
 
-        # Click handler
+        # Title
+        title_label = Label(text=title, font_size=16, bold=True, role="section-title")
+        header_row.add_component(title_label)
+
+        header_container.add_component(header_row)
+
+        # Store references for the click handler
+        header_container.tag.content_panel = content
+        header_container.tag.chevron = chevron
+        header_container.tag.is_expanded = expanded
+
+        # Click handler - attached to the container
         def toggle_section(**event_args):
-            is_expanded = header.tag.expanded
-            content.visible = not is_expanded
-            header.tag.expanded = not is_expanded
-            chevron.text = "▼" if not is_expanded else "▶"
+            # Debug print
+            print(f"Section clicked: {title}")
 
-        header.set_event_handler("click", toggle_section)
+            # Get current state
+            current_state = header_container.tag.is_expanded
+            new_state = not current_state
 
-        section.add_component(header)
+            # Update content visibility
+            content.visible = new_state
 
-        # Content
+            # Update chevron
+            chevron.text = "▼" if new_state else "▶"
+
+            # Update state
+            header_container.tag.is_expanded = new_state
+
+            # Debug print
+            print(f"New state: expanded={new_state}, content.visible={content.visible}")
+
+        header_container.set_event_handler("x-click", toggle_section)
+
+        section.add_component(header_container)
+
+        # Content panel
         content.visible = expanded
         content.role = "section-content"
         section.add_component(content)

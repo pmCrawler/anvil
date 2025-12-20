@@ -9,15 +9,15 @@
     --space-md: 12px;
     --space-lg: 16px;
     --space-xl: 24px;
-    
+
     --radius-sm: 4px;
     --radius-md: 8px;
     --radius-lg: 12px;
     --radius-full: 9999px;
-    
-    --shadow-sm: 0 1px 2px rgba(0,0,0,0.06);
-    --shadow-md: 0 2px 4px rgba(0,0,0,0.06), 0 4px 8px rgba(0,0,0,0.04);
-    --shadow-lg: 0 4px 8px rgba(0,0,0,0.08), 0 8px 16px rgba(0,0,0,0.06);
+
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.06), 0 4px 8px rgba(0, 0, 0, 0.04);
+    --shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.08), 0 8px 16px rgba(0, 0, 0, 0.06);
 }
 
 /* --- Global Mobile Optimizations --- */
@@ -25,7 +25,9 @@
     -webkit-tap-highlight-color: transparent;
 }
 
-input, select, textarea {
+input,
+select,
+textarea {
     font-size: 16px !important;
 }
 
@@ -108,21 +110,37 @@ input, select, textarea {
     border-radius: 12px;
     margin-bottom: 12px;
     overflow: hidden;
-    box-shadow: var(--shadow-sm);
+    box-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.06),
+        0 2px 4px rgba(0, 0, 0, 0.06);
 }
 
 .anvil-role-section-header {
     padding: 16px;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    min-height: 48px;
+    min-height: 56px;
     transition: background-color 0.15s ease;
+    border-bottom: 1px solid transparent;
+}
+
+.anvil-role-section-header:hover {
+    background-color: rgba(0, 0, 0, 0.02);
 }
 
 .anvil-role-section-header:active {
     background-color: rgba(0, 0, 0, 0.04);
+}
+
+.anvil-role-section-header-expanded {
+    border-bottom-color: rgba(0, 0, 0, 0.06);
+}
+
+/* If using Link component */
+.anvil-role-section-header a {
+    display: block !important;
+    padding: 16px !important;
+    min-height: 56px !important;
+    text-decoration: none !important;
 }
 
 .anvil-role-section-title {
@@ -132,14 +150,8 @@ input, select, textarea {
     margin: 0;
 }
 
-.anvil-role-section-chevron {
-    color: #666;
-    font-size: 14px;
-}
-
 .anvil-role-section-content {
-    padding: 0 16px 16px;
-    border-top: 1px solid rgba(0, 0, 0, 0.06);
+    padding: 16px;
 }
 
 /* --- Tasks --- */
@@ -251,20 +263,19 @@ input, select, textarea {
 
 /* --- Loading Skeleton --- */
 .anvil-role-skeleton {
-    background: linear-gradient(
-        90deg,
-        #e0e0e0 0%,
-        #f5f5f5 50%,
-        #e0e0e0 100%
-    );
+    background: linear-gradient(90deg, #e0e0e0 0%, #f5f5f5 50%, #e0e0e0 100%);
     background-size: 200% 100%;
     animation: shimmer 1.5s ease-in-out infinite;
     border-radius: 8px;
 }
 
 @keyframes shimmer {
-    0% { background-position: 100% 0; }
-    100% { background-position: -100% 0; }
+    0% {
+        background-position: 100% 0;
+    }
+    100% {
+        background-position: -100% 0;
+    }
 }
 
 .anvil-role-skeleton-title {
