@@ -6,4 +6,4 @@ components_by_slot:
     properties: {col_spacing: none}
     type: ColumnPanel
 is_package: true
-layout: {type: 'form:Frame'}
+layout: {type: 'form:dep_lin1x4oec0ytd:Layouts.NavigationDrawerLayout'}

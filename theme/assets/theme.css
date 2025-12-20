@@ -1,47 +1,11 @@
 /* ============================================
-   MOBILE-FIRST EVENT DETAILS THEME
-   ============================================ */
+MOBILE-FIRST EVENT DETAILS THEME
+============================================ */
 
-/* --- Accordion Pattern (Same as ai_ui_builder) --- */
-.anvil-role-accordion-header-container {
-    border-radius: 12px 12px 0 0;
-}
-
-.anvil-role-accordion-content {
-    padding: 16px;
-}
-
-.anvil-role-section-content-padding {
-    padding: 0;
-}
-
-/* --- Design Tokens --- */
-:root {
-    --space-xs: 4px;
-    --space-sm: 8px;
-    --space-md: 12px;
-    --space-lg: 16px;
-    --space-xl: 24px;
-
-    --radius-sm: 4px;
-    --radius-md: 8px;
-    --radius-lg: 12px;
-    --radius-full: 9999px;
-
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
-    --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.06), 0 4px 8px rgba(0, 0, 0, 0.04);
-    --shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.08), 0 8px 16px rgba(0, 0, 0, 0.06);
-}
-
-/* --- Global Mobile Optimizations --- */
-* {
-    -webkit-tap-highlight-color: transparent;
-}
-
-input,
-select,
-textarea {
-    font-size: 16px !important;
+/* --- Mobile Page Layout --- */
+.anvil-role-mobile-page {
+    min-height: 100vh;
+    background: #f5f5f5;
 }
 
 /* --- Sticky Header --- */
@@ -49,29 +13,15 @@ textarea {
     position: sticky;
     top: 0;
     z-index: 100;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-    padding: 12px 16px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-}
-
-.anvil-role-countdown {
-    font-size: 12px;
-    font-weight: 600;
-    background: #e3f2fd;
-    color: #1976d2;
-    padding: 4px 10px;
-    border-radius: 12px;
-    display: inline-block;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Status badges */
 .anvil-role-status-planning {
     background: #ff9800;
     color: white;
-    padding: 4px 10px;
+    padding: 4px 12px;
     border-radius: 12px;
     font-size: 11px;
     font-weight: 600;
@@ -80,7 +30,7 @@ textarea {
 .anvil-role-status-confirmed {
     background: #4caf50;
     color: white;
-    padding: 4px 10px;
+    padding: 4px 12px;
     border-radius: 12px;
     font-size: 11px;
     font-weight: 600;
@@ -89,32 +39,71 @@ textarea {
 .anvil-role-status-completed {
     background: #2196f3;
     color: white;
-    padding: 4px 10px;
+    padding: 4px 12px;
     border-radius: 12px;
     font-size: 11px;
     font-weight: 600;
+}
+
+.anvil-role-status-cancelled {
+    background: #f44336;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+/* Header info row - responsive */
+.anvil-role-header-info-row {
+    flex-wrap: wrap;
+    gap: 16px;
 }
 
 /* --- Scrollable Content --- */
 .anvil-role-scrollable-content {
     padding: 16px;
     padding-bottom: 88px; /* Space for bottom bar */
-    background: #f5f5f5;
 }
 
-/* --- Stats Row --- */
+/* --- Stats Row (Responsive) --- */
 .anvil-role-stats-row {
     display: flex;
-    gap: 8px;
-    margin-bottom: 16px;
+    gap: 12px;
+    flex-wrap: wrap;
 }
 
-.anvil-role-stat-mini {
+.anvil-role-stat-card {
     flex: 1;
-    min-height: 80px;
+    min-width: 120px;
+}
+
+/* Mobile: Stack stats */
+@media (max-width: 600px) {
+    .anvil-role-stat-card {
+        min-width: calc(50% - 6px);
+    }
+}
+
+/* --- Responsive Grid --- */
+.anvil-role-responsive-grid {
     display: flex;
-    align-items: center;
-    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.anvil-role-main-column,
+.anvil-role-sidebar-column {
+    flex: 1;
+    min-width: 300px;
+}
+
+/* Mobile: Single column */
+@media (max-width: 900px) {
+    .anvil-role-main-column,
+    .anvil-role-sidebar-column {
+        width: 100% !important;
+    }
 }
 
 /* --- Collapsible Sections --- */
@@ -128,90 +117,63 @@ textarea {
         0 2px 4px rgba(0, 0, 0, 0.06);
 }
 
-.anvil-role-section-header {
+.anvil-role-accordion-header-container {
     padding: 16px;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     min-height: 56px;
     transition: background-color 0.15s ease;
-    border-bottom: 1px solid transparent;
 }
 
-.anvil-role-section-header:hover {
-    background-color: rgba(0, 0, 0, 0.02);
-}
-
-.anvil-role-section-header:active {
+.anvil-role-accordion-header-container:active {
     background-color: rgba(0, 0, 0, 0.04);
 }
 
-.anvil-role-section-header-expanded {
-    border-bottom-color: rgba(0, 0, 0, 0.06);
+.anvil-role-accordion-content {
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
 }
 
-/* If using Link component */
-.anvil-role-section-header a {
-    display: block !important;
-    padding: 16px !important;
-    min-height: 56px !important;
-    text-decoration: none !important;
-}
-
-.anvil-role-section-title {
-    font-size: 16px;
-    font-weight: 600;
-    color: #1a1a1a;
-    margin: 0;
-}
-
-.anvil-role-section-content {
+.anvil-role-section-content-padding {
     padding: 16px;
+}
+
+/* Inline action buttons in headers */
+.anvil-role-inline-action-btn {
+    margin-left: auto;
+}
+
+/* --- Detail Rows --- */
+.anvil-role-detail-row {
+    padding: 8px 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    flex-wrap: wrap;
 }
 
 /* --- Tasks --- */
 .anvil-role-task-item {
     display: flex;
     align-items: flex-start;
-    padding: 12px 0;
     min-height: 48px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-}
-
-.anvil-role-task-item:last-child {
-    border-bottom: none;
 }
 
 .anvil-role-task-checkbox input[type="checkbox"] {
     width: 20px;
     height: 20px;
     margin: 2px 12px 0 0;
-    accent-color: #1976d2;
+    accent-color: #ff9800;
 }
 
 .anvil-role-task-title {
     flex: 1;
-    font-size: 15px;
     line-height: 1.4;
-}
-
-/* --- Progress Bar --- */
-.anvil-role-progress-bar-track {
-    height: 6px;
-    background: #e0e0e0;
-    border-radius: 3px;
-    overflow: hidden;
-    position: relative;
-}
-
-.anvil-role-progress-bar-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #1976d2 0%, #42a5f5 100%);
-    border-radius: 3px;
-    display: block;
 }
 
 /* --- Budget --- */
 .anvil-role-budget-summary {
-    padding: 16px;
     background: #e8f5e9 !important;
 }
 
@@ -228,14 +190,6 @@ textarea {
     font-weight: 600;
 }
 
-/* --- Detail Rows --- */
-.anvil-role-detail-row {
-    padding: 8px 0;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
 /* --- Bottom Action Bar --- */
 .anvil-role-bottom-action-bar {
     position: fixed;
@@ -248,75 +202,44 @@ textarea {
     padding: 12px 16px;
     padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
     display: flex;
-    gap: 12px;
+    gap: 8px;
     box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.06);
 }
 
-.anvil-role-action-button-primary,
-.anvil-role-action-button-secondary {
+.anvil-role-action-button,
+.anvil-role-action-button-primary {
     flex: 1;
 }
 
-.anvil-role-action-button-primary > button,
-.anvil-role-action-button-secondary > button {
+.anvil-role-action-button > button,
+.anvil-role-action-button-primary > button {
     min-height: 48px;
     width: 100%;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 600;
     border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
 }
 
-.anvil-role-action-button-primary > button:active {
-    transform: scale(0.98);
-}
-
-/* --- Loading Skeleton --- */
-.anvil-role-skeleton {
-    background: linear-gradient(90deg, #e0e0e0 0%, #f5f5f5 50%, #e0e0e0 100%);
-    background-size: 200% 100%;
-    animation: shimmer 1.5s ease-in-out infinite;
-    border-radius: 8px;
-}
-
-@keyframes shimmer {
-    0% {
-        background-position: 100% 0;
+/* Mobile: Show only icons, hide text */
+@media (max-width: 600px) {
+    .anvil-role-action-button > button,
+    .anvil-role-action-button-primary > button {
+        font-size: 0; /* Hide text */
     }
-    100% {
-        background-position: -100% 0;
+
+    .anvil-role-action-button > button::before,
+    .anvil-role-action-button-primary > button::before {
+        font-size: 20px; /* Show icon */
     }
 }
 
-.anvil-role-skeleton-title {
-    height: 24px;
-    width: 70%;
-    margin-bottom: 12px;
+/* --- Touch Optimizations --- */
+* {
+    -webkit-tap-highlight-color: transparent;
 }
 
-.anvil-role-skeleton-text {
-    height: 16px;
-    width: 100%;
-    margin-bottom: 8px;
-}
-
-.anvil-role-skeleton-text-short {
-    height: 16px;
-    width: 40%;
-}
-
-.anvil-role-skeleton-card {
-    height: 120px;
-    border-radius: 12px;
-    margin-bottom: 12px;
-}
-
-/* Respect reduced motion */
-@media (prefers-reduced-motion: reduce) {
-    .anvil-role-skeleton {
-        animation: none;
-    }
+input,
+select,
+textarea {
+    font-size: 16px !important; /* Prevent iOS zoom */
 }

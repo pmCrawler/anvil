@@ -12,14 +12,11 @@ from datetime import datetime, timezone
 
 
 class EventDetails2(EventDetails2Template):
-    def __init__(self, event_id=None, **properties):
+    def __init__(self, event_id=24, **properties):
         self.init_components(**properties)
 
         self.event_id = event_id
         self.event_data = None
-
-        # Configure mobile-first layout
-        self.column_panel_main.role = "mobile-page"
 
         if event_id:
             self.load_event_data()
@@ -28,186 +25,86 @@ class EventDetails2(EventDetails2Template):
             open_form("Events.EventsList")
 
     def load_event_data(self):
-        """Load event data from server with loading state"""
+        """Load event data from server"""
+        with Notification("Loading event...", timeout=None):
+            try:
+                result = anvil.server.call("get_event_details", self.event_id)
 
-        # Show loading skeleton
-        self.show_loading_skeleton()
-
-        try:
-            result = anvil.server.call("get_event_details", self.event_id)
-
-            if result["success"]:
-                self.event_data = result["event"]
-                self.render_event_view()
-            else:
-                alert(f"Error loading event: {result.get('error')}", title="Error")
+                if result["success"]:
+                    self.event_data = result["event"]
+                    self.render_event_view()
+                else:
+                    alert(f"Error loading event: {result.get('error')}", title="Error")
+                    open_form("Events.EventsList")
+            except Exception as e:
+                print(f"Error loading event: {e}")
+                alert(f"Failed to load event: {str(e)}", title="Error")
                 open_form("Events.EventsList")
-        except Exception as e:
-            print(f"Error loading event: {e}")
-            alert(f"Failed to load event: {str(e)}", title="Error")
-            open_form("Events.EventsList")
-
-    def show_loading_skeleton(self):
-        """Show loading skeleton while data loads"""
-        self.column_panel_main.clear()
-
-        skeleton = ColumnPanel(spacing="medium", role="scrollable-content")
-
-        # Skeleton header
-        skeleton.add_component(Label(text="", role="skeleton skeleton-title"))
-        skeleton.add_component(Label(text="", role="skeleton skeleton-text"))
-        skeleton.add_component(Label(text="", role="skeleton skeleton-text-short"))
-
-        # Skeleton cards
-        for i in range(3):
-            skeleton.add_component(Label(text="", role="skeleton skeleton-card"))
-
-        self.column_panel_main.add_component(skeleton)
 
     def render_event_view(self):
-        """Render the complete mobile-first event view"""
+        """Render the complete event view - MOBILE-FIRST"""
 
         # Clear container
         self.column_panel_main.clear()
 
-        # Sticky Header
-        self.add_sticky_header()
+        # Apply mobile-first role
+        self.column_panel_main.role = "mobile-page"
 
-        # Scrollable Content Area
-        content_scroll = ColumnPanel(spacing="medium", role="scrollable-content")
+        # Sticky Header Section
+        self.add_event_header()
 
-        # Quick Stats Cards
-        content_scroll.add_component(self.create_stats_row())
+        # Scrollable content area
+        content_area = ColumnPanel(spacing="medium", role="scrollable-content")
 
-        # Collapsible Sections (Most Important First)
-        content_scroll.add_component(self.create_overview_section())
-        content_scroll.add_component(self.create_tasks_section())
-        content_scroll.add_component(self.create_budget_section())
-        content_scroll.add_component(self.create_timeline_section())
+        # Quick Stats Row
+        content_area.add_component(self.create_quick_stats())
 
-        # AI Plan Sections
+        # Main Content - Single Column on Mobile, Two Columns on Desktop
+        content_grid = FlowPanel(spacing="medium", align="left", role="responsive-grid")
+
+        # Left Column (60% on desktop, 100% on mobile)
+        left_column = ColumnPanel(spacing="medium", role="main-column")
+
+        # Event Details Card (with accordion)
+        left_column.add_component(self.create_event_details_card())
+
+        # Selected Options Card (with accordion)
+        if self.event_data.get("event_options"):
+            left_column.add_component(self.create_selected_options_card())
+
+        # AI Plan Sections (with accordions)
         if self.event_data.get("ai_response"):
-            content_scroll.add_component(self.create_selections_section())
-            content_scroll.add_component(self.create_decorations_section())
-            content_scroll.add_component(self.create_logistics_section())
+            left_column.add_component(self.create_ai_plan_sections())
 
-        self.column_panel_main.add_component(content_scroll)
+        content_grid.add_component(left_column, width="60%")
 
-        # Fixed Bottom Action Bar
-        self.add_bottom_action_bar()
+        # Right Column (40% on desktop, 100% on mobile)
+        right_column = ColumnPanel(spacing="medium", role="sidebar-column")
 
-    # ========================================================================
-    # STICKY HEADER
-    # ========================================================================
+        # Tasks Card (with accordion)
+        right_column.add_component(self.create_tasks_card())
 
-    def add_sticky_header(self):
-        """Compact sticky header with essential info"""
+        # Budget Card (with accordion)
+        right_column.add_component(self.create_budget_card())
 
-        header = ColumnPanel(spacing="small", role="event-header")
+        # Timeline Card (with accordion)
+        right_column.add_component(self.create_timeline_card())
 
-        # Title row
-        title_row = FlowPanel(spacing="small", align="left")
+        content_grid.add_component(right_column, width="40%")
 
-        # Event title (truncated for mobile)
-        title = self.event_data["title"]
-        if len(title) > 30:
-            title = title[:27] + "..."
+        content_area.add_component(content_grid)
+        self.column_panel_main.add_component(content_area)
 
-        title_label = Label(text=title, font_size=18, bold=True)
-        title_label.role = "headline"
-        title_row.add_component(title_label)
-
-        # Status badge
-        status = self.event_data.get("status", "planning")
-        status_badge = Label(text=status.upper(), role=f"status-{status}")
-        title_row.add_component(status_badge)
-
-        header.add_component(title_row)
-
-        # Date and countdown row
-        event_date = self.event_data.get("event_datetime")
-        if event_date:
-            date_row = FlowPanel(spacing="small", align="left")
-
-            # Date
-            date_str = (
-                event_date.strftime("%b %d, %Y")
-                if hasattr(event_date, "strftime")
-                else str(event_date)
-            )
-            date_row.add_component(Label(text=f"📅 {date_str}", font_size=13))
-
-            # Countdown
-            if isinstance(event_date, str):
-                event_date = datetime.fromisoformat(event_date.replace("Z", "+00:00"))
-
-            days_until = (event_date - datetime.now(timezone.utc)).days
-
-            if days_until >= 0:
-                countdown = Label(text=f"{days_until}d away", role="countdown")
-                date_row.add_component(countdown)
-
-            header.add_component(date_row)
-
-        self.column_panel_main.add_component(header)
+        # Fixed Bottom Action Buttons
+        self.add_action_buttons()
 
     # ========================================================================
-    # STATS ROW
-    # ========================================================================
-
-    def create_stats_row(self):
-        """Compact stats cards for mobile"""
-
-        stats = FlowPanel(spacing="small", role="stats-row")
-
-        # Guests
-        stats.add_component(
-            self.create_stat_mini(
-                "👥", str(self.event_data.get("guest_count", 0)), "Guests"
-            )
-        )
-
-        # Budget
-        budget = self.event_data.get("budget", 0)
-        stats.add_component(
-            self.create_stat_mini("💰", f"${budget:,.0f}" if budget else "$0", "Budget")
-        )
-
-        # Tasks
-        tasks = self.event_data.get("tasks", [])
-        completed = sum(1 for t in tasks if t.get("is_done"))
-        stats.add_component(
-            self.create_stat_mini("✓", f"{completed}/{len(tasks)}", "Tasks")
-        )
-
-        return stats
-
-    def create_stat_mini(self, icon, value, label):
-        """Create compact stat card"""
-
-        card = m3.Card(appearance="filled", role="stat-mini")
-        content = ColumnPanel(spacing="tiny")
-
-        content.add_component(Label(text=icon, font_size=20, align="center"))
-        content.add_component(
-            Label(text=value, font_size=16, bold=True, align="center")
-        )
-        content.add_component(
-            Label(text=label, font_size=11, align="center", foreground="#666")
-        )
-
-        card.add_component(content)
-        return card
-
-    # ========================================================================
-    # ACCORDION HELPER (Same pattern as ai_ui_builder.py)
+    # ACCORDION HELPER (Proven Pattern from ai_ui_builder)
     # ========================================================================
 
     def create_accordion_container(self, title, initially_open=False, color="#1976d2"):
         """
         Create accordion header and content panel with toggle
-        SAME PATTERN AS ai_ui_builder.py
-
         Returns: (header_container, header_btn, content_panel)
         """
 
@@ -225,8 +122,8 @@ class EventDetails2(EventDetails2Template):
         header_btn = m3.Link(
             text=title,
             align="left",
-            icon="mi:arrow_drop_down" if initially_open else "mi:arrow_right",
-            icon_size="16px",
+            icon="mi:expand_more" if initially_open else "mi:chevron_right",
+            icon_size="18px",
             icon_align="left",
             underline=False,
             bold=True,
@@ -254,7 +151,7 @@ class EventDetails2(EventDetails2Template):
             is_expanded["value"] = not is_expanded["value"]
             content_panel.visible = is_expanded["value"]
             header_btn.icon = (
-                "mi:arrow_drop_down" if is_expanded["value"] else "mi:arrow_right"
+                "mi:expand_more" if is_expanded["value"] else "mi:chevron_right"
             )
 
             if is_expanded["value"]:
@@ -269,574 +166,862 @@ class EventDetails2(EventDetails2Template):
         return (header_container, header_btn, content_panel)
 
     # ========================================================================
-    # COLLAPSIBLE SECTIONS (Using Working Accordion Pattern)
+    # HEADER SECTION (Sticky on Mobile)
     # ========================================================================
 
-    def create_overview_section(self):
-        """Event overview - expanded by default"""
+    def add_event_header(self):
+        """Add event header with title and status - STICKY"""
 
-        # Create accordion
-        section_container = ColumnPanel(role="collapsible-section", spacing="none")
-        header_container, header_btn, content_panel = self.create_accordion_container(
-            title="📋 Overview", initially_open=True, color="#1976d2"
+        header = ColumnPanel(
+            background="linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+            spacing="medium",
+            role="event-header",
         )
 
-        # Add content
-        content_panel.add_component(self.create_overview_content())
+        # Title row
+        title_row = FlowPanel(spacing="medium", align="left")
 
-        # Wrap in card
-        card_content = m3.CardContentContainer(margin="0px")
-        card_content.add_component(header_container)
-        card_content.add_component(content_panel)
-
-        section_container.add_component(card_content)
-        return section_container
-
-    def create_tasks_section(self):
-        """Tasks section - collapsed by default"""
-
-        tasks = self.event_data.get("tasks", [])
-        completed = sum(1 for t in tasks if t.get("is_done"))
-
-        # Create accordion
-        section_container = ColumnPanel(role="collapsible-section", spacing="none")
-        header_container, header_btn, content_panel = self.create_accordion_container(
-            title=f"✓ Tasks ({completed}/{len(tasks)})",
-            initially_open=False,
-            color="#ff9800",
+        title_row.add_component(
+            Label(
+                text=self.event_data["title"],
+                font_size=28,
+                bold=True,
+                foreground="black",
+            )
         )
 
-        # Add content
-        content_panel.add_component(self.create_tasks_content())
-
-        # Wrap in card
-        card_content = m3.CardContentContainer(margin="0px")
-        card_content.add_component(header_container)
-        card_content.add_component(content_panel)
-
-        section_container.add_component(card_content)
-        return section_container
-
-    def create_budget_section(self):
-        """Budget section - collapsed"""
-
-        # Create accordion
-        section_container = ColumnPanel(role="collapsible-section", spacing="none")
-        header_container, header_btn, content_panel = self.create_accordion_container(
-            title="💰 Budget", initially_open=False, color="#4caf50"
+        # Status badge
+        status = self.event_data.get("status", "planning")
+        status_badge = Label(
+            text=status.upper(),
+            role=f"status-{status}",
+            spacing="small",
         )
+        title_row.add_component(status_badge)
 
-        # Add content
-        content_panel.add_component(self.create_budget_content())
-
-        # Wrap in card
-        card_content = m3.CardContentContainer(margin="0px")
-        card_content.add_component(header_container)
-        card_content.add_component(content_panel)
-
-        section_container.add_component(card_content)
-        return section_container
-
-    def create_timeline_section(self):
-        """Timeline section - collapsed"""
-
-        # Create accordion
-        section_container = ColumnPanel(role="collapsible-section", spacing="none")
-        header_container, header_btn, content_panel = self.create_accordion_container(
-            title="⏰ Timeline", initially_open=False, color="#1976d2"
-        )
-
-        # Add content
-        content_panel.add_component(self.create_timeline_content())
-
-        # Wrap in card
-        card_content = m3.CardContentContainer(margin="0px")
-        card_content.add_component(header_container)
-        card_content.add_component(content_panel)
-
-        section_container.add_component(card_content)
-        return section_container
-
-    def create_selections_section(self):
-        """Selected options section"""
-
-        if not self.event_data.get("event_options"):
-            return ColumnPanel()
-
-        # Create accordion
-        section_container = ColumnPanel(role="collapsible-section", spacing="none")
-        header_container, header_btn, content_panel = self.create_accordion_container(
-            title="⭐ Your Selections", initially_open=False, color="#7b1fa2"
-        )
-
-        # Add content
-        content_panel.add_component(self.create_selections_content())
-
-        # Wrap in card
-        card_content = m3.CardContentContainer(margin="0px")
-        card_content.add_component(header_container)
-        card_content.add_component(content_panel)
-
-        section_container.add_component(card_content)
-        return section_container
-
-    def create_decorations_section(self):
-        """Decorations section"""
-
-        ai_response = self.event_data.get("ai_response", {})
-        plan = ai_response.get("plan", {})
-
-        if "decorations" not in plan:
-            return ColumnPanel()
-
-        # Create accordion
-        section_container = ColumnPanel(role="collapsible-section", spacing="none")
-        header_container, header_btn, content_panel = self.create_accordion_container(
-            title="🎈 Decorations", initially_open=False, color="#e91e63"
-        )
-
-        # Add content
-        content_panel.add_component(
-            self.create_decorations_content(plan["decorations"])
-        )
-
-        # Wrap in card
-        card_content = m3.CardContentContainer(margin="0px")
-        card_content.add_component(header_container)
-        card_content.add_component(content_panel)
-
-        section_container.add_component(card_content)
-        return section_container
-
-    def create_logistics_section(self):
-        """Logistics section"""
-
-        ai_response = self.event_data.get("ai_response", {})
-
-        if "logistics" not in ai_response:
-            return ColumnPanel()
-
-        # Create accordion
-        section_container = ColumnPanel(role="collapsible-section", spacing="none")
-        header_container, header_btn, content_panel = self.create_accordion_container(
-            title="🚚 Logistics", initially_open=False, color="#3f51b5"
-        )
-
-        # Add content
-        content_panel.add_component(
-            self.create_logistics_content(ai_response["logistics"])
-        )
-
-        # Wrap in card
-        card_content = m3.CardContentContainer(margin="0px")
-        card_content.add_component(header_container)
-        card_content.add_component(content_panel)
-
-        section_container.add_component(card_content)
-        return section_container
-
-    # ========================================================================
-    # SECTION CONTENT BUILDERS
-    # ========================================================================
-
-    def create_overview_content(self):
-        """Build overview content"""
-
-        panel = ColumnPanel(spacing="small", role="section-content-padding")
+        header.add_component(title_row)
 
         # Description
         if self.event_data.get("description"):
-            panel.add_component(
+            header.add_component(
                 Label(
-                    text=self.event_data["description"], font_size=14, foreground="#444"
+                    text=self.event_data["description"],
+                    font_size=15,
+                    foreground="black",
+                    italic=True,
                 )
             )
 
-        # Details list
-        details = ColumnPanel(spacing="tiny", spacing_above="medium")
+        # Date & Location row
+        info_row = FlowPanel(spacing="large", align="left", role="header-info-row")
 
-        details.add_component(
-            self.create_detail_row(
-                "🏢", "Venue", self.event_data.get("venue_type", "Not specified")
+        # Date
+        event_date = self.event_data.get("event_datetime")
+        if event_date:
+            date_panel = FlowPanel(spacing="tiny")
+            date_panel.add_component(Label(text="📅", font_size=18))
+            date_panel.add_component(
+                Label(
+                    text=event_date.strftime("%B %d, %Y at %I:%M %p")
+                    if hasattr(event_date, "strftime")
+                    else str(event_date),
+                    font_size=14,
+                    foreground="black",
+                    bold=True,
+                )
             )
-        )
-
-        details.add_component(
-            self.create_detail_row(
-                "🎭", "Setting", self.event_data.get("event_setting", "Not specified")
-            )
-        )
-
-        details.add_component(
-            self.create_detail_row(
-                "🍽️", "Food/Beverage", "Yes" if self.event_data.get("food_bev") else "No"
-            )
-        )
+            info_row.add_component(date_panel)
 
         # Location
         location = self.event_data.get("location")
         if location and location.get("formatted_address"):
-            details.add_component(
-                self.create_detail_row("📍", "Location", location["formatted_address"])
+            loc_panel = FlowPanel(spacing="tiny")
+            loc_panel.add_component(Label(text="📍", font_size=18))
+            loc_panel.add_component(
+                Label(
+                    text=location["formatted_address"], font_size=14, foreground="black"
+                )
             )
+            info_row.add_component(loc_panel)
 
-        panel.add_component(details)
+        header.add_component(info_row)
 
-        return panel
+        self.column_panel_main.add_component(header)
 
-    def create_tasks_content(self):
-        """Build tasks list with checkboxes"""
+    # ========================================================================
+    # QUICK STATS (Responsive Cards)
+    # ========================================================================
 
-        panel = ColumnPanel(spacing="small", role="section-content-padding")
+    def create_quick_stats(self):
+        """Add quick stats cards - RESPONSIVE"""
 
-        tasks = self.event_data.get("tasks", [])
+        stats_panel = FlowPanel(spacing="medium", align="left", role="stats-row")
 
-        if not tasks:
-            panel.add_component(
-                Label(text="No tasks yet", font_size=14, italic=True, foreground="#999")
-            )
-            return panel
-
-        # Progress bar
-        completed = sum(1 for t in tasks if t.get("is_done"))
-        total = len(tasks)
-        percentage = (completed / total * 100) if total > 0 else 0
-
-        progress_container = ColumnPanel(spacing="tiny", spacing_below="medium")
-        progress_container.add_component(
-            Label(
-                text=f"{completed} of {total} complete", font_size=12, foreground="#666"
+        # Guest Count
+        stats_panel.add_component(
+            self.create_stat_card(
+                icon="👥",
+                value=str(self.event_data.get("guest_count", 0)),
+                label="Guests",
+                color="#2196f3",
             )
         )
 
-        # Progress bar visual
-        bar_outer = ColumnPanel(role="progress-bar-track")
-        bar_inner = Label(text="", role="progress-bar-fill")
-        bar_inner.tag.width = f"{percentage}%"
-        bar_outer.add_component(bar_inner)
-        progress_container.add_component(bar_outer)
+        # Budget
+        budget = self.event_data.get("budget", 0)
+        stats_panel.add_component(
+            self.create_stat_card(
+                icon="💰",
+                value=f"${budget:,.0f}" if budget else "$0",
+                label="Budget",
+                color="#4caf50",
+            )
+        )
 
-        panel.add_component(progress_container)
+        # Tasks
+        tasks = self.event_data.get("tasks", [])
+        completed_tasks = sum(1 for t in tasks if t.get("is_done"))
+        stats_panel.add_component(
+            self.create_stat_card(
+                icon="✓",
+                value=f"{completed_tasks}/{len(tasks)}",
+                label="Tasks Done",
+                color="#ff9800",
+            )
+        )
 
-        # Task list
-        for task in tasks:
-            task_item = self.create_task_item(task)
-            panel.add_component(task_item)
+        # Days Until
+        event_date = self.event_data.get("event_datetime")
+        if event_date:
+            if isinstance(event_date, str):
+                event_date = datetime.fromisoformat(event_date.replace("Z", "+00:00"))
 
-        return panel
+            days_until = (event_date - datetime.now(timezone.utc)).days
 
-    def create_task_item(self, task):
-        """Create individual task item"""
+            if days_until < 0:
+                days_text = "Past"
+                color = "#757575"
+            elif days_until == 0:
+                days_text = "Today!"
+                color = "#f44336"
+            elif days_until == 1:
+                days_text = "Tomorrow"
+                color = "#ff5722"
+            else:
+                days_text = f"{days_until} days"
+                color = "#9c27b0"
 
-        item = FlowPanel(spacing="small", role="task-item")
+            stats_panel.add_component(
+                self.create_stat_card(
+                    icon="📆",
+                    value=days_text,
+                    label="Until Event",
+                    color=color,
+                )
+            )
+
+        return stats_panel
+
+    def create_stat_card(self, icon, value, label, color):
+        """Create a stat card - MOBILE OPTIMIZED"""
+
+        card = m3.Card(appearance="elevated", role="stat-card")
+        card_content = m3.CardContentContainer(margin="16px")
+
+        # Icon
+        card_content.add_component(Label(text=icon, font_size=32, align="center"))
+
+        # Value
+        card_content.add_component(
+            Label(text=value, font_size=24, bold=True, align="center", foreground=color)
+        )
+
+        # Label
+        card_content.add_component(
+            Label(text=label, font_size=12, align="center", foreground="#666")
+        )
+
+        card.add_component(card_content)
+        return card
+
+    # ========================================================================
+    # EVENT DETAILS CARD (With Accordion)
+    # ========================================================================
+
+    def create_event_details_card(self):
+        """Event details card with accordion"""
+
+        section = ColumnPanel(role="collapsible-section", spacing="none")
+
+        # Accordion
+        header_container, header_btn, content_panel = self.create_accordion_container(
+            title="📋 Event Details", initially_open=True, color="#1976d2"
+        )
+
+        # Edit button in header
+        edit_btn = m3.Button(
+            text="Edit",
+            icon="mi:edit",
+            appearance="outlined",
+            size="small",
+            role="inline-action-btn",
+        )
+        edit_btn.set_event_handler("click", self.edit_event_details)
+        header_container.add_component(edit_btn)
+
+        # Content
+        details_content = ColumnPanel(spacing="small", role="section-content-padding")
+
+        # Venue Type
+        details_content.add_component(
+            self.create_detail_row(
+                "🏢 Venue Type:", self.event_data.get("venue_type", "Not specified")
+            )
+        )
+
+        # Event Setting
+        details_content.add_component(
+            self.create_detail_row(
+                "🎭 Setting:", self.event_data.get("event_setting", "Not specified")
+            )
+        )
+
+        # Food & Beverage
+        details_content.add_component(
+            self.create_detail_row(
+                "🍽️ Food & Beverage:", "Yes" if self.event_data.get("food_bev") else "No"
+            )
+        )
+
+        # Created
+        created_at = self.event_data.get("created_at")
+        if created_at:
+            details_content.add_component(
+                self.create_detail_row(
+                    "📅 Created:",
+                    created_at.strftime("%B %d, %Y")
+                    if hasattr(created_at, "strftime")
+                    else str(created_at),
+                )
+            )
+
+        content_panel.add_component(details_content)
+
+        # Assemble
+        card_content = m3.CardContentContainer(margin="0px")
+        card_content.add_component(header_container)
+        card_content.add_component(content_panel)
+
+        section.add_component(card_content)
+        return section
+
+    def create_detail_row(self, label, value):
+        """Create a detail row"""
+        row = FlowPanel(spacing="small", align="left", role="detail-row")
+        row.add_component(Label(text=label, bold=True, font_size=13, foreground="#666"))
+        row.add_component(Label(text=str(value), font_size=13))
+        return row
+
+    # ========================================================================
+    # SELECTED OPTIONS CARD (With Accordion)
+    # ========================================================================
+
+    def create_selected_options_card(self):
+        """Selected options from AI with accordion"""
+
+        section = ColumnPanel(role="collapsible-section", spacing="none")
+
+        # Accordion
+        header_container, header_btn, content_panel = self.create_accordion_container(
+            title="⭐ Your Selected Options", initially_open=False, color="#7b1fa2"
+        )
+
+        # Content
+        options_content = ColumnPanel(spacing="medium", role="section-content-padding")
+
+        options = self.event_data["event_options"]
+
+        # Render each selected option
+        for section_key, selection in options.items():
+            section_title = section_key.replace("_", " ").title()
+
+            # Section header
+            options_content.add_component(
+                Label(
+                    text=section_title,
+                    font_size=15,
+                    bold=True,
+                    foreground="#9c27b0",
+                )
+            )
+
+            # Selection content
+            if isinstance(selection, dict):
+                options_content.add_component(
+                    self.create_option_display_card(selection)
+                )
+            elif isinstance(selection, list):
+                for item in selection:
+                    options_content.add_component(self.create_option_display_card(item))
+
+        content_panel.add_component(options_content)
+
+        # Assemble
+        card_content = m3.CardContentContainer(margin="0px")
+        card_content.add_component(header_container)
+        card_content.add_component(content_panel)
+
+        section.add_component(card_content)
+        return section
+
+    def create_option_display_card(self, option):
+        """Create display card for selected option"""
+
+        card = m3.Card(appearance="outlined", spacing_above="small")
+        card_content = m3.CardContentContainer(margin="12px")
+
+        # Show key fields
+        for key, value in option.items():
+            if key in ["name", "style", "title"]:
+                card_content.add_component(
+                    Label(text=value, font_size=14, bold=True, foreground="#673ab7")
+                )
+            elif key == "description":
+                card_content.add_component(
+                    Label(text=value, font_size=12, spacing_above="tiny")
+                )
+            elif isinstance(value, list) and len(value) < 5:
+                card_content.add_component(
+                    Label(
+                        text=f"{key.replace('_', ' ').title()}: {', '.join(str(v) for v in value)}",
+                        font_size=11,
+                        foreground="#666",
+                        spacing_above="tiny",
+                    )
+                )
+
+        card.add_component(card_content)
+        return card
+
+    # ========================================================================
+    # AI PLAN SECTIONS (With Accordions)
+    # ========================================================================
+
+    def create_ai_plan_sections(self):
+        """AI plan sections with accordions"""
+
+        container = ColumnPanel(spacing="medium")
+
+        ai_response = self.event_data.get("ai_response", {})
+        plan = ai_response.get("plan", {})
+
+        # Decorations
+        if "decorations" in plan:
+            container.add_component(
+                self.create_decorations_section(plan["decorations"])
+            )
+
+        # Logistics
+        if "logistics" in ai_response:
+            container.add_component(
+                self.create_simple_section("🚚 Logistics", ai_response["logistics"])
+            )
+
+        # Contingency Plans
+        if "contingency_notes" in ai_response:
+            container.add_component(
+                self.create_simple_section(
+                    "🛡️ Contingency Plans", ai_response["contingency_notes"]
+                )
+            )
+
+        return container
+
+    def create_decorations_section(self, decorations):
+        """Decorations section with accordion"""
+
+        section = ColumnPanel(role="collapsible-section", spacing="none")
+
+        # Accordion
+        header_container, header_btn, content_panel = self.create_accordion_container(
+            title="🎈 Decorations", initially_open=False, color="#e91e63"
+        )
+
+        # Content
+        dec_content = ColumnPanel(spacing="small", role="section-content-padding")
+
+        # Essential items
+        if "essential_items" in decorations:
+            dec_content.add_component(
+                Label(
+                    text="Essential Items:",
+                    bold=True,
+                    font_size=14,
+                    foreground="#d32f2f",
+                )
+            )
+            for item in decorations["essential_items"]:
+                dec_content.add_component(self.create_bullet_item(item, "🔴"))
+
+        # Optional items
+        if "optional_items" in decorations and decorations["optional_items"]:
+            dec_content.add_component(
+                Label(
+                    text="Optional Items:",
+                    bold=True,
+                    font_size=14,
+                    spacing_above="small",
+                    foreground="#1976d2",
+                )
+            )
+            for item in decorations["optional_items"]:
+                dec_content.add_component(self.create_bullet_item(item, "🔵"))
+
+        # Setup tips
+        if "setup_tips" in decorations:
+            tip_card = m3.Card(appearance="filled", spacing_above="small")
+            tip_content = m3.CardContentContainer(margin="12px")
+            tip_content.add_component(
+                Label(text="💡 Setup Tips:", bold=True, font_size=13)
+            )
+            tip_content.add_component(
+                Label(text=decorations["setup_tips"], font_size=12)
+            )
+            tip_card.add_component(tip_content)
+            dec_content.add_component(tip_card)
+
+        content_panel.add_component(dec_content)
+
+        # Assemble
+        card_content = m3.CardContentContainer(margin="0px")
+        card_content.add_component(header_container)
+        card_content.add_component(content_panel)
+
+        section.add_component(card_content)
+        return section
+
+    def create_simple_section(self, title, items):
+        """Simple list section with accordion"""
+
+        section = ColumnPanel(role="collapsible-section", spacing="none")
+
+        # Accordion
+        header_container, header_btn, content_panel = self.create_accordion_container(
+            title=title, initially_open=False, color="#3f51b5"
+        )
+
+        # Content
+        list_content = ColumnPanel(spacing="tiny", role="section-content-padding")
+
+        if isinstance(items, list):
+            for item in items:
+                list_content.add_component(self.create_bullet_item(item))
+        else:
+            list_content.add_component(Label(text=str(items), font_size=13))
+
+        content_panel.add_component(list_content)
+
+        # Assemble
+        card_content = m3.CardContentContainer(margin="0px")
+        card_content.add_component(header_container)
+        card_content.add_component(content_panel)
+
+        section.add_component(card_content)
+        return section
+
+    def create_bullet_item(self, text, icon="•"):
+        """Create bullet item"""
+        row = FlowPanel(spacing="tiny", spacing_above="tiny")
+        row.add_component(Label(text=icon, font_size=14))
+        row.add_component(Label(text=str(text), font_size=13))
+        return row
+
+    # ========================================================================
+    # TASKS CARD (With Accordion)
+    # ========================================================================
+
+    def create_tasks_card(self):
+        """Tasks management card with accordion"""
+
+        section = ColumnPanel(role="collapsible-section", spacing="none")
+
+        tasks = self.event_data.get("tasks", [])
+        completed_tasks = sum(1 for t in tasks if t.get("is_done"))
+
+        # Accordion
+        header_container, header_btn, content_panel = self.create_accordion_container(
+            title=f"✓ Tasks ({completed_tasks}/{len(tasks)})",
+            initially_open=True,
+            color="#ff9800",
+        )
+
+        # Add task button in header
+        add_btn = m3.Button(
+            text="Add",
+            icon="mi:add",
+            appearance="outlined",
+            size="small",
+            role="inline-action-btn",
+        )
+        add_btn.set_event_handler("click", self.add_new_task)
+        header_container.add_component(add_btn)
+
+        # Content
+        tasks_content = ColumnPanel(spacing="small", role="section-content-padding")
+
+        if not tasks:
+            tasks_content.add_component(
+                Label(
+                    text="No tasks yet. Click Add to create one.",
+                    font_size=13,
+                    italic=True,
+                    foreground="#999",
+                )
+            )
+        else:
+            for task in tasks:
+                tasks_content.add_component(self.create_task_card(task))
+
+        content_panel.add_component(tasks_content)
+
+        # Assemble
+        card_content = m3.CardContentContainer(margin="0px")
+        card_content.add_component(header_container)
+        card_content.add_component(content_panel)
+
+        section.add_component(card_content)
+        return section
+
+    def create_task_card(self, task):
+        """Create individual task card"""
+
+        task_card = m3.Card(
+            appearance="filled" if not task.get("is_done") else "outlined",
+            spacing_above="small",
+        )
+        task_content = m3.CardContentContainer(margin="12px")
+
+        # Task row
+        task_row = FlowPanel(spacing="small", align="left", role="task-item")
 
         # Checkbox
         checkbox = CheckBox(checked=task.get("is_done", False), role="task-checkbox")
         checkbox.tag.task_id = task["id"]
         checkbox.set_event_handler("change", self.toggle_task_complete)
-        item.add_component(checkbox)
-
-        # Task info column
-        task_info = ColumnPanel(spacing="tiny")
+        task_row.add_component(checkbox)
 
         # Task text
         task_text = Label(
             text=task["task"],
-            font_size=15,
+            font_size=14,
             bold=not task.get("is_done"),
             foreground="#999" if task.get("is_done") else "#000",
             role="task-title",
         )
-        task_info.add_component(task_text)
+        task_row.add_component(task_text)
+
+        task_content.add_component(task_row)
 
         # Due date
         if task.get("due_date"):
             due_date = task["due_date"]
-            due_str = (
-                due_date.strftime("%b %d")
-                if hasattr(due_date, "strftime")
-                else str(due_date)
+            task_content.add_component(
+                Label(
+                    text=f"📅 Due: {due_date.strftime('%b %d') if hasattr(due_date, 'strftime') else str(due_date)}",
+                    font_size=11,
+                    foreground="#666",
+                    spacing_above="tiny",
+                )
             )
-            task_info.add_component(
-                Label(text=f"Due: {due_str}", font_size=12, foreground="#666")
+
+        # Details
+        if task.get("details"):
+            task_content.add_component(
+                Label(
+                    text=task["details"],
+                    font_size=11,
+                    foreground="#666",
+                    spacing_above="tiny",
+                )
             )
 
-        item.add_component(task_info)
+        task_card.add_component(task_content)
+        return task_card
 
-        return item
+    # ========================================================================
+    # BUDGET CARD (With Accordion)
+    # ========================================================================
 
-    def create_budget_content(self):
-        """Build budget breakdown"""
+    def create_budget_card(self):
+        """Budget tracking card with accordion"""
 
-        panel = ColumnPanel(spacing="small", role="section-content-padding")
+        section = ColumnPanel(role="collapsible-section", spacing="none")
+
+        # Accordion
+        header_container, header_btn, content_panel = self.create_accordion_container(
+            title="💰 Budget", initially_open=False, color="#4caf50"
+        )
+
+        # Add item button in header
+        add_btn = m3.Button(
+            text="Add",
+            icon="mi:add",
+            appearance="outlined",
+            size="small",
+            role="inline-action-btn",
+        )
+        add_btn.set_event_handler("click", self.add_budget_item)
+        header_container.add_component(add_btn)
+
+        # Content
+        budget_content = ColumnPanel(spacing="small", role="section-content-padding")
 
         budget = self.event_data.get("budget", 0)
         budget_items = self.event_data.get("budget_items", [])
 
-        # Summary card
-        summary = m3.Card(appearance="filled", role="budget-summary")
-        summary_content = ColumnPanel(spacing="tiny")
-
+        # Calculate totals
         estimated_total = sum(item.get("estimated_amount", 0) for item in budget_items)
         actual_total = sum(item.get("actual_amount", 0) for item in budget_items)
 
-        summary_content.add_component(
+        # Total card
+        total_card = m3.Card(appearance="filled", role="budget-summary")
+        total_content = m3.CardContentContainer(margin="12px")
+
+        total_content.add_component(
             Label(
-                text=f"Total Budget: ${budget:,.0f}",
-                font_size=18,
+                text=f"Total Budget: ${budget:,.2f}",
+                font_size=16,
                 bold=True,
                 foreground="#2e7d32",
             )
         )
 
         if budget_items:
-            summary_content.add_component(
+            total_content.add_component(
                 Label(
-                    text=f"Estimated: ${estimated_total:,.0f}",
-                    font_size=13,
+                    text=f"Estimated: ${estimated_total:,.2f} | Actual: ${actual_total:,.2f}",
+                    font_size=12,
                     foreground="#666",
                 )
             )
 
+            # Progress bar
             if budget > 0:
-                percentage = estimated_total / budget * 100
-                color = "#f44336" if percentage > 100 else "#4caf50"
-                summary_content.add_component(
+                percentage = min((estimated_total / budget) * 100, 100)
+                color = "#4caf50" if percentage <= 100 else "#f44336"
+
+                total_content.add_component(
                     Label(
                         text=f"{percentage:.0f}% allocated",
-                        font_size=13,
+                        font_size=11,
                         foreground=color,
-                        bold=True,
+                        spacing_above="tiny",
                     )
                 )
 
-        summary.add_component(summary_content)
-        panel.add_component(summary)
+        total_card.add_component(total_content)
+        budget_content.add_component(total_card)
 
         # Budget items
-        if budget_items:
-            for item in budget_items:
-                panel.add_component(self.create_budget_item_card(item))
-        else:
-            panel.add_component(
+        if not budget_items:
+            budget_content.add_component(
                 Label(
-                    text="No budget items yet",
-                    font_size=14,
+                    text="No budget items yet.",
+                    font_size=13,
                     italic=True,
                     foreground="#999",
                     spacing_above="small",
                 )
             )
+        else:
+            for item in budget_items:
+                budget_content.add_component(self.create_budget_item_card(item))
 
-        return panel
+        content_panel.add_component(budget_content)
+
+        # Assemble
+        card_content = m3.CardContentContainer(margin="0px")
+        card_content.add_component(header_container)
+        card_content.add_component(content_panel)
+
+        section.add_component(card_content)
+        return section
 
     def create_budget_item_card(self, item):
         """Create budget item card"""
 
-        card = m3.Card(appearance="outlined", role="budget-item", spacing_above="small")
-        content = ColumnPanel(spacing="tiny")
+        item_card = m3.Card(
+            appearance="outlined", spacing_above="small", role="budget-item"
+        )
+        item_content = m3.CardContentContainer(margin="12px")
 
-        # Header row
+        # Header
         header = FlowPanel(spacing="small", align="left")
-        header.add_component(Label(text=item["category"], font_size=14, bold=True))
+        header.add_component(Label(text=item["category"], font_size=13, bold=True))
 
+        # Paid badge
         if item.get("paid"):
             header.add_component(Label(text="PAID", role="paid-badge"))
 
-        content.add_component(header)
+        item_content.add_component(header)
 
-        # Amount
+        # Amounts
         estimated = item.get("estimated_amount", 0)
-        content.add_component(
+        actual = item.get("actual_amount", 0)
+
+        item_content.add_component(
             Label(
-                text=f"${estimated:,.2f}", font_size=15, bold=True, foreground="#4caf50"
+                text=f"Estimated: ${estimated:,.2f}"
+                + (f" | Actual: ${actual:,.2f}" if actual else ""),
+                font_size=11,
+                foreground="#666",
             )
         )
 
-        card.add_component(content)
-        return card
+        # Description
+        if item.get("description"):
+            item_content.add_component(
+                Label(
+                    text=item["description"],
+                    font_size=11,
+                    foreground="#999",
+                    italic=True,
+                    spacing_above="tiny",
+                )
+            )
 
-    def create_timeline_content(self):
-        """Build timeline"""
+        item_card.add_component(item_content)
+        return item_card
 
-        panel = ColumnPanel(spacing="small", role="section-content-padding")
+    # ========================================================================
+    # TIMELINE CARD (With Accordion)
+    # ========================================================================
 
+    def create_timeline_card(self):
+        """Event timeline card with accordion"""
+
+        section = ColumnPanel(role="collapsible-section", spacing="none")
+
+        # Accordion
+        header_container, header_btn, content_panel = self.create_accordion_container(
+            title="⏰ Timeline", initially_open=False, color="#1976d2"
+        )
+
+        # Content
+        timeline_content = ColumnPanel(spacing="small", role="section-content-padding")
+
+        # Get timeline from AI response
         ai_response = self.event_data.get("ai_response", {})
         timeline = ai_response.get("plan", {}).get("timeline", [])
 
         if not timeline:
-            panel.add_component(
+            timeline_content.add_component(
                 Label(
-                    text="No timeline available",
-                    font_size=14,
+                    text="No timeline available.",
+                    font_size=13,
                     italic=True,
                     foreground="#999",
                 )
             )
-            return panel
-
-        for i, item in enumerate(timeline):
-            timeline_card = m3.Card(
-                appearance="filled" if i % 2 == 0 else "outlined",
-                spacing_above="tiny" if i > 0 else "none",
-            )
-            timeline_content = ColumnPanel(spacing="tiny")
-
-            # Time and activity
-            timeline_content.add_component(
-                Label(
-                    text=f"{item.get('time', '')} - {item.get('activity', '')}",
-                    font_size=14,
-                    bold=True,
-                )
-            )
-
-            # Responsible party
-            if item.get("responsible_party"):
-                timeline_content.add_component(
-                    Label(
-                        text=f"👤 {item['responsible_party']}",
-                        font_size=12,
-                        foreground="#666",
-                    )
-                )
-
-            timeline_card.add_component(timeline_content)
-            panel.add_component(timeline_card)
-
-        return panel
-
-    def create_selections_content(self):
-        """Build selected options"""
-
-        panel = ColumnPanel(spacing="medium", role="section-content-padding")
-
-        options = self.event_data["event_options"]
-
-        for section_key, selection in options.items():
-            section_title = section_key.replace("_", " ").title()
-
-            # Section header
-            panel.add_component(
-                Label(text=section_title, font_size=15, bold=True, foreground="#7b1fa2")
-            )
-
-            # Selection cards
-            if isinstance(selection, dict):
-                panel.add_component(self.create_selection_card(selection))
-            elif isinstance(selection, list):
-                for item in selection:
-                    panel.add_component(self.create_selection_card(item))
-
-        return panel
-
-    def create_selection_card(self, option):
-        """Create selection display card"""
-
-        card = m3.Card(appearance="outlined", spacing_above="tiny")
-        content = ColumnPanel(spacing="tiny")
-
-        # Show main field
-        for key, value in option.items():
-            if key in ["name", "style", "title"]:
-                content.add_component(Label(text=value, font_size=14, bold=True))
-            elif key == "description":
-                content.add_component(
-                    Label(text=value, font_size=13, foreground="#666")
-                )
-
-        card.add_component(content)
-        return card
-
-    def create_decorations_content(self, decorations):
-        """Build decorations section"""
-
-        panel = ColumnPanel(spacing="small", role="section-content-padding")
-
-        # Essential items
-        if "essential_items" in decorations:
-            panel.add_component(
-                Label(text="Essential:", bold=True, foreground="#d32f2f")
-            )
-            for item in decorations["essential_items"]:
-                panel.add_component(Label(text=f"• {item}", font_size=13))
-
-        # Optional items
-        if decorations.get("optional_items"):
-            panel.add_component(
-                Label(
-                    text="Optional:",
-                    bold=True,
-                    foreground="#1976d2",
-                    spacing_above="small",
-                )
-            )
-            for item in decorations["optional_items"]:
-                panel.add_component(Label(text=f"• {item}", font_size=13))
-
-        return panel
-
-    def create_logistics_content(self, logistics):
-        """Build logistics section"""
-
-        panel = ColumnPanel(spacing="tiny", role="section-content-padding")
-
-        if isinstance(logistics, list):
-            for item in logistics:
-                panel.add_component(Label(text=f"• {item}", font_size=13))
         else:
-            panel.add_component(Label(text=str(logistics), font_size=13))
+            for i, item in enumerate(timeline):
+                timeline_content.add_component(self.create_timeline_item(item, i))
 
-        return panel
+        content_panel.add_component(timeline_content)
 
-    # ========================================================================
-    # HELPERS
-    # ========================================================================
+        # Assemble
+        card_content = m3.CardContentContainer(margin="0px")
+        card_content.add_component(header_container)
+        card_content.add_component(content_panel)
 
-    def create_detail_row(self, icon, label, value):
-        """Create detail row with icon"""
+        section.add_component(card_content)
+        return section
 
-        row = FlowPanel(spacing="tiny", role="detail-row")
-        row.add_component(Label(text=icon, font_size=16))
-        row.add_component(
-            Label(text=f"{label}:", bold=True, font_size=14, foreground="#666")
+    def create_timeline_item(self, item, index):
+        """Create timeline item"""
+
+        item_card = m3.Card(
+            appearance="filled" if index % 2 == 0 else "outlined",
+            spacing_above="small" if index > 0 else "none",
         )
-        row.add_component(Label(text=str(value), font_size=14))
-        return row
+        item_content = m3.CardContentContainer(margin="12px")
+
+        # Time and activity
+        time_panel = FlowPanel(spacing="small")
+        time_panel.add_component(
+            Label(
+                text=item.get("time", ""), font_size=13, bold=True, foreground="#1976d2"
+            )
+        )
+        time_panel.add_component(Label(text=item.get("activity", ""), font_size=13))
+        item_content.add_component(time_panel)
+
+        # Responsible party
+        if item.get("responsible_party"):
+            item_content.add_component(
+                Label(
+                    text=f"👤 {item['responsible_party']}",
+                    font_size=11,
+                    foreground="#666",
+                    spacing_above="tiny",
+                )
+            )
+
+        item_card.add_component(item_content)
+        return item_card
 
     # ========================================================================
-    # BOTTOM ACTION BAR
+    # ACTION BUTTONS (Fixed Bottom Bar on Mobile)
     # ========================================================================
 
-    def add_bottom_action_bar(self):
-        """Fixed bottom action bar"""
+    def add_action_buttons(self):
+        """Add action buttons - FIXED BOTTOM BAR on mobile"""
 
-        bar = FlowPanel(spacing="small", role="bottom-action-bar")
+        button_panel = FlowPanel(
+            spacing="small", align="left", role="bottom-action-bar"
+        )
 
         # Back button
         back_btn = m3.Button(
             text="Back",
             icon="mi:arrow_back",
             appearance="outlined",
-            role="action-button-secondary",
+            role="action-button",
         )
         back_btn.set_event_handler("click", lambda **e: open_form("Events.EventsList"))
-        bar.add_component(back_btn)
+        button_panel.add_component(back_btn)
 
-        # Primary action
+        # Edit button
         edit_btn = m3.Button(
-            text="Edit Event",
-            icon="mi:edit",
+            text="Edit", icon="mi:edit", appearance="outlined", role="action-button"
+        )
+        edit_btn.set_event_handler("click", self.edit_event_details)
+        button_panel.add_component(edit_btn)
+
+        # Export PDF button
+        export_btn = m3.Button(
+            text="PDF",
+            icon="mi:picture_as_pdf",
+            appearance="outlined",
+            role="action-button",
+        )
+        export_btn.set_event_handler("click", self.export_pdf)
+        button_panel.add_component(export_btn)
+
+        # Share button
+        share_btn = m3.Button(
+            text="Share",
+            icon="mi:share",
             appearance="filled",
             role="action-button-primary",
         )
-        edit_btn.set_event_handler("click", self.edit_event)
-        bar.add_component(edit_btn)
+        share_btn.set_event_handler("click", self.share_event)
+        button_panel.add_component(share_btn)
 
-        self.column_panel_main.add_component(bar)
+        self.column_panel_main.add_component(button_panel)
 
     # ========================================================================
-    # EVENT HANDLERS
+    # EVENT HANDLERS (All Preserved)
     # ========================================================================
 
     def toggle_task_complete(self, **event_args):
@@ -849,11 +1034,11 @@ class EventDetails2(EventDetails2Template):
             result = anvil.server.call("update_task_status", task_id, is_done)
             if result["success"]:
                 Notification(
-                    "✓ Task updated" if is_done else "Task incomplete",
+                    "Task updated!" if is_done else "Task marked incomplete",
                     timeout=2,
                     style="success",
                 ).show()
-                self.load_event_data()  # Reload to update counts
+                self.load_event_data()
             else:
                 alert(f"Error: {result.get('error')}", title="Error")
                 sender.checked = not is_done
@@ -862,6 +1047,22 @@ class EventDetails2(EventDetails2Template):
             alert(f"Failed to update task: {str(e)}", title="Error")
             sender.checked = not is_done
 
-    def edit_event(self, **event_args):
-        """Edit event"""
+    def edit_event_details(self, **event_args):
+        """Open edit dialog"""
         alert("Edit functionality coming soon!", title="Edit Event")
+
+    def add_new_task(self, **event_args):
+        """Add new task dialog"""
+        alert("Add task functionality coming soon!", title="Add Task")
+
+    def add_budget_item(self, **event_args):
+        """Add budget item dialog"""
+        alert("Add budget item functionality coming soon!", title="Add Budget Item")
+
+    def export_pdf(self, **event_args):
+        """Export event to PDF"""
+        Notification("Generating PDF...", timeout=3).show()
+
+    def share_event(self, **event_args):
+        """Share event"""
+        alert("Share functionality coming soon!", title="Share Event")
