@@ -1,16 +1,298 @@
-.anvil-role-item-border {
-    border-bottom: 0.5px solid lightgray;
-    /* border-right: 1px solid red; */
-    border-inline-color: red;
-    padding: 8px;
-    /* display: flex; */
+/* ============================================
+   MOBILE-FIRST EVENT DETAILS THEME
+   ============================================ */
+
+/* --- Design Tokens --- */
+:root {
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 12px;
+    --space-lg: 16px;
+    --space-xl: 24px;
+    
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-full: 9999px;
+    
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.06);
+    --shadow-md: 0 2px 4px rgba(0,0,0,0.06), 0 4px 8px rgba(0,0,0,0.04);
+    --shadow-lg: 0 4px 8px rgba(0,0,0,0.08), 0 8px 16px rgba(0,0,0,0.06);
 }
 
-.anvil-role-column-border {
-    border-right: 1px solid red;
-    padding: 8px;
+/* --- Global Mobile Optimizations --- */
+* {
+    -webkit-tap-highlight-color: transparent;
 }
 
-.anvil-role-column-border:last-child {
-    border-right: 0.5px solid lightgray;
+input, select, textarea {
+    font-size: 16px !important;
+}
+
+/* --- Sticky Header --- */
+.anvil-role-event-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    padding: 12px 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.anvil-role-countdown {
+    font-size: 12px;
+    font-weight: 600;
+    background: #e3f2fd;
+    color: #1976d2;
+    padding: 4px 10px;
+    border-radius: 12px;
+    display: inline-block;
+}
+
+/* Status badges */
+.anvil-role-status-planning {
+    background: #ff9800;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.anvil-role-status-confirmed {
+    background: #4caf50;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.anvil-role-status-completed {
+    background: #2196f3;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+/* --- Scrollable Content --- */
+.anvil-role-scrollable-content {
+    padding: 16px;
+    padding-bottom: 88px; /* Space for bottom bar */
+    background: #f5f5f5;
+}
+
+/* --- Stats Row --- */
+.anvil-role-stats-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.anvil-role-stat-mini {
+    flex: 1;
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* --- Collapsible Sections --- */
+.anvil-role-collapsible-section {
+    background: white;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+}
+
+.anvil-role-section-header {
+    padding: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 48px;
+    transition: background-color 0.15s ease;
+}
+
+.anvil-role-section-header:active {
+    background-color: rgba(0, 0, 0, 0.04);
+}
+
+.anvil-role-section-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0;
+}
+
+.anvil-role-section-chevron {
+    color: #666;
+    font-size: 14px;
+}
+
+.anvil-role-section-content {
+    padding: 0 16px 16px;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+/* --- Tasks --- */
+.anvil-role-task-item {
+    display: flex;
+    align-items: flex-start;
+    padding: 12px 0;
+    min-height: 48px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.anvil-role-task-item:last-child {
+    border-bottom: none;
+}
+
+.anvil-role-task-checkbox input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    margin: 2px 12px 0 0;
+    accent-color: #1976d2;
+}
+
+.anvil-role-task-title {
+    flex: 1;
+    font-size: 15px;
+    line-height: 1.4;
+}
+
+/* --- Progress Bar --- */
+.anvil-role-progress-bar-track {
+    height: 6px;
+    background: #e0e0e0;
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+}
+
+.anvil-role-progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #1976d2 0%, #42a5f5 100%);
+    border-radius: 3px;
+    display: block;
+}
+
+/* --- Budget --- */
+.anvil-role-budget-summary {
+    padding: 16px;
+    background: #e8f5e9 !important;
+}
+
+.anvil-role-budget-item {
+    padding: 12px;
+}
+
+.anvil-role-paid-badge {
+    background: #4caf50;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 8px;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+/* --- Detail Rows --- */
+.anvil-role-detail-row {
+    padding: 8px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* --- Bottom Action Bar --- */
+.anvil-role-bottom-action-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: white;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    padding: 12px 16px;
+    padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    display: flex;
+    gap: 12px;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.anvil-role-action-button-primary,
+.anvil-role-action-button-secondary {
+    flex: 1;
+}
+
+.anvil-role-action-button-primary > button,
+.anvil-role-action-button-secondary > button {
+    min-height: 48px;
+    width: 100%;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.anvil-role-action-button-primary > button:active {
+    transform: scale(0.98);
+}
+
+/* --- Loading Skeleton --- */
+.anvil-role-skeleton {
+    background: linear-gradient(
+        90deg,
+        #e0e0e0 0%,
+        #f5f5f5 50%,
+        #e0e0e0 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s ease-in-out infinite;
+    border-radius: 8px;
+}
+
+@keyframes shimmer {
+    0% { background-position: 100% 0; }
+    100% { background-position: -100% 0; }
+}
+
+.anvil-role-skeleton-title {
+    height: 24px;
+    width: 70%;
+    margin-bottom: 12px;
+}
+
+.anvil-role-skeleton-text {
+    height: 16px;
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+.anvil-role-skeleton-text-short {
+    height: 16px;
+    width: 40%;
+}
+
+.anvil-role-skeleton-card {
+    height: 120px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .anvil-role-skeleton {
+        animation: none;
+    }
 }

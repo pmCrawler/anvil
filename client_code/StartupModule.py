@@ -14,13 +14,14 @@ def startup():
     #     anvil.server.call('add_user_color')
 
     # open_form("Form1")
-    open_form("Events.EventsList")
+    # open_form("Events.EventsList")
     # open_form("Events.EventAI")
     # open_form("Events.EventForm")
     # open_form("Events.EventView")
     # open_form("Events.EventAIModule")
     # open_form("Tasks.TaskForm")
     # open_form("Events.EventDetails")
+    open_form("Events.EventDetails2")
 
 
 startup()
