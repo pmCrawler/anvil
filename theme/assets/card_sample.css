@@ -1,4 +1,4 @@
-.card-container {
+/* .card-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 2rem;
@@ -100,4 +100,4 @@
     display: flex;
     gap: 0.75rem;
     flex-wrap: wrap;
-}
+} */

@@ -2,6 +2,19 @@
    MOBILE-FIRST EVENT DETAILS THEME
    ============================================ */
 
+/* --- Accordion Pattern (Same as ai_ui_builder) --- */
+.anvil-role-accordion-header-container {
+    border-radius: 12px 12px 0 0;
+}
+
+.anvil-role-accordion-content {
+    padding: 16px;
+}
+
+.anvil-role-section-content-padding {
+    padding: 0;
+}
+
 /* --- Design Tokens --- */
 :root {
     --space-xs: 4px;

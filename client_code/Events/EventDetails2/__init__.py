@@ -12,7 +12,7 @@ from datetime import datetime, timezone
 
 
 class EventDetails2(EventDetails2Template):
-    def __init__(self, event_id=24, **properties):
+    def __init__(self, event_id=None, **properties):
         self.init_components(**properties)
 
         self.event_id = event_id
@@ -200,135 +200,240 @@ class EventDetails2(EventDetails2Template):
         return card
 
     # ========================================================================
-    # COLLAPSIBLE SECTIONS
+    # ACCORDION HELPER (Same pattern as ai_ui_builder.py)
+    # ========================================================================
+
+    def create_accordion_container(self, title, initially_open=False, color="#1976d2"):
+        """
+        Create accordion header and content panel with toggle
+        SAME PATTERN AS ai_ui_builder.py
+
+        Returns: (header_container, header_btn, content_panel)
+        """
+
+        # Header container
+        header_container = ColumnPanel(
+            background="theme:Surface Variant"
+            if initially_open
+            else "theme:Surface Container",
+            spacing_above="none",
+            spacing_below="none",
+            role="accordion-header-container",
+        )
+
+        # Header button
+        header_btn = m3.Link(
+            text=title,
+            align="left",
+            icon="mi:arrow_drop_down" if initially_open else "mi:arrow_right",
+            icon_size="16px",
+            icon_align="left",
+            underline=False,
+            bold=True,
+            foreground=color,
+        )
+
+        if initially_open:
+            header_btn.background = "theme:Surface Variant"
+            header_btn.role = "filled-button"
+
+        header_container.add_component(header_btn)
+
+        # Content panel
+        content_panel = ColumnPanel(
+            visible=initially_open,
+            spacing_above="none",
+            spacing_below="none",
+            role="accordion-content",
+        )
+
+        # Toggle functionality
+        is_expanded = {"value": initially_open}
+
+        def toggle(**event_args):
+            is_expanded["value"] = not is_expanded["value"]
+            content_panel.visible = is_expanded["value"]
+            header_btn.icon = (
+                "mi:arrow_drop_down" if is_expanded["value"] else "mi:arrow_right"
+            )
+
+            if is_expanded["value"]:
+                header_btn.background = "theme:Surface Variant"
+                header_btn.role = "filled-button"
+            else:
+                header_btn.background = ""
+                header_btn.role = None
+
+        header_btn.set_event_handler("click", toggle)
+
+        return (header_container, header_btn, content_panel)
+
+    # ========================================================================
+    # COLLAPSIBLE SECTIONS (Using Working Accordion Pattern)
     # ========================================================================
 
     def create_overview_section(self):
         """Event overview - expanded by default"""
-        return self.create_collapsible_section(
-            title="📋 Overview", content=self.create_overview_content(), expanded=True
+
+        # Create accordion
+        section_container = ColumnPanel(role="collapsible-section", spacing="none")
+        header_container, header_btn, content_panel = self.create_accordion_container(
+            title="📋 Overview", initially_open=True, color="#1976d2"
         )
+
+        # Add content
+        content_panel.add_component(self.create_overview_content())
+
+        # Wrap in card
+        card_content = m3.CardContentContainer(margin="0px")
+        card_content.add_component(header_container)
+        card_content.add_component(content_panel)
+
+        section_container.add_component(card_content)
+        return section_container
 
     def create_tasks_section(self):
         """Tasks section - collapsed by default"""
+
         tasks = self.event_data.get("tasks", [])
         completed = sum(1 for t in tasks if t.get("is_done"))
 
-        return self.create_collapsible_section(
+        # Create accordion
+        section_container = ColumnPanel(role="collapsible-section", spacing="none")
+        header_container, header_btn, content_panel = self.create_accordion_container(
             title=f"✓ Tasks ({completed}/{len(tasks)})",
-            content=self.create_tasks_content(),
-            expanded=False,
+            initially_open=False,
+            color="#ff9800",
         )
+
+        # Add content
+        content_panel.add_component(self.create_tasks_content())
+
+        # Wrap in card
+        card_content = m3.CardContentContainer(margin="0px")
+        card_content.add_component(header_container)
+        card_content.add_component(content_panel)
+
+        section_container.add_component(card_content)
+        return section_container
 
     def create_budget_section(self):
         """Budget section - collapsed"""
-        return self.create_collapsible_section(
-            title="💰 Budget", content=self.create_budget_content(), expanded=False
+
+        # Create accordion
+        section_container = ColumnPanel(role="collapsible-section", spacing="none")
+        header_container, header_btn, content_panel = self.create_accordion_container(
+            title="💰 Budget", initially_open=False, color="#4caf50"
         )
+
+        # Add content
+        content_panel.add_component(self.create_budget_content())
+
+        # Wrap in card
+        card_content = m3.CardContentContainer(margin="0px")
+        card_content.add_component(header_container)
+        card_content.add_component(content_panel)
+
+        section_container.add_component(card_content)
+        return section_container
 
     def create_timeline_section(self):
         """Timeline section - collapsed"""
-        return self.create_collapsible_section(
-            title="⏰ Timeline", content=self.create_timeline_content(), expanded=False
+
+        # Create accordion
+        section_container = ColumnPanel(role="collapsible-section", spacing="none")
+        header_container, header_btn, content_panel = self.create_accordion_container(
+            title="⏰ Timeline", initially_open=False, color="#1976d2"
         )
+
+        # Add content
+        content_panel.add_component(self.create_timeline_content())
+
+        # Wrap in card
+        card_content = m3.CardContentContainer(margin="0px")
+        card_content.add_component(header_container)
+        card_content.add_component(content_panel)
+
+        section_container.add_component(card_content)
+        return section_container
 
     def create_selections_section(self):
         """Selected options section"""
+
         if not self.event_data.get("event_options"):
             return ColumnPanel()
 
-        return self.create_collapsible_section(
-            title="⭐ Your Selections",
-            content=self.create_selections_content(),
-            expanded=False,
+        # Create accordion
+        section_container = ColumnPanel(role="collapsible-section", spacing="none")
+        header_container, header_btn, content_panel = self.create_accordion_container(
+            title="⭐ Your Selections", initially_open=False, color="#7b1fa2"
         )
+
+        # Add content
+        content_panel.add_component(self.create_selections_content())
+
+        # Wrap in card
+        card_content = m3.CardContentContainer(margin="0px")
+        card_content.add_component(header_container)
+        card_content.add_component(content_panel)
+
+        section_container.add_component(card_content)
+        return section_container
 
     def create_decorations_section(self):
         """Decorations section"""
+
         ai_response = self.event_data.get("ai_response", {})
         plan = ai_response.get("plan", {})
 
         if "decorations" not in plan:
             return ColumnPanel()
 
-        return self.create_collapsible_section(
-            title="🎈 Decorations",
-            content=self.create_decorations_content(plan["decorations"]),
-            expanded=False,
+        # Create accordion
+        section_container = ColumnPanel(role="collapsible-section", spacing="none")
+        header_container, header_btn, content_panel = self.create_accordion_container(
+            title="🎈 Decorations", initially_open=False, color="#e91e63"
         )
+
+        # Add content
+        content_panel.add_component(
+            self.create_decorations_content(plan["decorations"])
+        )
+
+        # Wrap in card
+        card_content = m3.CardContentContainer(margin="0px")
+        card_content.add_component(header_container)
+        card_content.add_component(content_panel)
+
+        section_container.add_component(card_content)
+        return section_container
 
     def create_logistics_section(self):
         """Logistics section"""
+
         ai_response = self.event_data.get("ai_response", {})
 
         if "logistics" not in ai_response:
             return ColumnPanel()
 
-        return self.create_collapsible_section(
-            title="🚚 Logistics",
-            content=self.create_logistics_content(ai_response["logistics"]),
-            expanded=False,
+        # Create accordion
+        section_container = ColumnPanel(role="collapsible-section", spacing="none")
+        header_container, header_btn, content_panel = self.create_accordion_container(
+            title="🚚 Logistics", initially_open=False, color="#3f51b5"
         )
 
-    def create_collapsible_section(self, title, content, expanded=False):
-        """Generic collapsible section container - EXPLICIT VERSION"""
-
-        section = ColumnPanel(role="collapsible-section", spacing="none")
-
-        # Header container - ColumnPanel for better click handling
-        header_container = ColumnPanel(role="section-header", spacing="none")
-
-        # Header content row
-        header_row = FlowPanel(spacing="small", align="left")
-
-        # Chevron icon
-        chevron = Label(
-            text="▼" if expanded else "▶", font_size=18, bold=True, foreground="#1976d2"
+        # Add content
+        content_panel.add_component(
+            self.create_logistics_content(ai_response["logistics"])
         )
-        header_row.add_component(chevron)
 
-        # Title
-        title_label = Label(text=title, font_size=16, bold=True, role="section-title")
-        header_row.add_component(title_label)
+        # Wrap in card
+        card_content = m3.CardContentContainer(margin="0px")
+        card_content.add_component(header_container)
+        card_content.add_component(content_panel)
 
-        header_container.add_component(header_row)
-
-        # Store references for the click handler
-        header_container.tag.content_panel = content
-        header_container.tag.chevron = chevron
-        header_container.tag.is_expanded = expanded
-
-        # Click handler - attached to the container
-        def toggle_section(**event_args):
-            # Debug print
-            print(f"Section clicked: {title}")
-
-            # Get current state
-            current_state = header_container.tag.is_expanded
-            new_state = not current_state
-
-            # Update content visibility
-            content.visible = new_state
-
-            # Update chevron
-            chevron.text = "▼" if new_state else "▶"
-
-            # Update state
-            header_container.tag.is_expanded = new_state
-
-            # Debug print
-            print(f"New state: expanded={new_state}, content.visible={content.visible}")
-
-        header_container.set_event_handler("x-click", toggle_section)
-
-        section.add_component(header_container)
-
-        # Content panel
-        content.visible = expanded
-        content.role = "section-content"
-        section.add_component(content)
-
-        return section
+        section_container.add_component(card_content)
+        return section_container
 
     # ========================================================================
     # SECTION CONTENT BUILDERS
@@ -337,7 +442,7 @@ class EventDetails2(EventDetails2Template):
     def create_overview_content(self):
         """Build overview content"""
 
-        panel = ColumnPanel(spacing="small")
+        panel = ColumnPanel(spacing="small", role="section-content-padding")
 
         # Description
         if self.event_data.get("description"):
@@ -382,7 +487,7 @@ class EventDetails2(EventDetails2Template):
     def create_tasks_content(self):
         """Build tasks list with checkboxes"""
 
-        panel = ColumnPanel(spacing="small")
+        panel = ColumnPanel(spacing="small", role="section-content-padding")
 
         tasks = self.event_data.get("tasks", [])
 
@@ -463,7 +568,7 @@ class EventDetails2(EventDetails2Template):
     def create_budget_content(self):
         """Build budget breakdown"""
 
-        panel = ColumnPanel(spacing="small")
+        panel = ColumnPanel(spacing="small", role="section-content-padding")
 
         budget = self.event_data.get("budget", 0)
         budget_items = self.event_data.get("budget_items", [])
@@ -554,7 +659,7 @@ class EventDetails2(EventDetails2Template):
     def create_timeline_content(self):
         """Build timeline"""
 
-        panel = ColumnPanel(spacing="small")
+        panel = ColumnPanel(spacing="small", role="section-content-padding")
 
         ai_response = self.event_data.get("ai_response", {})
         timeline = ai_response.get("plan", {}).get("timeline", [])
@@ -604,7 +709,7 @@ class EventDetails2(EventDetails2Template):
     def create_selections_content(self):
         """Build selected options"""
 
-        panel = ColumnPanel(spacing="medium")
+        panel = ColumnPanel(spacing="medium", role="section-content-padding")
 
         options = self.event_data["event_options"]
 
@@ -646,7 +751,7 @@ class EventDetails2(EventDetails2Template):
     def create_decorations_content(self, decorations):
         """Build decorations section"""
 
-        panel = ColumnPanel(spacing="small")
+        panel = ColumnPanel(spacing="small", role="section-content-padding")
 
         # Essential items
         if "essential_items" in decorations:
@@ -674,7 +779,7 @@ class EventDetails2(EventDetails2Template):
     def create_logistics_content(self, logistics):
         """Build logistics section"""
 
-        panel = ColumnPanel(spacing="tiny")
+        panel = ColumnPanel(spacing="tiny", role="section-content-padding")
 
         if isinstance(logistics, list):
             for item in logistics:

@@ -1,9 +1,11 @@
+/*
 .anvil-role-item-border {
     border-bottom: 0.5px solid lightgray;
     /* border-right: 1px solid red; */
-    border-inline-color: red;
-    padding: 8px;
-    /* display: flex; */
+/* border-inline-color: red;
+    padding: 8px; */
+/* display: flex; */
+/*
 }
 
 .anvil-role-column-border {
@@ -14,3 +16,4 @@
 .anvil-role-column-border:last-child {
     border-right: 0.5px solid lightgray;
 }
+*/

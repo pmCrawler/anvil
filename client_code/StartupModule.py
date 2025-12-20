@@ -20,8 +20,8 @@ def startup():
     # open_form("Events.EventView")
     # open_form("Events.EventAIModule")
     # open_form("Tasks.TaskForm")
-    # open_form("Events.EventDetails")
-    open_form("Events.EventDetails2")
+    open_form("Events.EventDetails")
+    # open_form("Events.EventDetails2")
 
 
 startup()

@@ -683,7 +683,7 @@ class EventsList(EventsListTemplate):
         if event_id is None:
             event_id = event_args["sender"].tag.event_id
 
-        open_form("Events.EventDetails", event_id=event_id)
+        open_form("Events.EventDetails2", event_id=event_id)
 
     def edit_event(self, **event_args):
         """Edit event"""
