@@ -6,7 +6,6 @@ import anvil.server
 import anvil.tables as tables
 import anvil.tables.query as q
 import anvil.users
-import m3.components as m3
 from anvil.tables import app_tables
 
 

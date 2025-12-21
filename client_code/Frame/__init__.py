@@ -5,7 +5,6 @@ import anvil.server
 import anvil.tables as tables
 import anvil.tables.query as q
 from anvil.tables import app_tables
-import m3.components as m3
 from .. import Events
 from .. import Tasks
 
