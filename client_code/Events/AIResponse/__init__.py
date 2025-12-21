@@ -5,6 +5,7 @@ import anvil.tables as tables
 import anvil.tables.query as q
 import anvil.users
 from anvil import *
+import m3.components as m3
 from anvil.tables import app_tables
 
 from ._anvil_designer import AIResponseTemplate
